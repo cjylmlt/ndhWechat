@@ -22,7 +22,7 @@ var markdown = {
        $(dst).each(function(i,e){
     	   e.focus();
            var r = document.getSelection();
-           if (r.toString() === "")
+           if (r.toString() == "")
            {
         	   result = {
                    start: e.selectionStart,

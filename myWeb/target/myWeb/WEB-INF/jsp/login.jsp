@@ -24,16 +24,16 @@
 		<div class="row myCenter">
 			<div class="col-xs-6 col-md-4 col-center-block">
 				<form class="form-signin"
-					action="${pageContext.request.contextPath}/login.action">
+					action="${pageContext.request.contextPath}/login" method="post">
 					<h2 class="form-signin-heading">请登录</h2>
 					<div>
-						<input type="text" name="username" class="form-control" placeholder="用户名" required autofocus> 
+						<input type="text"  name="username" class="form-control" placeholder="用户名" required autofocus> 
 					</div>
 					<div>
-						<input type="password" name="password" class="form-control" placeholder="密码" required> 
+						<input type="password"  name="password" class="form-control" placeholder="密码" required> 
 					</div>
 					<div>
-						<input type="text" name="checkCode" class="form-control" placeholder="验证码" required> 
+						<input type="text"  name="checkCode" class="form-control" placeholder="验证码" required> 
 					</div>
 					
 					<img src="${pageContext.request.contextPath}/DrawImage.action" id="validateCodeImage" onclick="changeImg()">
@@ -44,7 +44,7 @@
 		</div>
 	</div>
 </body>
-	<div class="row myCenter">
+	<div class="col-center-block">
     <jsp:include page="common/footer.jsp" flush="false" />
     </div>
 </html>

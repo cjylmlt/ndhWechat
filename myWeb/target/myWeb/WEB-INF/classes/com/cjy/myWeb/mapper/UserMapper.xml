@@ -24,7 +24,7 @@
 		select * from user where user_name = #{value}
 	</select>
 	<insert id="insert" parameterType="com.cjy.myWeb.po.User">
-		INSERT INTO `user` (`user_id`, `user_name`, `password`) VALUES (#{id},#{username}.#{password})
+		INSERT INTO user (user_id, user_name, password) VALUES (#{id},#{username},#{password})
 	</insert>
 	<delete id="deleteUserById" parameterType="String">
 		delete from user where

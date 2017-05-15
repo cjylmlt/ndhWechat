@@ -48,7 +48,7 @@ public class UserMapperTest {
 		User user = new User();
 		user.setUsername("cjy");
 		user.setPassword("cjy");
-		user.setId("33");
+		user.setId("3333");
 		userMapper.insert(user);
 		sqlSession.commit();
 		sqlSession.close();

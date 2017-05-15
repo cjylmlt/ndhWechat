@@ -15,25 +15,31 @@
 	<select id="findArticleById" parameterType="String" resultMap="articleResultMap">
 		select * from article where article_id=#{value}
 	</select>
-	<select id="findArticleByTitle" parameterType="String" resultMap="articleResultMap">
-		selcet * from article where article_title=#{value}
+	<select id="findArticleListByTitle" parameterType="String" resultMap="articleResultMap">
+		select * from article where article_title=#{value}
 	</select>
 	<select id="findArticleListByAuthor" parameterType="com.cjy.myWeb.po.User" resultMap="articleResultMap">
 		select * from article where author_id=#{id}
 	</select>
 	<update id="updateArticle" parameterType="com.cjy.myWeb.po.Article" >
-		UPDATE `myweb`.`article` SET `article_id`='#{id}', `article_title`='#{title}', `article_summary`='#{summary}', 
-		`article_content`='#{content}', `comment_num`='{#commentNum}', `article_date`='#{date,jdbcType=TIMESTAMP}', 
-		`author_id`='#{authorId}', `readnum`='#{readNum}', `tag`='#{tag}', `type`='#{type}', `classification`='#{classification}', 
-		`collector_id`='#{collectorId}', `state`='#{state}' WHERE (`article_id`='#{id}');
+		UPDATE article SET article_id=#{id}, article_title=#{title}, article_summary=#{summary}, 
+		article_content=#{content}, comment_num=#{commentNum}, article_date=#{date,jdbcType=TIMESTAMP}, 
+		author_id= #{authorId} , readnum= #{readNum} , tag= #{tag} , type= #{type} , classification= #{classification} , 
+		collector_id= #{collectorId} , state= #{state}  WHERE (article_id= #{id} );
 	</update>
-	<delete id="delteArticle" parameterType="com.cjy.myWeb.po.Article">
-		delete from article where article_id = #{id}
+	<delete id="deleteArticle" parameterType="com.cjy.myWeb.po.Article">
+		 delete from article where article_id = #{id}
 	</delete>
 	<insert id="addArticle" parameterType="com.cjy.myWeb.po.Article">
-		INSERT INTO `article` (`article_id`, `article_title`, `article_summary`, `article_content`, `comment_num`, `article_date`, 
-		`author_id`, `readnum`, `tag`, `type`, `classification`, `collector_id`, `state`) 
-		VALUES ('#{id}', '#{title}', '#{summary}', '#{content}', '#{commentNum}', '#{date,jdbcType=TIMESTAMP}', '#{authorId}',
-		 '#{readNum}', '#{tag}', '#{type}', '#{classification}', '#{collectorId}', 'state')
+		INSERT INTO  article  ( article_id ,  article_title ,  article_summary ,  article_content ,  comment_num ,  article_date , 
+		 author_id ,  readnum ,  tag ,  type ,  classification ,  collector_id ,  state ) 
+		VALUES ( #{id} ,  #{title} ,  #{summary} ,  #{content} ,  #{commentNum} ,  #{date,jdbcType=TIMESTAMP} ,  #{authorId} ,
+		  #{readNum} ,  #{tag} ,  #{type} ,  #{classification} ,  #{collectorId} ,  #{state} )
 	</insert>
+	<select id="countArticleByAuthorId" parameterType="com.cjy.myWeb.po.User" resultType="Integer">
+		select count( * ) from article where author_id = #{value}
+	</select>
+	<select id="findArticleListByPage"  resultMap = "articleResultMap">
+		select * from article where author_id=#{0} order by article_date desc limit #{1},10;
+	</select>
 </mapper>

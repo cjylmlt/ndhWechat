@@ -74,13 +74,13 @@ var writeEvent = {
 		articleData['article.articleId'] = $('#articleId').html();
 		$.ajax({
 			type : 'post',
-			url : '${pageContext.request.contextPath}/saveArticle.action',
+			url : 'saveArticle',
 			dataType : 'json',
 			data:articleData,
 			success : function(data) {
 				if (data.state == "0") {
 					alert("发表成功!");
-					window.location.href="writeArticle.action"
+					window.location.href="index"
 				} else if (data.state == "2") {
 					alert(data.message);
 				} else if(data.state == "3"){

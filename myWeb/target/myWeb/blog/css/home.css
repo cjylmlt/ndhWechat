@@ -19,10 +19,11 @@ body{
 	float:right;
 }
 .user_img{
-    width: 60px;
-    height: 60px;
+    width: 230px;
+    height: 230px;
     border-radius: 50%;
     cursor: pointer;
+	text-align:center
 }
 .main_content div.main_left .new-group{
 	margin-bottom: 0px;

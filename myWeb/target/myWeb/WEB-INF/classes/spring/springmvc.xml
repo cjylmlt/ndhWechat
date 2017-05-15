@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	<context:component-scan base-package="com.cjy.myWeb.controller"></context:component-scan>
+	<mvc:annotation-driven />
+	<mvc:resources location="bootstrap-3.3.7/css/"
+		mapping="bootstrap-3.3.7/css/**" />
+	<mvc:resources location="bootstrap-3.3.7/js/"
+		mapping="bootstrap-3.3.7/js/**" />
+	<mvc:resources location="picture/userImage/" mapping="picture/userImage/**" />
+	<mvc:resources location="blog/" mapping="blog/**" />
+	<mvc:resources location="resource/" mapping="resource/**" />
+	<mvc:interceptors>
+		<!--多个拦截器,顺序执行 -->
+		<!-- 登陆认证拦截器 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resource/bootstrap-3.3.7/css/**" />
+			<mvc:exclude-mapping path="/resource/bootstrap-3.3.7/js/**" />
+			<mvc:exclude-mapping path="/picture/userImage/**" />
+			<mvc:exclude-mapping path="/blog/**" />
+			<bean class="com.cjy.myWeb.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resource/bootstrap-3.3.7/css/**" />
+			<mvc:exclude-mapping path="/resource/bootstrap-3.3.7/js/**" />
+			<mvc:exclude-mapping path="/picture/userImage/**" />
+			<mvc:exclude-mapping path="/blog/**" />
+			<bean class="com.cjy.myWeb.interceptor.RegisterInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+</beans>
