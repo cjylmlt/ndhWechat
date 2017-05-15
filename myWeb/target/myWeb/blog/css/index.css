@@ -1,0 +1,146 @@
+body{
+    font-family: -webkit-pictograph;
+}
+div{
+	word-break: break-all;
+}
+.mytitle{
+	padding-top: 1px;
+	height:120px;
+	background-image: url(../images/title.png);
+}
+.mytitle h1{
+	margin-left: 45px;
+	color:#fff;
+}
+.mytitle h3{
+	margin-left: 100px;
+	color:#fff;
+}
+a{
+	text-decoration: none;
+}
+a:hover{
+	color:#eb7350;
+	text-decoration: none;
+	cursor: pointer;
+}
+.main{
+	width: 1200px;
+	height: auto;
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 120px;
+	clear: both;
+}
+.min-main{
+	width: 1000px;
+	height: auto;
+    margin-right: auto;
+    margin-left: auto;
+    /*margin-bottom: 120px;*/
+    clear: both;
+}
+.head{
+	height:50px;
+	background-color: #fff;
+	border: 1px solid #e3e3e3;
+}
+.head_main{
+	width: 1400px;
+	/*height: auto;*/
+	margin-right: auto;
+	margin-left: auto;
+}
+.option{
+	float:right;
+	margin-right: 32px
+}
+div.option ul{
+	border-bottom: 0px;
+	margin-top:3px;
+}
+.head_search{
+	float:left;
+	margin-top: 7px;
+	margin-right: 10px;
+	width:400px;
+}
+.logo{
+	width: 120px;
+	height: 50px;
+	float: left;
+	margin-left: 40px;
+}
+.logo img{
+	width: 48px;
+	height: 48px;
+}
+div.head ul li a{
+	border: 1px solid #fff;
+	background-color: #fff;
+}
+div.head ul li a:hover,div.head ul li a:focus{
+	border: 1px solid #e3e3e3;
+	background-color: #fff;
+}
+
+.tail div{
+	width: 100%;
+	text-align: center;
+}
+
+.main_content{
+	margin-top:20px;
+}
+li.first{
+	background-color: #f5f5f5;
+	/*border:0px;*/
+}
+.panel{
+	margin-bottom: 0px;
+	border-radius: 0px;
+}
+.list-group-item:first-child{
+	border-radius: 0px;
+}
+.list-group-item:last-child{
+	border-radius: 0px;
+}
+.main_content li.new-item{
+	padding:0px;
+	border:0px;
+	/*margin-bottom: 10px;
+	border-radius: 4px;*/
+}
+/*公共下拉框*/
+.select_other{
+	float:left;
+}
+.bbtn{
+    display: inline-block;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.select_other .dropdown{
+	float:left;
+	margin-left: 10px;
+	color:#428bca;
+}
+.select_other .dropdown:hover{
+	color:red;
+}
+.select_other .classification{
+	float:left;
+	margin-top:2px;
+}

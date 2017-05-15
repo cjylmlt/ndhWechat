@@ -1,0 +1,89 @@
+body{
+	margin:0px;
+	padding:0px;
+	font-family: -webkit-pictograph;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	font-family: 微软雅黑;
+}
+.main{
+	overflow:auto;
+}
+.main_left{
+	width:230px;
+	float: left;
+}
+.main_right{
+	width:950px;
+	float:right;
+}
+.user_img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.main_content div.main_left .new-group{
+	margin-bottom: 0px;
+}
+.main_right .panel-body{
+	padding: 12px;
+}
+.main_right div.user{
+	float:left;
+	border-right: 1px solid #bebebe;
+	padding:12px;
+}
+.main_right .user .userimg{
+	width:100px;
+	height:100px;
+	margin-left:auto;
+	margin-right:auto
+}
+.main_right .userimg img{
+	width:100px;
+	height:100px;
+	border-radius:50%
+}
+.userName{
+	text-align:center;
+}
+.main_right .blog_content{
+	float:left;
+	margin-left:12px;
+	width: 784px;
+}
+.blog_title{
+	margin-left:0px;
+	margin-top:0px
+}
+.blog_title a{
+	font-size:16px;
+	font-weight: bold;
+}
+.article_content{
+	height: 100px;
+	overflow:hidden;
+	word-break: break-all;
+	color: #a3a3a3;
+    padding: 15px;
+}
+.article_info{
+	text-align: right;
+}
+.list_user{
+	height: 60px;
+}
+.list_user_name{
+	float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.list_user_img{
+	width: 60px;
+    height: 60px;
+    float: left;
+    border-radius: 50%;
+}
+

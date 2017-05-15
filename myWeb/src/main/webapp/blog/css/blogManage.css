@@ -1,0 +1,67 @@
+#main {
+	overflow: visible;
+}
+.a-focus{
+	color:#eb7350;
+	text-decoration: none;
+	cursor: pointer;
+}
+.manageView {
+	width: 20%;
+	text-align: center;
+}
+
+.tableOption {
+	/**border-bottom: 1px solid #e3e3e3**/;
+}
+
+.select_others {
+	margin-right: 10px;
+	float: left;
+}
+
+.select {
+	height: 25px;
+	margin-top: 20px;
+	margin-bottom: 15px;
+}
+
+#select1 {
+	width: 100px;
+}
+
+tbody {
+	text-align: center;
+}
+
+tbody tr:hover {
+	background-color: #f9fad1;
+}
+
+.makeHidden{
+	display: none;
+}
+
+.comment{
+	width:100%;
+	overflow-y: hidden;
+	font-size: 13px;
+}
+.comment_user{
+	float:left;
+}
+.comment_user img{
+	 width:40px;
+	 height:40px;
+	 border-radius:50%;
+}
+.comment_content{
+	min-height:40px;
+	width:600px;
+	word-break:break-all;
+	float:left;
+	margin-left:20px
+}
+.comment_option{
+	float:right
+}

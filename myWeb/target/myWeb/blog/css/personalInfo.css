@@ -1,0 +1,222 @@
+a{
+	text-decoration: none;
+}
+a:hover{
+	color:#eb7350;
+	text-decoration: none;
+	cursor: pointer;
+}
+.a-focus{
+	color:#eb7350;
+	text-decoration: none;
+	cursor: pointer;
+}
+body{
+    font-family: -webkit-pictograph;
+}
+#main{
+	overflow: visible;
+}
+.user{
+	float:left;
+	border-right: 1px solid #bebebe;
+	padding:12px;
+}
+.user .userimg{
+	width:150px;
+	height:150px;
+	margin-left:auto;
+	margin-right:auto
+}
+.userimg img{
+	width:150px;
+	height:150px;
+	border-radius:50%
+}
+.fansandfollow{
+	text-align: center;
+	margin-top: 5px;
+}
+.fans{
+	width:50%;
+	float:left;
+	border-right: 0.3px solid #bebebe;
+}
+.follow{
+	width:50%;
+	float: left;
+	border-left: 0.3px solid #bebebe;
+}
+.basicdata{
+	float:left;
+	margin-left: 20px;
+	width: 770px;
+}
+.userdata span{
+	padding-right: 10px;
+}
+.top-edit{
+	height: 16px;
+	text-align: right;
+	font-size:16px;
+}
+.basicdata a{
+	float:right;
+	font-size:16px;
+	visibility: hidden;
+}
+.basicdata:hover a{
+	visibility: visible;
+}
+#myTab li{
+    width: 25%;
+    text-align: center;
+}
+.contact .panel-body div{
+	width:50%;
+	float:left
+}
+a.first-edit{
+	float:right;
+	font-size:14px;
+	visibility: hidden;
+}
+.contact:hover a.first-edit{
+	visibility: visible;
+}
+.field:hover a.first-edit{
+	visibility: visible;
+}
+.professional:hover a.first-edit{
+	visibility: visible;
+}
+.labelDiv{
+	width:130px;
+	height: 70px;
+	float: left;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.myLabel{
+    border: 1px solid #b5b5b5;
+    width: 130px;
+    height: 70px;
+    border-radius: 15px;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    text-align: center;
+    line-height: 70px;
+}
+.del{
+   	font-size:14px;
+    float: right;
+    text-align: center;
+    display: none;
+    margin-top: -23px;
+    margin-right: 8px;
+}
+.labelDiv:hover>.del{
+	display: block;
+}
+.labeladd{
+	font-size: 30px;
+	border:1px dashed #b5b5b5;
+}
+a.add{
+	width: 12px;
+	height:12px;
+	display: inline-block;
+	float:right;
+	font-size: 14px;
+    padding: 5px;
+    margin-right:10px;
+}
+.info{
+	float: left;
+}
+.myinfo-option{
+	display: none;
+	float:right;
+	height: 24px;
+}
+.delete{
+	width:12px;
+	height:12px;
+	display:inline-block;
+	margin-right:10px;
+	font-size: 14px;
+    padding: 5px;
+}
+.edit{
+	width:12px;
+	height:12px;
+	display:inline-block;
+	font-size: 14px;
+    padding: 5px;
+}
+.education:hover>.myinfo-option{
+	display: block;
+}
+.work:hover>.myinfo-option{
+	display: block;
+}
+.work>.myinfo-option .delete{
+	margin-right: 0px;
+	display: block;
+}
+.work>.myinfo-option .edit{
+	margin-right: 0px;
+	margin-top:20px;
+	display: block;
+}
+#myCollection li .myinfo-option{
+	display: block;
+}
+.relationship-btn{
+	display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.relationship-search{
+	float:right;
+	width: 300px;
+}
+.users{
+	padding-right: 10px;
+    padding-left: 10px;
+    line-height: 65px;
+    float: left;
+    border: 1px,solid,#b5b5b5;
+    border: 1px solid #b5b5b5;
+    border-radius: 15px;
+    margin-right: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.user-img{
+	width:50px;
+	height:50px;
+	display:inline-block;
+}
+.user-img img{
+	width:50px;
+	height:50px;
+	border-radius:50%;
+}
+.user-img + button{
+	float:right;
+	margin-right:10px;
+	margin-top:8px
+}
+.right-time{
+	float:right;
+	margin-right:20px;
+}
+#myDynamic .new-item .list-group-item,#myCollection .list-group-item{
+	padding: 30px 15px;
+}
+#myTab li a{
+	margin-right:0px;
+}

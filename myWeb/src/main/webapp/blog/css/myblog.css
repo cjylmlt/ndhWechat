@@ -1,0 +1,98 @@
+body a:hover {
+    color: #eb7350;
+    text-decoration: none;
+    cursor: pointer;
+}
+body{
+    font-family: -webkit-pictograph;
+}
+.myinfo .myportrait{
+	width:120px;
+	height:120px;
+	margin-left:auto;
+	margin-right:auto
+}
+.myportrait img{
+	width:120px;
+	height:120px;
+	border-radius:50%
+}
+.myname{
+	margin-top: 10px;
+	text-align:center;
+}
+.btns{
+	text-align: center;
+}
+.myblogs{
+	width: 100%;
+}
+.myblog_title{
+	text-align: left;
+	margin-bottom: 15px;
+}
+.myblog_title a{
+	font-size: 20px;
+	font-weight: bold;
+}
+.comment{
+	width:100%;
+	overflow-y: hidden;
+	font-size: 13px;
+}
+.comment_user{
+	float:left;
+}
+.comment_user img{
+	 width:40px;
+	 height:40px;
+	 border-radius:50%;
+}
+.comment_content{
+	min-height:40px;
+	width:600px;
+	word-break:break-all;
+	float:left;
+	margin-left:20px
+}
+.comment_option{
+	float:right
+}
+
+
+
+.comments-li{
+	position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+.articleDetailShow{
+	padding:12px;
+	word-break: break-all;
+	font-family: -webkit-pictograph;
+}
+.comment_reply{
+	font-size:7px;
+	float:left;
+}
+.comment_reply img{
+	 width:30px;
+	 height:30px;
+	 border-radius:50%;
+}
+
+#thisArticleComments li{
+	border-left: 0px;
+	border-right: 0px;
+}
+
+.blogHostInfo{
+	display:block;
+	float:left;
+	width:50%;
+	text-align:center;
+}
+
+#contentDetail img{
+	width:100%;
+}
