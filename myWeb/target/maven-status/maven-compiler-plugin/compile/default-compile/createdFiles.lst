@@ -1,11 +1,10 @@
 com\cjy\myWeb\po\Article.class
 com\cjy\myWeb\po\User.class
+com\cjy\myWeb\controller\UserController.class
 com\cjy\myWeb\service\MessageType.class
 com\cjy\myWeb\mapper\UserMapper.class
-com\cjy\myWeb\controller\LoginController.class
 com\cjy\myWeb\service\impl\UserServiceImpl$1.class
 com\cjy\myWeb\controller\BlogListController.class
-com\cjy\myWeb\controller\RegisterController.class
 com\cjy\myWeb\service\UserService.class
 com\cjy\myWeb\interceptor\RegisterInterceptor.class
 com\cjy\myWeb\mapper\ArticleMapper.class

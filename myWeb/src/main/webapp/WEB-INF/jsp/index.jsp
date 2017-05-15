@@ -15,7 +15,7 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 </head>
-<body>
+<body background="${pageContext.request.contextPath}/blog/images/background.jpg">
 	<%@ include file="common/head.jsp"%>
 	<input hidden id="isArticleClass" value="1"/>
 	<div class="mytitle">

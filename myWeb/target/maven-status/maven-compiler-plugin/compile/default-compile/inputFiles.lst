@@ -6,13 +6,12 @@ D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\service\UserService.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\interceptor\LoginInterceptor.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\utils\PageUtil.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\po\Page.java
-D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\controller\RegisterController.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\mapper\UserMapper.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\service\PageService.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\po\Article.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\controller\DrawImageController.java
-D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\controller\LoginController.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\interceptor\RegisterInterceptor.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\service\MessageType.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\po\User.java
+D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\controller\UserController.java
 D:\eclipse\workspace\myWeb\src\main\java\com\cjy\myWeb\service\impl\UserServiceImpl.java

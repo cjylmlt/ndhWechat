@@ -13,7 +13,7 @@ import com.cjy.myWeb.service.*;
 
 
 @Controller
-public class LoginController {
+public class UserController {
 	@Autowired
     private UserService userService;
 	@RequestMapping("/login")
@@ -45,6 +45,34 @@ public class LoginController {
 	public ModelAndView loginView(){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("login");
+		return modelAndView;
+	}
+	@RequestMapping("/register")
+	public String register(HttpSession session,String username,String password,String checkCode,HttpServletRequest request,HttpServletResponse response) throws Exception{
+		System.out.println(username+password+checkCode);
+		if(userService.checkCheckCode(request, response)&&userService.checkRegisterEmpty(request, response)){
+			if(userService.registerNewUser(request, response)){
+				session.setAttribute("username", request.getAttribute("username"));
+				return "index";
+			}
+			else {
+				return "registerFail";
+			}
+		}
+		else
+			return "registerFail";
+	}
+	@RequestMapping("/registerView")
+	public ModelAndView registerView(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("register");
+		return modelAndView;
+	}
+	@RequestMapping("/logout")
+	public ModelAndView logout(HttpSession session){
+		session.removeAttribute("userId");
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("index");
 		return modelAndView;
 	}
 }

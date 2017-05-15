@@ -2,22 +2,24 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+	<script type="text/javascript">
+		$(function(){
+			$('.trick').click(function(){
+				alert("简直异想天开")
+			})
+		})
+	</script>
 
 	<ul class="list-group new-group">
 		<li class="list-group-item new-item">
 			<ul class="list-group">
 				<li href="#" class="list-group-item first">博主资料</li>
-				<li><img src="${pageContext.request.contextPath}/picture/userImage/me.PNG" class="img-rounded"></li>
+				<li style="width:230px ;height:230px"><img src="${pageContext.request.contextPath}/picture/userImage/user.jpg" class="user_img"></li>
 				<li class="list-group-item first">联系方式</li>
-				<li class="list-group-item">电话:18868100899</li>
-				<li class="list-group-item">微信:cjy950128</li>
+				<li class="list-group-item">电话:<a class="trick">点击查看</a></li>
+				<li class="list-group-item">微信:<a class="trick">点击查看</a></li>
 				<li class="list-group-item">邮箱:cjylemonlight@163.com</li>
-				<li class="list-group-item">qq:392026769</li>
+				<li class="list-group-item">qq:<a class="trick">点击查看</a></li>
 			</ul>
 		</li>
 		<li class="list-group-item new-item">
@@ -59,5 +61,5 @@
 		
 	</ul>
 
-</body>
+
 </html>
