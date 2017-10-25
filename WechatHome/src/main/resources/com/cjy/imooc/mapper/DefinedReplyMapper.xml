@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjy.imooc.mapper.DefinedReplyMapper">
+  <select id="getDefinedReplyByKeyAndUser"  resultType="com.imooc.po.DefinedReply">
+  	select * from defined_reply where replyKey = #{0} and username=#{1}
+  </select>
+    <select id="getAdByUser"  resultType="com.imooc.po.DefinedReply">
+  	select * from defined_reply where replyKey = '广告' and username=#{0}
+  </select>
+</mapper>
