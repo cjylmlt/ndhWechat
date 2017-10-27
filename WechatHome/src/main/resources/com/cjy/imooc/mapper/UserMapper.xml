@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cjy.imooc.mapper.UserMapper">
-  <select id="selectUserByUrl"  resultType="com.imooc.po.User">
-  	select * from user where userUrl = #{0}
+  <select id="selectUserById"  resultType="com.imooc.po.User">
+  	select `id`,`userName`,`userId`,`status` from user where `userId` = #{0}
   </select>
 </mapper>

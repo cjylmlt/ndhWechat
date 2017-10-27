@@ -15,7 +15,10 @@
     </environment>
   </environments>
   <mappers>
+    
     <mapper resource="com/cjy/imooc/mapper/DefinedReplyMapper.xml"/>
     <mapper resource="com/cjy/imooc/mapper/UserMapper.xml"/>
+    <mapper resource="com/cjy/imooc/mapper/RecordMapper.xml"/>
+    <mapper resource="com/cjy/imooc/mapper/NewsMapper.xml"/>
   </mappers>
 </configuration>

@@ -13,6 +13,7 @@
      <url-pattern>/hongxiufei_1.do</url-pattern>
      <url-pattern>/02_yglzf66_2.do</url-pattern>
      <url-pattern>/02_dy23hua_3.do</url-pattern>
+      <url-pattern>/maxiaodai.do</url-pattern>
   </servlet-mapping>
 </web-app>
 

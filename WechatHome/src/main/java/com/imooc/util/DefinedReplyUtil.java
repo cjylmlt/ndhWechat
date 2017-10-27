@@ -40,15 +40,15 @@ public class DefinedReplyUtil {
 		}
 		return adList;
 	}
-	public static String getUserName(String userUrl) throws IOException{
+	public static User getUser(String userId) throws IOException{
 		String resource = "mybatis-config.xml";
 		InputStream inputStream = Resources.getResourceAsStream(resource);
 		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-		User user =userMapper.selectUserByUrl(userUrl);
+		User user =userMapper.selectUserById(userId);
 		if(user!=null)
-			return user.getUsername();
+			return user;
 		else
 			return null;
 	}
