@@ -1,5 +1,7 @@
 package com.cjy.imooc.mapper;
 
+import com.imooc.po.User;
+
 public interface UserMapper {
-	public String selectUserByUrl(String url);
+	public User selectUserByUrl(String url);
 }

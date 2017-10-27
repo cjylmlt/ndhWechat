@@ -8,15 +8,11 @@
   <servlet-mapping>
     <servlet-name>WechatServlet</servlet-name>
     <url-pattern>/wx.do</url-pattern>
-  </servlet-mapping>
-    <display-name>Wechat</display-name>
-  <servlet>
-    <servlet-name>AiyoutengServlet</servlet-name>
-    <servlet-class>com.imooc.controller.AiyoutengServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AiyoutengServlet</servlet-name>
     <url-pattern>/aiyouteng.do</url-pattern>
+     <url-pattern>/botianbanmu.do</url-pattern>
+     <url-pattern>/hongxiufei_1.do</url-pattern>
+     <url-pattern>/02_yglzf66_2.do</url-pattern>
+     <url-pattern>/02_dy23hua_3.do</url-pattern>
   </servlet-mapping>
 </web-app>
 

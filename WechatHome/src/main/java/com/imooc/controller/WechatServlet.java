@@ -21,7 +21,6 @@ import com.imooc.util.MessageUtil;
 
 
 public class WechatServlet extends HttpServlet{
-	private static final String USERNAME = "nhd";
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -37,7 +36,10 @@ public class WechatServlet extends HttpServlet{
 	//@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//String userUrl = req.getRequestURL().toString();
+		String userUrl = req.getRequestURL().toString();
+		String userName = DefinedReplyUtil.getUserName(userUrl);
+		if(userName == null)
+			return;
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		PrintWriter out = resp.getWriter();
@@ -52,30 +54,42 @@ public class WechatServlet extends HttpServlet{
 			DefinedReply definedReply;
 			List<DefinedReply> adList;
 			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
-				if((definedReply = DefinedReplyUtil.getReply(content, USERNAME))!=null){
+				if((definedReply = DefinedReplyUtil.getReply(content, userName))!=null){
 					message = MessageUtil.packText(toUserName, fromUserName, definedReply.getValue());
 				}
 				else{
 					String urlContent = URLEncoder.encode(content,"UTF-8");
 					List<News> newsList = VideoSpider.getVideoMessage(urlContent);					
 					if(newsList.size()>0){
-						if((adList = DefinedReplyUtil.getADList(USERNAME))!=null){
-							for(DefinedReply d:adList){
-								if((8-newsList.size())>0){
-									News news = new News();
-									news.setDescription("");
-									news.setTitle(d.getValue());
-									news.setPicUrl(d.getPicUrl());
-									news.setUrl(d.getUrl());
-									newsList.add(news);
-								}
+						if((adList = DefinedReplyUtil.getADList(userName))!=null){
+							if(adList.size()>0){
+								DefinedReply d = adList.get(0);
+								News news = new News();
+								news.setDescription("");
+								news.setTitle(d.getValue());
+								news.setPicUrl(d.getPicUrl());
+								news.setUrl(d.getUrl());
+								newsList.add(1, news);
 							}
+//							for(DefinedReply d:adList){
+//								if((8-newsList.size())>0){
+//									News news = new News();
+//									news.setDescription("");
+//									news.setTitle(d.getValue());
+//									news.setPicUrl(d.getPicUrl());
+//									news.setUrl(d.getUrl());
+//									newsList.add(news);
+//								}
+//							}
 						}
 						message = MessageUtil.packNewsMessage(toUserName, fromUserName,newsList);
 					}
 					else {
 						
-						reply = "您当前搜索的影视尚未收入，请留言想看的影片，我们会后台更新";
+						if( DefinedReplyUtil.getReply("搜索不到的回复", userName)!=null)
+							reply = DefinedReplyUtil.getReply("搜索不到的回复", userName).getValue();
+						else
+							reply = "搜索不到您当前输入的资源，请检查下您的片名是否正确";
 						message=MessageUtil.packText(toUserName, fromUserName, reply);
 					}
 				}
@@ -83,7 +97,7 @@ public class WechatServlet extends HttpServlet{
 			else if(MessageUtil.MESSAGE_EVENT.equals(msgType)){
 				String eventType = map.get("Event");
 				if(MessageUtil.MESSAGE_SUBSCRIBE.equals(eventType)){
-					if((definedReply = DefinedReplyUtil.getReply("新关注的回复", USERNAME))!=null){
+					if((definedReply = DefinedReplyUtil.getReply("新关注的回复", userName))!=null){
 						message = MessageUtil.packText(toUserName, fromUserName, definedReply.getValue());
 					}
 					else{

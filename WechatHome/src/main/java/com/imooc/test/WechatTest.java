@@ -11,7 +11,7 @@ import net.sf.json.JSONObject;
 public class WechatTest {
 	private static final String GET_ONLINE_MEDIA_URL= "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN";
 	public static void main(String[] args){
-		sendMediaMessage();
+		sendMenuToWechat();
 	}
 	public static void sendMenuToWechat(){
 		String token = WechatUtil.getAccessToken().getToken();

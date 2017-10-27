@@ -10,7 +10,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.cjy.imooc.mapper.DefinedReplyMapper;
+import com.cjy.imooc.mapper.UserMapper;
 import com.imooc.po.DefinedReply;
+import com.imooc.po.User;
 
 public class DefinedReplyUtil {
 	
@@ -37,5 +39,17 @@ public class DefinedReplyUtil {
 			
 		}
 		return adList;
+	}
+	public static String getUserName(String userUrl) throws IOException{
+		String resource = "mybatis-config.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+		User user =userMapper.selectUserByUrl(userUrl);
+		if(user!=null)
+			return user.getUsername();
+		else
+			return null;
 	}
 }
