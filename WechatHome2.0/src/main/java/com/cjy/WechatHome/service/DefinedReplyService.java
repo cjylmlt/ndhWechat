@@ -37,8 +37,14 @@ public class DefinedReplyService {
 		}
 		return adList;
 	}
-	public void insertDefinedReply(DefinedReply definedReply){
-		definedReplyDao.insertDefinedReply(definedReply);
+	public boolean insertDefinedReply(DefinedReply definedReply,String username){
+		if(definedReplyDao.getDefinedReplyByKeyAndUser(definedReply.getReplyKey(),username)==null){
+			definedReplyDao.insertDefinedReply(definedReply);
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	public void deleteDefinedReply(int id){
 		definedReplyDao.deleteDefinedReply(id);

@@ -1,8 +1,11 @@
 package com.cjy.WechatHome.model;
 
+import java.util.Date;
+
 public class TopRecord {
 	private String content;
 	private int count;
+	private Date updateTime;
 	public String getContent() {
 		return content;
 	}
@@ -14,5 +17,11 @@ public class TopRecord {
 	}
 	public void setCount(int count) {
 		this.count = count;
+	}
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 }

@@ -17,7 +17,13 @@ public interface RecordDao{
 	@Insert({"insert into",TABLE_NAME,"(",INSERT_FIELDS,")",INSERT_VALUES})
 	void insertRecord(Record record);
 	 
-	@Select({"select content,count(*) as count from ",TABLE_NAME," where content!='VIEW' and content!='subscribe' and content!='unsubscribe' ","group by content order by count desc limit 10"})
+	@Select({"select content,count(*) as count from ",TABLE_NAME," where date>= now() - 1000000 and date<= now() and content!='VIEW' and content!='subscribe' and content!='unsubscribe' ","group by content order by count desc limit 10"})
 	List<TopRecord> selectTopRecord();
+	
+	@Select({"select content,count(*) as count from ",TABLE_NAME," where date>= now() - 1000000 and date<= now() and content='subscribe' ","group by content "})
+	TopRecord selectSubRecord();
+	
+	@Select({"select content,count(*) as count from ",TABLE_NAME," where date>= now() - 1000000 and date<= now() and content='unsubscribe' ","group by content "})
+	TopRecord selectUnsubRecord();
 	
 }

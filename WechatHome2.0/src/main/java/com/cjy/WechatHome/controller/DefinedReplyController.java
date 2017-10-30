@@ -47,7 +47,9 @@ public class DefinedReplyController {
 	       definedReply.setReplyKey(title);
 	       definedReply.setUserName(user.getUsername());
 	       definedReply.setValue(content);
-	       definedReplyService.insertDefinedReply(definedReply);
+	       if(!definedReplyService.insertDefinedReply(definedReply,user.getUsername())){
+	    	   return WendaUtil.getJSONString(1,"失败");
+	       }
 	       definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
 		   model.addAttribute("settingUser", user);
 		   

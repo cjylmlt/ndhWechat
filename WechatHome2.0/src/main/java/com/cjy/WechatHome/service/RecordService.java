@@ -19,4 +19,10 @@ public class RecordService{
 	public List<TopRecord> selectTopRecord(){
 		return recordDao.selectTopRecord();
 	}
+	public TopRecord selectSubRecord(){
+		return recordDao.selectSubRecord();
+	}
+	public TopRecord selectUnsubRecord(){
+		return recordDao.selectUnsubRecord();
+	}
 }

@@ -9,7 +9,7 @@
                     <div id="js-home-feed-list" class="zh-general-list topstory clearfix" data-init="{&quot;params&quot;: {}, &quot;nodename&quot;: &quot;TopStory2FeedList&quot;}" data-delayed="true" data-za-module="TopStoryFeedList">
 
                        <table class="table">
-                          <caption>一小时热搜top10</caption>
+                          <caption>上一小时热搜top10</caption>
                           <thead>
                             <tr>
                               <th>排名</th>
@@ -47,6 +47,24 @@
                
                           </tbody>
                         </table>
+                        
+                        <table class="table">
+                          <caption>昨日后台总关注量</caption>
+                          <thead>
+                            <tr>
+                              <th>关注量</th>
+                              <th>取关量</th>
+                              </tr>
+                          </thead>
+                          <tbody>                   
+                            <tr class="success">
+                              <td>$!{subRecord.count}</td>
+                              <td>$!{unSubRecord.count}</td>
+                             </tr>
+                          </tbody>
+                        </table>
+                        
+                        
                         #if($userList)
                         	
                         		<table class="table">

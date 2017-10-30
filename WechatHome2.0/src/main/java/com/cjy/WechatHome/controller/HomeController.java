@@ -2,6 +2,7 @@ package com.cjy.WechatHome.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.cjy.WechatHome.model.HostHolder;
+import com.cjy.WechatHome.model.TopRecord;
 import com.cjy.WechatHome.model.ViewObject;
 import com.cjy.WechatHome.service.RecordService;
+import com.cjy.WechatHome.service.TopRecordService;
 import com.cjy.WechatHome.service.UserService;
 
 @Controller
@@ -23,12 +26,14 @@ public class HomeController {
 	@Autowired
 	UserService userService;
 	@Autowired
-	RecordService recordService;
-	@Autowired
 	HostHolder hostHolder;
+	@Autowired
+	TopRecordService topRecordService;
 	@RequestMapping(path={"/","/index"},method = {RequestMethod.GET})
 	public String index(Model model){
-		model.addAttribute("topRecordList", recordService.selectTopRecord()); 
+		model.addAttribute("topRecordList", topRecordService.selectTopRecord()); 
+		model.addAttribute("subRecord", topRecordService.selectSubRecord("subscribe"));
+		model.addAttribute("unSubRecord", topRecordService.selectSubRecord("unSubscribe"));
 		if(hostHolder.getUser()!=null&&hostHolder.getUser().getUsername().equals("admin"))
 			model.addAttribute("userList", userService.selectAll());
 		return "index";
