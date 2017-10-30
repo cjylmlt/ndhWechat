@@ -1,0 +1,88 @@
+#parse("header.html")
+<link rel="stylesheet" href="../styles/index.css">
+<link rel="stylesheet" href="../styles/detail.css">
+    <div class="zg-wrap zu-main clearfix " role="main">
+        <div class="zu-main-content">
+            <div class="zu-main-content-inner">
+                <div class="zu-main-feed-con navigable" data-feedtype="topstory" id="zh-question-list" data-widget="navigable" data-navigable-options="{&quot;items&quot;:&quot;&gt; .zh-general-list .feed-content&quot;,&quot;offsetTop&quot;:-82}">
+                    <a href="javascript:;" class="zu-main-feed-fresh-button" id="zh-main-feed-fresh-button" style="display:none"></a>
+                    <div id="js-home-feed-list" class="zh-general-list topstory clearfix" data-init="{&quot;params&quot;: {}, &quot;nodename&quot;: &quot;TopStory2FeedList&quot;}" data-delayed="true" data-za-module="TopStoryFeedList">
+					#if($adminUser && ${adminUser.username}=="admin")
+					<form action="/userSetting" method="post">
+					<input name="id" value=$settingUser.id type="hidden">
+						<table class="table">
+					  <caption>用户基本信息</caption>
+					  <thead>
+					    <tr>
+					      <th>名称</th>
+					      <th>值</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+						<tr>
+					      <td>用户名</td>
+					      <td><input type="text" name="username" value =$!{settingUser.username}></td>
+					    </tr>
+					     <tr>
+					      <td>公众号id</td>
+					      <td><input type="text" name="wechatId" value =$!{settingUser.userId}></td>
+					    </tr>
+					    <tr>
+					      <td>账户信息(0代表正常，1代表停用)</td>
+					      <td>#if($!{user.status}==0)
+					      		<input type="text" name="status" value =$!{settingUser.status}>
+					      	   #else
+					      	    <input type="text" name="status" value =$!{settingUser.status}>
+					      	   #end
+					      </td>
+					    </tr>
+					     <tr>
+					      <td>中文名</td>
+					      <td> <input type="text" name="chineseName" value =$!{settingUser.chineseName}></td>
+					    </tr>
+					    <tr>
+					      <td>备注一</td>
+					      <td><input type="text" name="noteOne" value =$!{settingUser.noteOne}></td>
+					    </tr>
+					    <tr>
+					      <td>头像</td>
+					      <td><input type="text" name="headUrl" value =$!{settingUser.headUrl}></td>
+					    </tr>
+					  </tbody>
+					</table>   
+					<input type="submit" value="提交"/>                        
+					</form>
+					#end
+                       <table class="table">
+                          <caption>关键词</caption>
+                          <thead>
+                            <tr>
+                              <th>序号</th>
+                              <th>关键词</th>
+                              <th>回复</th>
+                              <th><button class="zu-top-add-question" id="zu-top-add-question">添加</button></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          #foreach($definedReply in $definedReplyList)
+                            <tr class="success">
+                            <form action="/definedReply/delete" method="post">
+                              <input type="hidden" name="definedReplyId" value=$definedReply.id> 
+                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
+                              <td>$!{velocityCount}</td>
+                              <td>$!{definedReply.replyKey}</td>
+                              <td>$!{definedReply.value}</td>
+                              <td><input type="submit" value="删除"></td></tr>
+                           </form>                             
+                          #end
+               
+                          </tbody>
+                        </table>
+                    </div>
+                    
+            </div>
+        </div>
+    </div>
+#parse("js.html")
+<script type="text/javascript" src="/scripts/main/site/detail.js"></script>
+#parse("footer.html")
