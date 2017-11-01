@@ -9,6 +9,9 @@ public class CheckUtil {
 	private static String token = "cjy";
 	public static boolean checkSignature(String signature,String timestamp,String nonce){
 		//排序
+		if(signature==null||timestamp==null|| nonce==null){
+			return false;
+		}
 		String[] arr = new String[]{token,timestamp,nonce};
 		Arrays.sort(arr);
 		//生成新字符串

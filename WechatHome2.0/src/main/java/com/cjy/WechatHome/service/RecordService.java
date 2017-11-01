@@ -25,4 +25,5 @@ public class RecordService{
 	public TopRecord selectUnsubRecord(){
 		return recordDao.selectUnsubRecord();
 	}
+
 }

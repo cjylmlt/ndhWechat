@@ -28,7 +28,7 @@
 					      <td><input type="text" name="wechatId" value =$!{settingUser.userId}></td>
 					    </tr>
 					    <tr>
-					      <td>账户信息(0代表正常，1代表停用)</td>
+					      <td>账户信息(0代表正常，1代表停用,2为超级用户)</td>
 					      <td>#if($!{user.status}==0)
 					      		<input type="text" name="status" value =$!{settingUser.status}>
 					      	   #else

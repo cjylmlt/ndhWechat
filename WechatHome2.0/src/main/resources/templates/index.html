@@ -9,7 +9,7 @@
                     <div id="js-home-feed-list" class="zh-general-list topstory clearfix" data-init="{&quot;params&quot;: {}, &quot;nodename&quot;: &quot;TopStory2FeedList&quot;}" data-delayed="true" data-za-module="TopStoryFeedList">
 
                        <table class="table">
-                          <caption>上一小时热搜top10</caption>
+                          <caption>24小时热搜top10</caption>
                           <thead>
                             <tr>
                               <th>排名</th>
@@ -17,6 +17,7 @@
                               <th>搜索次数</th></tr>
                           </thead>
                           <tbody>
+                          
                           #foreach($topRecord in $topRecordList)
                             #if($velocityCount==1)
                             <tr class="success">
@@ -83,8 +84,10 @@
 					      	公众号id：$!{user.userId} </br> 
 					      	账户信息：#if($!{user.status}==0)
 					      		用户正常 </br> 
-					      	   #else
+					      	   #elseif($!{user.status}==1)
 					      	        用户已被停用 </br> 
+					      	    #elseif($!{user.status}==2)
+					      	        超级用户 </br> 
 					      	   #end
 					      	   中文名：$!{user.chineseName}</br> 
 					      	  备注一：$!{user.noteOne}</br> 

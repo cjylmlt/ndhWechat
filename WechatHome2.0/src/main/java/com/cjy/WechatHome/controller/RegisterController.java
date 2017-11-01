@@ -25,7 +25,7 @@ public class RegisterController {
 		if(map.containsKey("ticket")){
 			Cookie cookie = new Cookie("ticket", map.get("ticket"));
 			cookie.setPath("/");
-			response.addCookie(cookie);
+			//response.addCookie(cookie);
 			if(!StringUtils.isEmpty(next))
 				return "redirect:"+next;
 			else 

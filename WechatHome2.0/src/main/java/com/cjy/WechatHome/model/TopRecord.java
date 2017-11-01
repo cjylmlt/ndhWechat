@@ -6,6 +6,7 @@ public class TopRecord {
 	private String content;
 	private int count;
 	private Date updateTime;
+	private int status;
 	public String getContent() {
 		return content;
 	}
@@ -23,5 +24,11 @@ public class TopRecord {
 	}
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }

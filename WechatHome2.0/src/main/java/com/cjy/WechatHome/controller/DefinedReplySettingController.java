@@ -24,7 +24,7 @@ import com.cjy.WechatHome.service.UserService;
 import com.cjy.WechatHome.util.WendaUtil;
 
 @Controller
-public class DefinedReplyController {
+public class DefinedReplySettingController {
 	@Autowired
 	HostHolder hostHolder;
 	@Autowired
