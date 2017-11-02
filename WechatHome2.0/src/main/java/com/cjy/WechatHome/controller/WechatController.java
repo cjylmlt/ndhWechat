@@ -107,34 +107,7 @@ public class WechatController {
 				message = replyService.textMessageReply(map, user, record);
 			}
 			else if(MessageUtil.MESSAGE_EVENT.equals(msgType)){
-				String eventType = map.get("Event");
-				content = eventType;
-				record.setContent(content);
-				if(MessageUtil.MESSAGE_SUBSCRIBE.equals(eventType)){
-					if((definedReply = definedReplyService.getReply("新关注的回复", user.getUsername()))!=null){
-						message = MessageUtil.packText(toUserName, fromUserName, definedReply.getValue());
-					}
-					else{
-						//reply = "欢迎您的关注，回复影视关键词即可在线观看超清资源，如果喜欢的话，请推荐给你的朋友们哦";
-						message = MessageUtil.packText(toUserName, fromUserName, reply);
-					}
-				}
-				else if(MessageUtil.MESSAGE_UNSUBSCRIBE.equals(eventType)){
-					
-				}
-				else if(MessageUtil.MESSAGE_CLICK.equals(eventType)){
-					String buttonKey = map.get("EventKey");
-					if("33".equals(buttonKey)){
-						reply="商务合作请联系我\n微信：18822802281\nQQ：8652837\nTel：18822802281\n非客户不要轻易投食，合作请注明公司，合作项目，其他勿扰";
-					}
-					else{
-						reply = "你点击了一下，真调皮";
-					}
-					message = MessageUtil.packText(toUserName, fromUserName, reply);
-				}
-				else if(MessageUtil.MESSAGE_VIEW.equals(eventType)){
-					message = MessageUtil.packText(toUserName, fromUserName, reply);
-				}
+				message = replyService.EventMessageReply(map, user, record);
 			}
 			else if(MessageUtil.MESSAGE_LOCATION.equals(msgType)){
 				String label = map.get("Label");

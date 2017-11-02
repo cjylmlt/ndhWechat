@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.cjy.WechatHome.dao.DefinedReplyDao;
 import com.cjy.WechatHome.dao.LoginTicketDao;
 import com.cjy.WechatHome.dao.UserDao;
+import com.cjy.WechatHome.model.DefinedReply;
 import com.cjy.WechatHome.model.LoginTicket;
 import com.cjy.WechatHome.model.User;
 import com.cjy.WechatHome.util.WendaUtil;
@@ -26,6 +28,8 @@ public class UserService {
 	UserDao userDao;
 	@Autowired
 	LoginTicketDao loginTicketDao;
+	@Autowired
+	DefinedReplyDao definedReplyDao;
 	public User getUser(int id){
 		return userDao.selectById(id);
 	}
@@ -57,6 +61,16 @@ public class UserService {
 			user.setHeadUrl("https://images.nowcoder.com/head/613m.png");
 			user.setUserId(wechatId);
 			userDao.addUser(user); 
+			user = userDao.selectByName(username);
+			DefinedReply definedReply = new DefinedReply();
+			definedReply.setReplyKey("新关注的回复");
+			definedReply.setUserName(user.getUsername());
+			definedReplyDao.insertDefinedReply(definedReply);
+			definedReply.setReplyKey("搜索不到的回复");
+			definedReplyDao.insertDefinedReply(definedReply);
+			definedReply.setReplyKey("广告");
+			//definedReply.setValue("预留广告位");
+			definedReplyDao.insertDefinedReply(definedReply);
 		}
 		String ticket =  addLoginTicket(user.getId());
 		map.put("ticket", ticket);

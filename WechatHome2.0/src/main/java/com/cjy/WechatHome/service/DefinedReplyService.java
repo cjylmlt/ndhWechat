@@ -49,4 +49,11 @@ public class DefinedReplyService {
 	public void deleteDefinedReply(int id){
 		definedReplyDao.deleteDefinedReply(id);
 	}
+	
+	public void updateDefinedReply(int id,String replyKey){
+		definedReplyDao.updateDefinedReply(id,replyKey);
+	}
+	public void updateAd(int id,String replyKey,String picUrl,String url){
+		definedReplyDao.updateAd(id,replyKey,picUrl,url);
+	}
 }

@@ -64,7 +64,19 @@
                               </tr>
                           </thead>
                           <tbody>
+                          
                           #foreach($definedReply in $definedReplyList)
+                          	#if($definedReply.replyKey=="新关注的回复"||$definedReply.replyKey=="搜索不到的回复")
+                          	<tr class="danger">
+                            <form action="/definedReply/update" method="post">
+                              <input type="hidden" name="definedReplyId" value=${definedReply.id}> 
+                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
+                              <td>$!{velocityCount}</td>
+                              <td>$!{definedReply.replyKey}</td>
+                              <td><input  style="width:660px;" type="textarea" name="replyValue" value=$!{definedReply.value} ></td>
+                              <td><input type="submit" value="修改"></td></tr>
+                             </form>
+                          	#else
                             <tr class="success">
                             <form action="/definedReply/delete" method="post">
                               <input type="hidden" name="definedReplyId" value=$definedReply.id> 
@@ -73,9 +85,33 @@
                               <td>$!{definedReply.replyKey}</td>
                               <td>$!{definedReply.value}</td>
                               <td><input type="submit" value="删除"></td></tr>
-                           </form>                             
+                           </form>
+                           #end
                           #end
                
+                          </tbody>
+                        </table>
+                         <table class="table">
+                          <caption>广告(为了美观，只能一条)</caption>
+                          <thead>
+                            <tr>
+                              <th>名称</th>
+                              <th>值</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          	<tr class="danger">
+                            <form action="/definedReply/updateAd" method="post">
+                              <input type="hidden" name="adId" value=${ad.id}> 
+                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
+                              <tr><th>封面标题</th>
+                              <td><input style="width:860px;"type="textarea" name="adValue" value=$!{ad.value}></td></tr>
+                               <tr><th>图片链接</th>
+                              <td><input style="width:860px;"type="textarea" name="adPicUrl" value=$!{ad.picUrl}></td></tr>
+                               <tr><th>跳转链接</th>
+                              <td><input style="width:860px;"type="textarea" name="adUrl" value=$!{ad.url}></td></tr>
+                              <td><input type="submit" value="修改"></td></tr>
+                             </form>
                           </tbody>
                         </table>
                     </div>

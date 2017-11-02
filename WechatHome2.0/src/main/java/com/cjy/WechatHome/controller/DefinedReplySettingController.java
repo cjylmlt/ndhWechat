@@ -108,4 +108,78 @@ public class DefinedReplySettingController {
 	    return "redirect:/user/"+String.valueOf(user.getId());
 	}
 
+	@RequestMapping(path = {"/definedReply/update"}, method = {RequestMethod.POST})
+	public String updateDefinedReply(@RequestParam("definedReplyId")int definedReplyid,@RequestParam("userId")int userId,@RequestParam("replyValue")String replyValue,Model model){
+		User visitUser = hostHolder.getUser();
+		User user = userService.getUser(userId);
+	    DefinedReply ad = null;
+	    List<DefinedReply> definedReplyList ;
+	    if(visitUser==null){
+	    	 return "redirect:/relogin";
+	    }
+	    //如果是超级用户或者是用户本人
+	    if("admin".equals(visitUser.getUsername())||visitUser.getId()==user.getId()){
+	       definedReplyService.updateDefinedReply(definedReplyid,replyValue);
+	       definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
+		   model.addAttribute("settingUser", user);
+		   
+	    }
+	    else{
+		   user = visitUser;
+		   definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
+		   model.addAttribute("settingUser", null);
+	    }
+	    try {
+		  List<DefinedReply> adList = definedReplyService.getADList(user.getUsername());
+		  if(adList.size()>0){
+			ad = adList.get(0);
+		  }
+		  model.addAttribute("ad",ad);
+		  model.addAttribute("definedReplyList", definedReplyList);
+	    }catch (Exception e) {
+		  e.printStackTrace();
+		  
+	    }
+	    return "redirect:/user/"+String.valueOf(user.getId());
+	}
+	
+	@RequestMapping(path = {"/definedReply/updateAd"}, method = {RequestMethod.POST})
+	public String updateAd(@RequestParam("adId")int adId,
+			@RequestParam("userId")int userId,
+			@RequestParam("adValue")String adValue,
+			@RequestParam("adPicUrl")String adPicUrl,
+			@RequestParam("adUrl")String adUrl,
+			Model model){
+		User visitUser = hostHolder.getUser();
+		User user = userService.getUser(userId);
+	    DefinedReply ad = null;
+	    List<DefinedReply> definedReplyList ;
+	    if(visitUser==null){
+	    	 return "redirect:/relogin";
+	    }
+	    //如果是超级用户或者是用户本人
+	    if("admin".equals(visitUser.getUsername())||visitUser.getId()==user.getId()){
+	       definedReplyService.updateAd(adId,adValue,adPicUrl,adUrl);
+	       definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
+		   model.addAttribute("settingUser", user);
+		   
+	    }
+	    else{
+		   user = visitUser;
+		   definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
+		   model.addAttribute("settingUser", null);
+	    }
+	    try {
+		  List<DefinedReply> adList = definedReplyService.getADList(user.getUsername());
+		  if(adList.size()>0){
+			ad = adList.get(0);
+		  }
+		  model.addAttribute("ad",ad);
+		  model.addAttribute("definedReplyList", definedReplyList);
+	    }catch (Exception e) {
+		  e.printStackTrace();
+		  
+	    }
+	    return "redirect:/user/"+String.valueOf(user.getId());
+	}
 }
