@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,8 +26,14 @@ public class LoginController {
 	@Autowired
 	LoginTicketDao ticketDao;
 	@RequestMapping(path={"/login/"},method = {RequestMethod.POST})
-	public String login(Model model,@RequestParam("username") String username,@RequestParam("password") String password,@RequestParam(value="next",required=false)String next,HttpServletResponse response){
-		Map<String,String> map = userService.login(username, password);
+	public String login(Model model,@RequestParam("username") String username,
+			@RequestParam("password") String password,
+			@RequestParam(value="next",required=false)String next,
+			HttpServletResponse response,
+			HttpSession session,
+			@RequestParam("inputCheckCode")String inputCheckCode){
+		String checkCode = (String)session.getAttribute("checkCode");
+		Map<String,String> map = userService.login(username, password,checkCode,inputCheckCode);
 		if(map.containsKey("ticket")){
 			Cookie cookie = new Cookie("ticket", map.get("ticket"));
 			cookie.setPath("/");

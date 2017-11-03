@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.cjy.WechatHome.dao.SpiderWebDao;
 import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.TopRecord;
 import com.cjy.WechatHome.model.ViewObject;
 import com.cjy.WechatHome.service.RecordService;
+import com.cjy.WechatHome.service.SpiderWebService;
 import com.cjy.WechatHome.service.TopRecordService;
 import com.cjy.WechatHome.service.UserService;
 
@@ -29,13 +31,18 @@ public class HomeController {
 	HostHolder hostHolder;
 	@Autowired
 	TopRecordService topRecordService;
+	@Autowired
+	SpiderWebService spiderWebService;
 	@RequestMapping(path={"/","/index"},method = {RequestMethod.GET})
 	public String index(Model model){
 		model.addAttribute("topRecordList", topRecordService.selectTopRecord()); 
 		model.addAttribute("subRecord", topRecordService.selectSubRecord("subscribe"));
 		model.addAttribute("unSubRecord", topRecordService.selectSubRecord("unSubscribe"));
-		if(hostHolder.getUser()!=null&&hostHolder.getUser().getUsername().equals("admin"))
+		model.addAttribute("choosenWeb", spiderWebService.selectChoosenSpiderWeb().getWebName());
+		if(hostHolder.getUser()!=null&&hostHolder.getUser().getUsername().equals("admin")){
 			model.addAttribute("userList", userService.selectAll());
+			model.addAttribute("hostWebList",spiderWebService.selectSpiderWebList());
+		}
 		return "index";
 	}
 //    @RequestMapping(path = {"/user/{userId}"}, method = {RequestMethod.GET, RequestMethod.POST})

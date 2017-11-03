@@ -10,22 +10,40 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.entity.StringEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.cjy.WechatHome.dao.AdminSettingDao;
+import com.cjy.WechatHome.dao.SpiderWebDao;
+import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.News;
+import com.cjy.WechatHome.model.SpiderWeb;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
 
 
-
+@Component
 public class VideoSpider {
-	private static String GOUDAITV_URL = "http://www.byjsj.cn";
-	public static String sendGet(String url){//获得给定url的源文件
+	@Autowired
+	SpiderWebDao spiderWebDao;
+	@Autowired
+	HostHolder hostHolder;
+	@Autowired
+	AdminSettingDao adminSettingDao;
+	public String sendGet(String url){//获得给定url的源文件
 		String content="";
 		HttpClient client = new HttpClient();
 		GetMethod get = new GetMethod(url);
 
-		//get.addRequestHeader("","utf-8");
+		//get.addRequestHeader("Accept-Encoding","gzip, deflate");
+		get.addRequestHeader("Accept-Language","zh-CN,zh;q=0.8");
+	
+		//get.addRequestHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36");
 		try {
+			
 			int status = client.executeMethod(get);
+			get.getParams().setContentCharset("UTF8");
 			content = get.getResponseBodyAsString();
 			//System.out.println("getUrl:"+status);
 			//System.out.println(content);
@@ -37,13 +55,22 @@ public class VideoSpider {
 		}
 		return content;
 	}
-	public static List<News> getVideoMessage(String content){//给定level-one page的url和id中获得level-two page url
+	public List<News> getVideoMessage(String content){//给定level-one page的url和id中获得level-two page url
 		List<News> newsList = new ArrayList<News>();
-		String url = "http://www.byjsj.cn/search.php?searchword="+content;
+		SpiderWeb spiderWeb = spiderWebDao.selectUserWeb(Integer.parseInt(adminSettingDao.selectAdminSetting("hostWeb")));
+		String url = spiderWeb.getSearchUrl()+content;
 		String urlResult = sendGet(url);//获得level-one page源代码
-		ArrayList<String> videoTitleList = regex(urlResult,"<span class=\"sTit\">(.+?)</span>","");
-		ArrayList<String> videoPicUrlList = regex(urlResult,"<img data-src=\"(.+?)\".+?src=.+?>","");
-		ArrayList<String> videoUrlList = regex(urlResult,"<div class=\"con\">[\\s\\S]+?<a href=\"(.+?)\".+?target=\"_self\">[\\s\\S]+?</div>",GOUDAITV_URL);
+		ArrayList<String> videoTitleList = regex(urlResult,spiderWeb.getTitleRegex1(),"");
+		ArrayList<String> videoPicUrlList = regex(urlResult,spiderWeb.getPicRegex1(),"");
+		ArrayList<String> videoUrlList = regex(urlResult,spiderWeb.getVideoRegex1(),spiderWeb.getWebUrl());
+		if(spiderWeb.getPicRegex2()!=null){
+			ArrayList<String> videoTitleList2 = regex(urlResult,spiderWeb.getTitleRegex2(),"");
+			ArrayList<String> videoPicUrlList2 = regex(urlResult,spiderWeb.getPicRegex2(),"");
+			ArrayList<String> videoUrlList2 = regex(urlResult,spiderWeb.getVideoRegex2(),spiderWeb.getWebUrl());
+			videoTitleList.addAll(videoTitleList2);
+			videoPicUrlList.addAll(videoPicUrlList2);
+			videoUrlList.addAll(videoUrlList2);
+		}
 		int num = 0;
 		if(videoTitleList.size()<=7)
 			num = videoTitleList.size();

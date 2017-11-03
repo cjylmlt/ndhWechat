@@ -1,7 +1,7 @@
 package com.cjy.WechatHome.model;
 
-import org.aspectj.weaver.tools.cache.AsynchronousFileCacheBacking.ClearCommand;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class HostHolder {
@@ -15,5 +15,4 @@ public class HostHolder {
 	public void clear(){
 		users.remove();
 	}
-	
 }

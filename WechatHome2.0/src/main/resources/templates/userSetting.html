@@ -1,6 +1,8 @@
 #parse("header.html")
+
 <link rel="stylesheet" href="../styles/index.css">
 <link rel="stylesheet" href="../styles/detail.css">
+
     <div class="zg-wrap zu-main clearfix " role="main">
         <div class="zu-main-content">
             <div class="zu-main-content-inner">
@@ -10,6 +12,7 @@
 					#if($adminUser && ${adminUser.username}=="admin")
 					<form action="/userSetting" method="post">
 					<input name="id" value=$settingUser.id type="hidden">
+					
 						<table class="table">
 					  <caption>用户基本信息</caption>
 					  <thead>
@@ -50,7 +53,7 @@
 					    </tr>
 					  </tbody>
 					</table>   
-					<input type="submit" value="提交"/>                        
+					<input class="btn btn-primary" type="submit" value="提交"/>                        
 					</form>
 					#end
                        <table class="table">
@@ -73,7 +76,7 @@
                               <input type="hidden" name="userId" value=$!{settingUser.id}> 
                               <td>$!{velocityCount}</td>
                               <td>$!{definedReply.replyKey}</td>
-                              <td><input  style="width:660px;" type="textarea" name="replyValue" value=$!{definedReply.value} ></td>
+                              <td><textarea style="width: 90%; height: 150px; margin-top:5px;"name="replyValue"  >$!{definedReply.value}</textarea></td>
                               <td><input type="submit" value="修改"></td></tr>
                              </form>
                           	#else
@@ -84,15 +87,16 @@
                               <td>$!{velocityCount}</td>
                               <td>$!{definedReply.replyKey}</td>
                               <td>$!{definedReply.value}</td>
-                              <td><input type="submit" value="删除"></td></tr>
+                              <td><input type="submit" class="btn btn-primary" value="删除"></td></tr>
                            </form>
                            #end
                           #end
                
                           </tbody>
                         </table>
+                        #if($ad)
                          <table class="table">
-                          <caption>广告(为了美观，只能一条)</caption>
+                          <caption>广告(为了不过多影响粉丝用户的体验，目前只开放一条广告位)</caption>
                           <thead>
                             <tr>
                               <th>名称</th>
@@ -100,20 +104,22 @@
                               </tr>
                           </thead>
                           <tbody>
-                          	<tr class="danger">
+                          	
                             <form action="/definedReply/updateAd" method="post">
-                              <input type="hidden" name="adId" value=${ad.id}> 
+                              
+                              <input type="hidden" name="adId" value=$!{ad.id}> 
                               <input type="hidden" name="userId" value=$!{settingUser.id}> 
-                              <tr><th>封面标题</th>
-                              <td><input style="width:860px;"type="textarea" name="adValue" value=$!{ad.value}></td></tr>
-                               <tr><th>图片链接</th>
-                              <td><input style="width:860px;"type="textarea" name="adPicUrl" value=$!{ad.picUrl}></td></tr>
-                               <tr><th>跳转链接</th>
-                              <td><input style="width:860px;"type="textarea" name="adUrl" value=$!{ad.url}></td></tr>
-                              <td><input type="submit" value="修改"></td></tr>
+                              <tr class="success"><th>封面标题</th>
+                              <td><textarea style="width:860px;" name="adValue" >$!{ad.value}</textarea></td></tr>
+                               <tr class="success"><th>图片链接</th>
+                              <td><textarea style="width:860px;" name="adPicUrl" >$!{ad.picUrl}</textarea></td></tr>
+                               <tr class="success"><th>跳转链接</th>
+                              <td><textarea style="width:860px;" name="adUrl" >$!{ad.url}</textarea></td></tr>
+                              <td><input type="submit" class="btn btn-primary" class="btn btn-primary" value="修改"></td></tr>
                              </form>
                           </tbody>
                         </table>
+                        #end
                     </div>
                     
             </div>

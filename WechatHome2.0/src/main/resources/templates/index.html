@@ -1,6 +1,10 @@
 #parse("header.html")
+#parse("carousel.html")
 <link rel="stylesheet" href="../styles/index.css">
 <link rel="stylesheet" href="../styles/detail.css">
+
+
+
     <div class="zg-wrap zu-main clearfix " role="main">
         <div class="zu-main-content">
             <div class="zu-main-content-inner">
@@ -65,9 +69,18 @@
                           </tbody>
                         </table>
                         
-                        
                         #if($userList)
-                        	
+                        <form action ="/adminSetting" method="post">
+                        <div>当前使用站点为：$!{choosenWeb}</div>
+                        <div class="dropdown">
+                        	<select name="hostWeb"> 
+                        	#foreach($hostWeb in $hostWebList)
+							<option value=$hostWeb.id>$hostWeb.webName</option> 
+							#end
+							</select> 
+						</div>
+							<input type="submit" value="修改"/>
+						</form>
                         		<table class="table">
 					  <caption>用户基本信息</caption>
 					  <thead>

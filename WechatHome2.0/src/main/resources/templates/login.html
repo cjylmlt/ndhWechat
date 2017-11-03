@@ -10,7 +10,12 @@
     <title>马小呆公众号服务</title>
     <link rel="dns-prefetch" href="">
     <link rel="stylesheet" href="../styles/login.css">
-
+<script type="text/javascript">
+	function changeImg() {
+		document.getElementById("validateCodeImage").src = "/DrawImage?"
+				+ Math.random();
+	}
+</script>
 </head>
 <body class="zhi  no-auth">
 <div class="index-main">
@@ -36,16 +41,17 @@
                         <div class="input-wrapper">
                             <input type="password" name="password" aria-label="密码" placeholder="密码" required="">
                         </div>
+                        <div class="input-wrapper">
+						<input type="text"  name="inputCheckCode" aria-label="验证码" placeholder="验证码" required=""> 
+						</div>
+					<div "input-wrapper">
+					<img src="/DrawImage.action" id="validateCodeImage" onclick="changeImg()">
                     </div>
+                    <div>
                     <input type="hidden" name="next" value="$!{next}"/>
+                    </div>
                     <div class="button-wrapper command clearfix">
                         <button class="sign-button submit" type="submit" onclick="form=document.getElementById('regloginform');form.action='/login/'">登录</button>
-                    </div>
-                    <div class="signin-misc-wrapper clearfix">
-                        <label class="remember-me">
-                            <input type="checkbox" name="rememberme" checked="" value="true"> 记住我
-                        </label>
-                        <a class="unable-login" href="#">无法登录?</a>
                     </div>
                 </form>
             </div>

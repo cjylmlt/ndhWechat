@@ -76,7 +76,7 @@ public class UserService {
 		map.put("ticket", ticket);
 		return map;
 	}
-	public Map<String, String> login(String username,String password){
+	public Map<String, String> login(String username,String password,String rightCheckCode,String inputCheckCode){
 		Map<String, String> map =  new HashMap<String,String>();
 		if(StringUtils.isEmpty(username)){
 			map.put("msg","用户名不能为空");
@@ -84,6 +84,14 @@ public class UserService {
 		}
 		if(StringUtils.isEmpty(password)){
 			map.put("msg","密码不能为空");
+			return map;
+		}
+		if(StringUtils.isEmpty(inputCheckCode)){
+			map.put("msg","验证码不能为空");
+			return map;
+		}
+		if(!inputCheckCode.equals(rightCheckCode)){
+			map.put("msg","验证码不正确");
 			return map;
 		}
 		User user = userDao.selectByName(username);
@@ -101,11 +109,49 @@ public class UserService {
 		return map;
 	}
 	
+	public Map<String, String> changePassword(int userId,String oldPassword,String newPassword,String confirmPassword){
+		Map<String, String> map =  new HashMap<String,String>();
+		if(StringUtils.isEmpty(oldPassword)){
+			map.put("msg","初始密码不能为空");
+			return map;
+		}
+		if(StringUtils.isEmpty(newPassword)){
+			map.put("msg","新密码不能为空");
+			return map;
+		}
+		if(StringUtils.isEmpty(confirmPassword)){
+			map.put("msg","确认密码不能为空");
+			return map;
+		}
+		if(!newPassword.equals(confirmPassword)){
+			map.put("msg","两次输入密码不一致");
+			return map;
+		}
+		User user = userDao.selectById(userId);
+		
+		if(user==null){
+			map.put("msg","用户不存在");
+			return map;
+		}
+		else if(!oldPassword.equals(user.getPassword())){
+			
+			map.put("msg","初始密码错误");
+			return map;
+		}
+		else{
+			user.setPassword(newPassword);
+			userDao.updatePassword(user);
+		}
+		String ticket =  addLoginTicket(user.getId());
+		map.put("ticket", ticket);
+		return map;
+	}
+	
 	public String addLoginTicket(int userId){
 		LoginTicket loginTicket = new LoginTicket();
 		loginTicket.setStatus(0);
 		Date now = new Date();
-		now.setTime(3600*1000+now.getTime());
+		now.setTime(3600*1000*24+now.getTime());
 		loginTicket.setExpired(now);
 		loginTicket.setUserId(userId);
 		loginTicket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));

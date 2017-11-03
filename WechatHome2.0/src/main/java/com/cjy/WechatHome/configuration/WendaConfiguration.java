@@ -22,4 +22,5 @@ public class WendaConfiguration extends WebMvcConfigurerAdapter{
 	}
 	
 	
+	
 }
