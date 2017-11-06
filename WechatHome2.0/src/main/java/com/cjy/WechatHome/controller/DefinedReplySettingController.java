@@ -31,9 +31,9 @@ public class DefinedReplySettingController {
 	UserService userService;
 	@Autowired
 	DefinedReplyService definedReplyService;
-	@RequestMapping(path = {"/definedReply/add"}, method = {RequestMethod.POST})
+	@RequestMapping(path = {"/definedReply/addTextReply"}, method = {RequestMethod.POST})
 	@ResponseBody
-	public String addDefinedReply(@RequestParam("id") int id,@RequestParam("title") String title, @RequestParam("content") String content,Model model,HttpServletRequest request){
+	public String addTextReply(@RequestParam("id") int id,@RequestParam("title") String title, @RequestParam("content") String content,Model model,HttpServletRequest request){
 		User visitUser = hostHolder.getUser();
 		User user = userService.getUser(id);
 	    DefinedReply ad = null;
@@ -73,6 +73,57 @@ public class DefinedReplySettingController {
 	    }
 	    
     }
+	
+	@RequestMapping(path = {"/definedReply/addPicReply"}, method = {RequestMethod.POST})
+	@ResponseBody
+	public String addPicReply(@RequestParam("id") int id,
+			@RequestParam("key") String key, 
+			@RequestParam("value") String value,
+			@RequestParam("picUrl") String picUrl,
+			@RequestParam("url") String url,
+			Model model,HttpServletRequest request){
+		User visitUser = hostHolder.getUser();
+		User user = userService.getUser(id);
+	    DefinedReply ad = null;
+	    List<DefinedReply> definedReplyList ;
+	    if(visitUser==null){
+	    	 return "redirect:/relogin";
+	    }
+	    //如果是超级用户或者是用户本人
+	    if("admin".equals(visitUser.getUsername())||visitUser.getId()==user.getId()){
+	       DefinedReply definedReply = new DefinedReply();
+	       definedReply.setReplyKey(key);
+	       definedReply.setUserName(user.getUsername());
+	       definedReply.setValue(value);
+	       definedReply.setPicUrl(picUrl);
+	       definedReply.setUrl(url);
+	       if(!definedReplyService.insertDefinedReply(definedReply,user.getUsername())){
+	    	   return WendaUtil.getJSONString(1,"失败");
+	       }
+	       definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
+		   model.addAttribute("settingUser", user);
+		   
+	    }
+	    else{
+		   user = visitUser;
+		   definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
+		   model.addAttribute("user", null);
+	    }
+	    try {
+		  List<DefinedReply> adList = definedReplyService.getADList(user.getUsername());
+		  if(adList.size()>0){
+			ad = adList.get(0);
+		  }
+		  model.addAttribute("ad",ad);
+		  model.addAttribute("definedReplyList", definedReplyList);
+		  return WendaUtil.getJSONString(0);
+	    }catch (Exception e) {
+		  e.printStackTrace();
+		  return WendaUtil.getJSONString(1,"失败");
+	    }
+	    
+    }
+	
 	@RequestMapping(path = {"/definedReply/delete"}, method = {RequestMethod.POST})
 	public String deleteDefinedReply(@RequestParam("definedReplyId")int definedReplyid,@RequestParam("userId")int userId,Model model){
 		User visitUser = hostHolder.getUser();

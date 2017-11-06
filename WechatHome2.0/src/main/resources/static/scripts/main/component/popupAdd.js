@@ -76,7 +76,7 @@ var oPopupAdd = new PopupAdd({
                 bSubmit = true;
                 // 提交内容
                 $.ajax({
-                    url: '/definedReply/add',
+                    url: '/definedReply/addTextReply',
                     type: 'post',
                     data: oData,
                     dataType: 'json'

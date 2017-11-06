@@ -29,5 +29,5 @@ public interface DefinedReplyDao {
 	public void updateDefinedReply(int id,String replyValue);
 	@Update({"update ",TABLE_NAME,"set `value` = #{1} ,`picUrl` = #{2}, `url` = #{3} where `id` = #{0} "})
 	public void updateAd(int id,String replyValue,String picUrl,String url);
-	
+
 }

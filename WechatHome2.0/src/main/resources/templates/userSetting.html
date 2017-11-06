@@ -1,5 +1,5 @@
 #parse("header.html")
-
+<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="../styles/index.css">
 <link rel="stylesheet" href="../styles/detail.css">
 
@@ -13,8 +13,8 @@
 					<form action="/userSetting" method="post">
 					<input name="id" value=$settingUser.id type="hidden">
 					
-						<table class="table">
-					  <caption>用户基本信息</caption>
+						<table class="table" style="word-break:break-all; word-wrap:break-all;">
+					  <span class="glyphicon glyphicon-asterisk"><span class="label label-danger">用户基本信息</span>
 					  <thead>
 					    <tr>
 					      <th>名称</th>
@@ -57,7 +57,7 @@
 					</form>
 					#end
                        <table class="table">
-                          <caption>关键词</caption>
+                          <span class="glyphicon glyphicon-asterisk"><span class="label label-danger">文字关键词</span>
                           <thead>
                             <tr>
                               <th>序号</th>
@@ -69,34 +69,36 @@
                           <tbody>
                           
                           #foreach($definedReply in $definedReplyList)
+                          	#if(!$definedReply.picUrl)
                           	#if($definedReply.replyKey=="新关注的回复"||$definedReply.replyKey=="搜索不到的回复")
-                          	<tr class="danger">
-                            <form action="/definedReply/update" method="post">
-                              <input type="hidden" name="definedReplyId" value=${definedReply.id}> 
-                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
-                              <td>$!{velocityCount}</td>
-                              <td>$!{definedReply.replyKey}</td>
-                              <td><textarea style="width: 90%; height: 150px; margin-top:5px;"name="replyValue"  >$!{definedReply.value}</textarea></td>
-                              <td><input type="submit" value="修改"></td></tr>
-                             </form>
+	                          	<tr class="danger">
+	                            <form action="/definedReply/update" method="post">
+	                              <input type="hidden" name="definedReplyId" value=${definedReply.id}> 
+	                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
+	                              <td>$!{velocityCount}</td>
+	                              <td>$!{definedReply.replyKey}</td>
+	                              <td><textarea style="width: 90%; height: 150px; margin-top:5px;"name="replyValue"  >$!{definedReply.value}</textarea></td>
+	                              <td><input type="submit" value="修改"></td></tr>
+	                             </form>
                           	#else
-                            <tr class="success">
-                            <form action="/definedReply/delete" method="post">
-                              <input type="hidden" name="definedReplyId" value=$definedReply.id> 
-                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
-                              <td>$!{velocityCount}</td>
-                              <td>$!{definedReply.replyKey}</td>
-                              <td>$!{definedReply.value}</td>
-                              <td><input type="submit" class="btn btn-primary" value="删除"></td></tr>
-                           </form>
+	                            <tr class="success">
+	                            <form action="/definedReply/delete" method="post">
+	                              <input type="hidden" name="definedReplyId" value=$definedReply.id> 
+	                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
+	                              <td>$!{velocityCount}</td>
+	                              <td>$!{definedReply.replyKey}</td>
+	                              <td>$!{definedReply.value}</td>
+	                              <td><input type="submit" class="btn btn-primary" value="删除"></td></tr>
+	                           </form>
+                           #end
                            #end
                           #end
                
                           </tbody>
-                        </table>
+                        </table style="word-break:break-all; word-wrap:break-all;">
                         #if($ad)
                          <table class="table">
-                          <caption>广告(为了不过多影响粉丝用户的体验，目前只开放一条广告位)</caption>
+                         <span class="glyphicon glyphicon-asterisk"></span></span><span class="label label-danger">广告(为了不过多影响粉丝用户的体验，目前只开放一条广告位)</span>
                           <thead>
                             <tr>
                               <th>名称</th>
@@ -120,6 +122,37 @@
                           </tbody>
                         </table>
                         #end
+                        
+                         <table class="table" style="word-break:break-all; word-wrap:break-all;">
+                          <span class="glyphicon glyphicon-asterisk"><span class="label label-danger">图文链接关键词</span>
+                          <thead>
+                            <tr>
+                              <th>关键词</th>
+                              <th>封面标题</th>
+                              <th>封面图片地址</th>
+                              <th>跳转链接</th>
+                              <th><button class="zu-top-add-question" id="zu-top-add-picReply">添加</button></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          
+                          #foreach($definedReply in $definedReplyList)
+                          #if($definedReply.picUrl)
+                            <tr class="success">
+                            <form action="/definedReply/delete" method="post">
+                              <input type="hidden" name="definedReplyId" value=$definedReply.id> 
+                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
+                              <td>$!{definedReply.replyKey}</td>
+                              <td>$!{definedReply.value}</td>
+                              <td>$!{definedReply.picUrl}</td>
+                              <td>$!{definedReply.url}</td>
+                              <td><input type="submit" class="btn btn-primary" value="删除"></td></tr>
+                           </form>
+                           #end
+                          #end
+               
+                          </tbody>
+                        </table>
                     </div>
                     
             </div>
