@@ -3,6 +3,9 @@ package com.cjy.WechatHome.spider;
 
 
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -44,7 +47,15 @@ public class VideoSpider {
 			
 			int status = client.executeMethod(get);
 			get.getParams().setContentCharset("UTF8");
-			content = get.getResponseBodyAsString();
+			InputStream inputStream = get.getResponseBodyAsStream();  
+			BufferedReader br = new BufferedReader(new InputStreamReader(inputStream,"ISO-8859-1"));  
+			StringBuffer stringBuffer = new StringBuffer();  
+			String str= "";  
+			while((str = br.readLine()) != null){  
+				stringBuffer .append(str);  
+			}  
+			content = new String(stringBuffer.toString().getBytes("ISO-8859-1"),"UTF8");
+			//content = get.getResponseBodyAsString();
 			//System.out.println("getUrl:"+status);
 			//System.out.println(content);
 		} catch (Exception e) {

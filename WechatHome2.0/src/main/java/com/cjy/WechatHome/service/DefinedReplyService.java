@@ -21,9 +21,9 @@ public class DefinedReplyService {
 	DefinedReplyDao definedReplyDao;
 	public DefinedReply getReply(String replyKey,String username) {
 		DefinedReply definedReply = definedReplyDao.getDefinedReplyByKeyAndUser(replyKey,username);
-		if (definedReply!=null) {
-			System.out.println(definedReply.getValue());
-		}
+//		if (definedReply!=null) {
+//			System.out.println(definedReply.getValue());
+//		}
 		return definedReply;
 	}
 	public List<DefinedReply> getReplyByUser(String username) {
