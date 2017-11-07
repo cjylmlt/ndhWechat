@@ -85,26 +85,27 @@
 					  <caption>用户基本信息</caption>
 					  <thead>
 					    <tr>
-					      <th>用户</th>
-					      <th>基本信息</th>
+					      <th>用户名</th>
+					      <th>中文名</th>
+					      <th>备注一</th>
+					      <!-- <th>基本信息</th> -->
 					    </tr>
 					  </thead>
 					  <tbody>
 					  #foreach($user in $userList)
 						<tr>
-					      <td><a href="/user/$!{user.id}" target="_blank"><img src=$!{user.headUrl}  alt="用户头像" height="50" width="60" /></a></td>
-					      <td>用户名：$!{user.username} </br> 
-					      	公众号id：$!{user.userId} </br> 
-					      	账户信息：#if($!{user.status}==0)
+					      <!-- <td><a href="/user/$!{user.id}" target="_blank"><img src=$!{user.headUrl}  alt="用户头像" height="50" width="60" /></a></td> -->
+					      <td><a href="/user/$!{user.id}">$!{user.username}</a> </td>
+					      	<!--  公众号id：$!{user.userId} </br> -->
+					      	<!--  账户信息：#if($!{user.status}==0)
 					      		用户正常 </br> 
 					      	   #elseif($!{user.status}==1)
 					      	        用户已被停用 </br> 
 					      	    #elseif($!{user.status}==2)
 					      	        超级用户 </br> 
-					      	   #end
-					      	   中文名：$!{user.chineseName}</br> 
-					      	  备注一：$!{user.noteOne}</br> 
-					      	   </td>
+					      	   #end-->
+					      	   <td>$!{user.chineseName}</td>
+					      	  <td>$!{user.noteOne}</td> 
 					      	 </tr>
 					     #end
 					  </tbody>

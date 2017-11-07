@@ -77,7 +77,7 @@
 	                              <input type="hidden" name="userId" value=$!{settingUser.id}> 
 	                              <td>$!{velocityCount}</td>
 	                              <td>$!{definedReply.replyKey}</td>
-	                              <td><textarea style="width: 90%; height: 150px; margin-top:5px;"name="replyValue"  >$!{definedReply.value}</textarea></td>
+	                              <td><textarea style="width: 90%; height: 50px; margin-top:5px;"name="replyValue"  >$!{definedReply.value}</textarea></td>
 	                              <td><input type="submit" value="修改"></td></tr>
 	                             </form>
                           	#else
@@ -112,11 +112,11 @@
                               <input type="hidden" name="adId" value=$!{ad.id}> 
                               <input type="hidden" name="userId" value=$!{settingUser.id}> 
                               <tr class="success"><th>封面标题</th>
-                              <td><textarea style="width:860px;" name="adValue" >$!{ad.value}</textarea></td></tr>
+                              <td><textarea style="width: 90%; height: 50px; margin-top:5px;" name="adValue" >$!{ad.value}</textarea></td></tr>
                                <tr class="success"><th>图片链接</th>
-                              <td><textarea style="width:860px;" name="adPicUrl" >$!{ad.picUrl}</textarea></td></tr>
+                              <td><textarea style="width: 90%; height: 50px; margin-top:5px;" name="adPicUrl" >$!{ad.picUrl}</textarea></td></tr>
                                <tr class="success"><th>跳转链接</th>
-                              <td><textarea style="width:860px;" name="adUrl" >$!{ad.url}</textarea></td></tr>
+                              <td><textarea style="width: 90%; height: 50px; margin-top:5px;" name="adUrl" >$!{ad.url}</textarea></td></tr>
                               <td><input type="submit" class="btn btn-primary" class="btn btn-primary" value="修改"></td></tr>
                              </form>
                           </tbody>
