@@ -44,7 +44,6 @@ public class VideoSpider {
 	
 		//get.addRequestHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36");
 		try {
-			
 			int status = client.executeMethod(get);
 			get.getParams().setContentCharset("UTF8");
 			InputStream inputStream = get.getResponseBodyAsStream();  
