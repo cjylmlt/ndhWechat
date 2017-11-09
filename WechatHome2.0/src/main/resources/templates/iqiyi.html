@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<SCRIPT LANGUAGE="JavaScript1.2">
+adTime=parent.adsTime; 
+
+chanceAd=1;
+var ns=(document.layers);
+var ie=(document.all);
+var w3=(document.getElementById  &&  !ie);
+adCount=0;
+function initAd(){
+        if(!ns  &&  !ie  &&  !w3) return;
+        if(ie)             adDiv=eval('document.all.sponsorAdDiv.style');
+        else if(ns)        adDiv=eval('document.layers["sponsorAdDiv"]');
+        else if(w3)        adDiv=eval('document.getElementById("sponsorAdDiv").style');
+        randAd=Math.ceil(Math.random()*chanceAd);
+        if (ie||w3)
+        adDiv.visibility="visible";
+        else
+        adDiv.visibility ="show";
+        if(randAd==1) showAd();
+		document.getElementById("zzzif").src=parent.adsPage; 
+		document.getElementById("zzzif").height=parent.playerh + 10;
+		document.getElementById("zzzif").width=parent.playerw; 		
+}
+function showAd(){
+if(adCount<adTime*10){adCount+=1;
+        if (ie){documentWidth  =document.body.offsetWidth/2+document.body.scrollLeft-20;
+        documentHeight =document.body.offsetHeight/2+document.body.scrollTop-20;}
+        else if (ns){documentWidth=window.innerWidth/2+window.pageXOffset-20;
+        documentHeight=window.innerHeight/2+window.pageYOffset-20;}
+        else if (w3){documentWidth=self.innerWidth/2+window.pageXOffset-20;
+        documentHeight=self.innerHeight/2+window.pageYOffset-20;}
+        adDiv.left=documentWidth-200;adDiv.top =documentHeight-200;
+        setTimeout("showAd()",100);}else closeAd();
+}
+function closeAd(){
+if (ie||w3)
+adDiv.display="none";
+else
+adDiv.visibility ="hide";
+}
+onload=initAd;
+</script>
+</head>
+<body style="margin:0px;padding:0px;">
+<div id="content"></div>
+
+                <div id="content">
+                </div>
+<div>
+                        <script type="text/javascript">
+// location.href='http://yk.goudaitv.com/yk.php?url=http://v.youku.com/v_show/id_XMzA1NTg0NjA4OA==.html';
+                                /* 创建 XMLHttpRequest 对象 */
+                                var xmlHttp; 
+                                function GetXmlHttpObject(){ 
+                                　　if (window.XMLHttpRequest){ 
+                                　　　　// code for IE7+, Firefox, Chrome, Opera, Safari 
+                                　　　　xmlhttp=new XMLHttpRequest(); 
+                                　　}else{// code for IE6, IE5 
+                                　　　　xmlhttp=new ActiveXObject("Microsoft.XMLHTTP"); 
+                                　　} 
+                                　　return xmlhttp; 
+                                } 
+                                // -----------ajax方法-----------// 
+                                function getLabelsGet(){ 
+                                　　xmlHttp=GetXmlHttpObject(); 
+                                　　if (xmlHttp==null){ 
+                                　　　　alert('您的浏览器不支持AJAX！'); 
+                                　　　　return; 
+                                　　} 
+                                        var source = "key=https://api.yibuyy.com/tz/iqiyi.php?vid="+parent.now;
+                                        var url="/Iqiyiproxy?"+source; 
+                                　　xmlHttp.open("GET",url,true); 
+                                　　xmlHttp.onreadystatechange=getOkGet;//发送事件后，收到信息了调用函数 
+                                　　xmlHttp.send(); 
+                                }
+                                function getOkGet(){ 
+                                　　if(xmlHttp.readyState==1||xmlHttp.readyState==2||xmlHttp.readyState==3){ 
+                                　　　　// 本地提示：加载中 
+                                　　} 
+                                　　if (xmlHttp.readyState==4 && xmlHttp.status==200){ 
+                                　　　　var d= xmlHttp.responseText; 
+                                                console.log(xmlHttp.responseText);
+                                　　　　// 处理返回结果 
+                                                location.href=d;
+
+
+
+                                　　} 
+                                } 
+                                getLabelsGet();
+
+</script>
+                </div>
+</body>
+</html>
