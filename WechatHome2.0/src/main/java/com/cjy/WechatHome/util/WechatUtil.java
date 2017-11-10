@@ -145,15 +145,22 @@ public class WechatUtil {
 		return url;
 	}
 	public static String getUserOpenId(String code){
-		String url = WEB_ACCESS_TOKEN_URL.replace("APPID", APPID).replace("SECRET", APPSECRET).replace("CODE", code);
-		JSONObject jsonObject = doGetStr(url);
-		String openId = "";
-		if(jsonObject!=null){
-			openId = jsonObject.getString("openid");
+		if(code!=null){
+			String url = WEB_ACCESS_TOKEN_URL.replace("APPID", APPID).replace("SECRET", APPSECRET).replace("CODE", code);
+			JSONObject jsonObject = doGetStr(url);
+			String openId = "";
+			if(jsonObject!=null){
+				openId = jsonObject.getString("openid");
+			}
+			return openId;
 		}
-		return openId;
+		else{
+			return "";
+		}
 		
 	}
+	
+
 //	public static Media getMedia(String token,String mediaId){
 //		int result;
 //		String url = GET_MEDIA_URL.replace("ACCESS_TOKEN", token);

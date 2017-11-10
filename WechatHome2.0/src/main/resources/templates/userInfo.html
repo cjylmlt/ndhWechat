@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>马小呆影视</title>
+</head>
+<body>
+#if($wechatUser)
+	欢迎${wechatUser.userName}!<br>
+	您的到期时间为:$!date.format('yyyy-MM-dd HH:mm:ss ',$!wechatUser.expireTime)<br>
+	如果想免费续期，请将下面的二维码分享给你的朋友<br>
+	<img src=$!{qrCode}/>
+	
+#else
+	您已过期!
+	怎么续期？
+#end
+</body>
+</html>

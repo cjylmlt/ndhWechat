@@ -72,7 +72,7 @@ public class UserService {
 			//definedReply.setValue("预留广告位");
 			definedReplyDao.insertDefinedReply(definedReply);
 		}
-		String ticket =  addLoginTicket(user.getId());
+		String ticket =  addLoginTicket(Integer.toString(user.getId()));
 		map.put("ticket", ticket);
 		return map;
 	}
@@ -104,7 +104,7 @@ public class UserService {
 			map.put("msg", "密码错误");
 			return map;
 		}
-		String ticket =  addLoginTicket(user.getId());
+		String ticket =  addLoginTicket(Integer.toString(user.getId()));
 		map.put("ticket", ticket);
 		return map;
 	}
@@ -142,12 +142,12 @@ public class UserService {
 			user.setPassword(newPassword);
 			userDao.updatePassword(user);
 		}
-		String ticket =  addLoginTicket(user.getId());
+		String ticket =  addLoginTicket(Integer.toString(user.getId()));
 		map.put("ticket", ticket);
 		return map;
 	}
 	
-	public String addLoginTicket(int userId){
+	public String addLoginTicket(String userId){
 		LoginTicket loginTicket = new LoginTicket();
 		loginTicket.setStatus(0);
 		Date now = new Date();
@@ -163,7 +163,7 @@ public class UserService {
 		loginTicketDao.updateStatus(1,ticket);
 	}
 	
-	public User getUserByUserId(String userId) throws IOException{
+	public User getUserByUserId(String userId){
 		User user =userDao.selectUserByUserId(userId);
 		if(user!=null)
 			return user;

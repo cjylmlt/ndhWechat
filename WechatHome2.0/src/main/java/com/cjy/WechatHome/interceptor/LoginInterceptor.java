@@ -56,7 +56,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 			if(loginTicket==null||loginTicket.getStatus()==1||loginTicket.getExpired().before(new Date())){
 				return true;				
 			}
-			User user = userDao.selectById(loginTicket.getUserId());
+			User user = userDao.selectById(Integer.valueOf(loginTicket.getUserId()));
 			hostHolder.setUser(user);
 		}
 		return true;

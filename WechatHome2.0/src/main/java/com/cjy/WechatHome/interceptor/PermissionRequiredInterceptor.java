@@ -1,14 +1,13 @@
 package com.cjy.WechatHome.interceptor;
 
 
-import java.lang.ProcessBuilder.Redirect;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.velocity.tools.config.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,6 +18,7 @@ import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.LoginTicket;
 import com.cjy.WechatHome.model.User;
 import com.cjy.WechatHome.model.WechatUser;
+import com.cjy.WechatHome.service.UserService;
 import com.cjy.WechatHome.service.WechatUserService;
 import com.cjy.WechatHome.util.WechatUtil;
 @Component
@@ -29,11 +29,14 @@ HostHolder hostHolder;
 WechatUserService wechatUserService;
 @Autowired
 LoginTicketDao loginTicketDao;
+@Autowired
+UserService userService;
 	@Override
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
 		// TODO Auto-generated method stub
-		
+		hostHolder.clearWechatOwnerUsers();
+		hostHolder.clearWechatUser();
 	}
 
 	@Override
@@ -55,34 +58,55 @@ LoginTicketDao loginTicketDao;
 			if(ticket!=null){
 				LoginTicket loginTicket = loginTicketDao.selectByTicket(ticket);
 				if(loginTicket==null||loginTicket.getStatus()==1||loginTicket.getExpired().before(new Date())){
-					return true;				
+					response.sendRedirect("/expireWarning?next="+request.getRequestURI());				
 				}
 				WechatUser wechatUser = wechatUserService.selectWechatUser(loginTicket.getUserId());
-				hostHolder.setWechatUser(wechatUser);
-			}
-		}
-		else{
-			String code = request.getParameter("code");
-			String openId = WechatUtil.getUserOpenId(code);
-			if(wechatUserService.isWchatUserExist(openId)){
-				//判断是否到期
-				WechatUser wechatUser = wechatUserService.selectWechatUser(openId);
-				if(wechatUser.getExpireTime().getTime()-new Date().getTime()>0){
-					return true;
+				if(wechatUser!=null){
+					hostHolder.setWechatUser(wechatUser);
+					hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
 				}
-				else{
-					response.sendRedirect("/expireWarning");
-				}
+
 			}
 			else{
-				WechatUser wechatUser = new WechatUser();
-				wechatUser.setOpenId(openId);
-				wechatUser.setUserName("adsfasdf");
-				wechatUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*7));
-				wechatUserService.regWechatUser(wechatUser);
+				String code = request.getParameter("code");
+				String openId = WechatUtil.getUserOpenId(code);
+				if(openId.equals(""))
+					response.sendRedirect("/error");	
+				if(wechatUserService.isWchatUserExist(openId)){
+					WechatUser wechatUser = wechatUserService.selectWechatUser(openId);
+					//没有过期
+					if(wechatUser.getExpireTime().getTime()-new Date().getTime()>0){
+						hostHolder.setWechatUser(wechatUser);
+						hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
+						Cookie cookie = new Cookie("ticket", userService.addLoginTicket(wechatUser.getOpenId()));
+						cookie.setPath("/");
+						response.addCookie(cookie);
+						return true;
+					}
+					//过期了
+					else{
+						hostHolder.setWechatUser(wechatUser);
+						response.sendRedirect("/expireWarning?next="+request.getRequestURI());	
+					}
+				}
+				//新用户
+				else{
+					WechatUser wechatUser = new WechatUser();
+					wechatUser.setOpenId(openId);
+					wechatUser.setBelongOwnerId("gh_936af05e57ce");
+					wechatUser.setUserName(UUID.randomUUID().toString().substring(0, 10));
+					wechatUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*7));
+					wechatUserService.regWechatUser(wechatUser);
+					hostHolder.setWechatUser(wechatUser);
+					hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
+					Cookie cookie = new Cookie("ticket", userService.addLoginTicket(wechatUser.getOpenId()));
+					cookie.setPath("/");
+					response.addCookie(cookie);
+					return true;
+				}
 			}
-			return true;
 		}
+		return true;
 	}
 
 }

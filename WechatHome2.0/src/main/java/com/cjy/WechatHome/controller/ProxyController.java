@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 
@@ -24,6 +25,7 @@ import com.cjy.WechatHome.dao.SpiderWebDao;
 import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.TopRecord;
 import com.cjy.WechatHome.model.ViewObject;
+import com.cjy.WechatHome.model.WechatUser;
 import com.cjy.WechatHome.service.RecordService;
 import com.cjy.WechatHome.service.SpiderWebService;
 import com.cjy.WechatHome.service.TopRecordService;
@@ -36,10 +38,14 @@ public class ProxyController {
 	private static final Logger logger = LoggerFactory.getLogger(ProxyController.class);
 	@Autowired
 	VideoSpider videoSpider;
+	@Autowired
+	HostHolder hostHolder;
 	@RequestMapping(path={"/v"},method = {RequestMethod.GET})
-	public String index(Model model,@RequestParam("code")String code,@RequestParam("state")String state) {
+	public String index(Model model,@RequestParam(value="code", required=false)String code,@RequestParam(value="state", required=false)String state) {
+		WechatUser w = hostHolder.getWechatUser();
 		String content = videoSpider.getIndexSource();
 		content = content.replaceAll("<a target=\"_blank\" href=\" http://neihantutu.lofter.com/taobao\"><div class=\"code\"><span class=\"hd_waiting\">去拆红包</span></div></a>", "");
+		model.addAttribute("wechatUser", hostHolder.getWechatUser());
 		model.addAttribute("content", content);
 		return "proxy";
 	}

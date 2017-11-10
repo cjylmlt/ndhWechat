@@ -5,6 +5,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-您已过期
+#if($wechatUser)
+	欢迎${wechatUser.userName}!<br>
+	您的到期时间为:$!{wechatUser.expireTime}
+	<a href=$!{next}>点击链接跳转</a>
+#else
+	您已过期!
+	怎么续期？
+#end
 </body>
 </html>

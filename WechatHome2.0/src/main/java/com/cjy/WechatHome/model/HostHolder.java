@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class HostHolder {
 	private static ThreadLocal<User> users = new ThreadLocal<User>();
 	private static ThreadLocal<WechatUser> wechatUsers = new ThreadLocal<WechatUser>();
+	private static ThreadLocal<User> wechatOwnerUsers = new ThreadLocal<User>();
 	public User getUser(){
 		return users.get();
 	}
@@ -25,5 +26,13 @@ public class HostHolder {
 	public void clearWechatUser(){
 		wechatUsers.remove();
 	}
-
+	public User getWechatOwnerUser(){
+		return wechatOwnerUsers.get();
+	}
+	public void setWechatOwnerUser(User user){
+		wechatOwnerUsers.set(user);
+	}
+	public void clearWechatOwnerUsers(){
+		wechatOwnerUsers.remove();
+	}
 }
