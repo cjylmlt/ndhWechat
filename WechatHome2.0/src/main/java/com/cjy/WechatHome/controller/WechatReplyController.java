@@ -34,7 +34,7 @@ import com.cjy.WechatHome.service.RecordService;
 import com.cjy.WechatHome.service.ReplyService;
 import com.cjy.WechatHome.service.UserService;
 @Controller
-public class WechatController {
+public class WechatReplyController {
 	@Autowired
 	DefinedReplyService definedReplyService;
 	@Autowired

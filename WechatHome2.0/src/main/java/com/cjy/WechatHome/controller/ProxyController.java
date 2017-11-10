@@ -29,6 +29,7 @@ import com.cjy.WechatHome.service.SpiderWebService;
 import com.cjy.WechatHome.service.TopRecordService;
 import com.cjy.WechatHome.service.UserService;
 import com.cjy.WechatHome.spider.VideoSpider;
+import com.cjy.WechatHome.util.WechatUtil;
 
 @Controller
 public class ProxyController {
@@ -36,7 +37,7 @@ public class ProxyController {
 	@Autowired
 	VideoSpider videoSpider;
 	@RequestMapping(path={"/v"},method = {RequestMethod.GET})
-	public String index(Model model) {
+	public String index(Model model,@RequestParam("code")String code,@RequestParam("state")String state) {
 		String content = videoSpider.getIndexSource();
 		content = content.replaceAll("<a target=\"_blank\" href=\" http://neihantutu.lofter.com/taobao\"><div class=\"code\"><span class=\"hd_waiting\">去拆红包</span></div></a>", "");
 		model.addAttribute("content", content);

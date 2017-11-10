@@ -26,15 +26,18 @@ import com.cjy.WechatHome.model.Media;
 import net.sf.json.JSONObject;
 
 public class WechatUtil {
-	//private static final String APPID = "wx39a6afe0d6c218de";
-	//private static final String APPSECRET="1087e9433396c0930c3b8d0b6960c948";
-	private static final String APPID = "wxcc7030da657c484d";
-	private static final String APPSECRET="4496ca6d9e4ffce5cdb8f6d0b5d69057";
+	private static final String APPID = "wx39a6afe0d6c218de";
+	private static final String APPSECRET="1087e9433396c0930c3b8d0b6960c948";
+	//private static final String APPID = "wxcc7030da657c484d";
+	//private static final String APPSECRET="4496ca6d9e4ffce5cdb8f6d0b5d69057";
 	private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 	
 	private static final String CREATE_MENU_URL = " https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
 	
 	private static final String GET_MEDIA_URL = "https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=ACCESS_TOKEN";
+	
+	private static final String WEB_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
+	private static final String WEB_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code ";
 	public static JSONObject doGetStr(String url){
 		HttpClient httpClient = new HttpClient();
 		GetMethod httpGet = new GetMethod(url);
@@ -137,6 +140,20 @@ public class WechatUtil {
 		return result;
 	}
 	
+	public static String packWebUrl(String redirectUrl){
+		String url = WEB_URL.replace("REDIRECT_URI", redirectUrl).replace("APPID", APPID).replace("SCOPE", "snsapi_base").replace("STATE", "123");
+		return url;
+	}
+	public static String getUserOpenId(String code){
+		String url = WEB_ACCESS_TOKEN_URL.replace("APPID", APPID).replace("SECRET", APPSECRET).replace("CODE", code);
+		JSONObject jsonObject = doGetStr(url);
+		String openId = "";
+		if(jsonObject!=null){
+			openId = jsonObject.getString("openid");
+		}
+		return openId;
+		
+	}
 //	public static Media getMedia(String token,String mediaId){
 //		int result;
 //		String url = GET_MEDIA_URL.replace("ACCESS_TOKEN", token);
