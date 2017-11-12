@@ -1,7 +1,9 @@
 package com.cjy.WechatHome.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -21,10 +23,18 @@ public class WechatConfiguration extends WebMvcConfigurerAdapter{
 		// TODO Auto-generated method stub
 		//registry.addInterceptor(loginInterceptor);
 		registry.addInterceptor(LoginRequiredInterceptor).addPathPatterns("/user/*");
-		registry.addInterceptor(permissionRequiredInterceptor).addPathPatterns("/v").addPathPatterns("/play").addPathPatterns("/movie").addPathPatterns("/userInfo");
+		registry.addInterceptor(permissionRequiredInterceptor).addPathPatterns("/v").addPathPatterns("/play/*").addPathPatterns("/movie/*").addPathPatterns("/userInfo").excludePathPatterns("/subscribe");
 		super.addInterceptors(registry);
 	}
-	
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.favorPathExtension(false).
+            favorParameter(false).
+            ignoreAcceptHeader(false).
+            useJaf(false).
+            defaultContentType(MediaType.TEXT_HTML).
+            mediaType("json", MediaType.APPLICATION_JSON);
+    }
 	
 	
 }

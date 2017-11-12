@@ -17,6 +17,8 @@ import com.cjy.WechatHome.model.Record;
 import com.cjy.WechatHome.model.User;
 import com.cjy.WechatHome.spider.VideoSpider;
 import com.cjy.WechatHome.util.MessageUtil;
+import com.cjy.WechatHome.util.UserUtil;
+import com.cjy.WechatHome.util.WechatUtil;
 import com.cjy.WechatHome.async.EventModel;
 import com.cjy.WechatHome.async.EventType;
 
@@ -65,7 +67,7 @@ public class ReplyService {
 			if(newsPoList.size()>0){
 				//System.out.println("数据库读取");
 				newsList = newsService.selectNewsByKey(content);
-				if((new Date().getTime()-newsPoList.get(0).getUpdateTime().getTime())>1){
+				if((new Date().getTime()-newsPoList.get(0).getUpdateTime().getTime())>3600*1000*24){
 					EventModel eventModel = new EventModel(EventType.VIDEOSPIDER);
 					eventModel.setExt("urlContent", urlContent);
 					eventModel.setExt("content", content);
@@ -85,6 +87,10 @@ public class ReplyService {
 					newsPo.setUrl(n.getUrl());
 					newsService.insertNews(newsPo);
 				}
+			}
+			for(News n: newsList){
+				n.setUrl(WechatUtil.packUserUrl(n.getUrl(),user.getUserId()));
+				
 			}
 			spiderTimeEnd = System.currentTimeMillis();
 			if(newsList.size()>0){

@@ -1,5 +1,8 @@
 package com.cjy.WechatHome.service;
 
+import java.util.Date;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +31,17 @@ public class WechatUserService {
 			return user;
 		}
 	}
-	public void regWechatUser(WechatUser wechatUser){
-		wechatUserDao.addWechatUser(wechatUser);
-	}
 	public void updateExpireTime(WechatUser wechatUser){
 		wechatUserDao.updateExpireTime(wechatUser);
+	}
+	public WechatUser regWechatUser(String openId,String ownerId){
+		WechatUser wechatUser = new WechatUser();
+		wechatUser.setOpenId(openId);
+		wechatUser.setBelongOwnerId(ownerId);
+		String username = "vip-"+UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");
+		wechatUser.setUserName(username);
+		wechatUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*7));
+		wechatUserDao.addWechatUser(wechatUser);
+		return wechatUser;
 	}
 }

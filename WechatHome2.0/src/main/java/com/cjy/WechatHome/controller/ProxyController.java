@@ -42,7 +42,6 @@ public class ProxyController {
 	HostHolder hostHolder;
 	@RequestMapping(path={"/v"},method = {RequestMethod.GET})
 	public String index(Model model,@RequestParam(value="code", required=false)String code,@RequestParam(value="state", required=false)String state) {
-		WechatUser w = hostHolder.getWechatUser();
 		String content = videoSpider.getIndexSource();
 		content = content.replaceAll("<a target=\"_blank\" href=\" http://neihantutu.lofter.com/taobao\"><div class=\"code\"><span class=\"hd_waiting\">去拆红包</span></div></a>", "");
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
@@ -65,12 +64,15 @@ public class ProxyController {
 	@RequestMapping(path={"/movie/{index}"},method = {RequestMethod.GET})
 	public String getMovie(Model model,@PathVariable("index")String index) {
 		String address = "movie/"+index+".html";
+		WechatUser w = hostHolder.getWechatUser();
+		model.addAttribute("wechatUser", hostHolder.getWechatUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address));
 		return "proxy";
 	}
 	@RequestMapping(path={"/play/{index}"},method = {RequestMethod.GET})
 	public String getPlay(Model model,@PathVariable("index")String index) {
 		String address = "play/"+index+".html";
+		model.addAttribute("wechatUser", hostHolder.getWechatUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address));
 		return "proxy";
 	}

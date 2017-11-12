@@ -2,10 +2,30 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<style>
+img {
+    max-width: 100%;
+    height: auto;
+}
+div.polaroid {
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+}
+
+div.container {
+  padding: 10px;
+}
+</style>
 <title>马小呆影视</title>
 </head>
 <body>
-<img src=${owner.headUrl} /><br>
-请长按关注上面的公众号！
+<div class="polaroid">
+  <img src=$!{owner.headUrl} alt="Norway" style="width:100%">
+  <div class="container">
+    <p><font size="5">长按关注公众号，免费看全网影视</font></p>
+  </div>
+</div>
+<!-- <img src=$!{owner.headUrl} alt="Norway" width="1000" height="300"/> -->
 </body>
 </html>
