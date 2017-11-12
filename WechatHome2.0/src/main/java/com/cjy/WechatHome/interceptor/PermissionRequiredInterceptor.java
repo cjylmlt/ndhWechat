@@ -1,5 +1,7 @@
 package com.cjy.WechatHome.interceptor;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,8 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cjy.WechatHome.dao.LoginTicketDao;
 import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.LoginTicket;
+import com.cjy.WechatHome.model.Message;
 import com.cjy.WechatHome.model.User;
 import com.cjy.WechatHome.model.WechatUser;
+import com.cjy.WechatHome.service.MessageService;
 import com.cjy.WechatHome.service.UserService;
 import com.cjy.WechatHome.service.WechatUserService;
 import com.cjy.WechatHome.util.WechatUtil;
@@ -31,7 +35,8 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 	LoginTicketDao loginTicketDao;
 	@Autowired
 	UserService userService;
-
+	@Autowired
+	MessageService messageService;
 	@Override
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
@@ -116,6 +121,22 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 				Cookie cookie = new Cookie("ticket", userService.addLoginTicket(wechatUser.getOpenId()));
 				cookie.setPath("/");
 				response.addCookie(cookie);
+				//给注册的用户发一份私信
+				Message regMessage = new Message();
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+				regMessage.setContent("欢迎您的注册，您的到期时间为"+dateFormat.format(wechatUser.getExpireTime()));
+				regMessage.setFromId(wechatUser.getBelongOwnerId());
+				regMessage.setToId(wechatUser.getOpenId());
+				String conversationId;
+		        if (wechatUser.getBelongOwnerId().compareTo(wechatUser.getOpenId())>=0) {
+		        	conversationId = String.format("%s_%s", wechatUser.getBelongOwnerId(), wechatUser.getOpenId());
+		        } else {
+		        	conversationId = String.format("%s_%s", wechatUser.getOpenId(), wechatUser.getBelongOwnerId());
+		        }
+		        regMessage.setConversationId(conversationId);
+		        regMessage.setCreatedDate(new Date());
+		        regMessage.setHasRead(0);
+		        messageService.addMessage(regMessage);
 				return true;
 			}
 

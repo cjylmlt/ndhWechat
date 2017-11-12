@@ -24,6 +24,7 @@ div.container {
 <body background="http://chuantu.biz/t6/136/1510389951x2062257371.jpg">
 #if($wechatUser)
 	<font size="5">欢迎$!{wechatUser.userName}!<br>
+	<a href="/messageBox">您当前有$!{messageUnreadCount}未读信息，点击读取</a> <br>
 	您的到期时间为:$!date.format('yyyy-MM-dd HH:mm:ss ',$!wechatUser.expireTime)<br>
 	如果想免费续期，请将下面的二维码分享给你的朋友<br></font>
  <div class="polaroid">

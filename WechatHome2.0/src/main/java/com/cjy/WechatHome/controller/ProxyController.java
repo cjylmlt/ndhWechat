@@ -26,6 +26,7 @@ import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.TopRecord;
 import com.cjy.WechatHome.model.ViewObject;
 import com.cjy.WechatHome.model.WechatUser;
+import com.cjy.WechatHome.service.MessageService;
 import com.cjy.WechatHome.service.RecordService;
 import com.cjy.WechatHome.service.SpiderWebService;
 import com.cjy.WechatHome.service.TopRecordService;
@@ -40,11 +41,14 @@ public class ProxyController {
 	VideoSpider videoSpider;
 	@Autowired
 	HostHolder hostHolder;
+	@Autowired
+	MessageService messageService;
 	@RequestMapping(path={"/v"},method = {RequestMethod.GET})
 	public String index(Model model,@RequestParam(value="code", required=false)String code,@RequestParam(value="state", required=false)String state) {
 		String content = videoSpider.getIndexSource();
 		content = content.replaceAll("<a target=\"_blank\" href=\" http://neihantutu.lofter.com/taobao\"><div class=\"code\"><span class=\"hd_waiting\">去拆红包</span></div></a>", "");
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
+		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
 		model.addAttribute("content", content);
 		return "proxy";
 	}
@@ -67,6 +71,7 @@ public class ProxyController {
 		WechatUser w = hostHolder.getWechatUser();
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address));
+		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
 		return "proxy";
 	}
 	@RequestMapping(path={"/play/{index}"},method = {RequestMethod.GET})
@@ -74,6 +79,7 @@ public class ProxyController {
 		String address = "play/"+index+".html";
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address));
+		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
 		return "proxy";
 	}
 	@RequestMapping(path={"/include/{index}"},method = {RequestMethod.GET})
