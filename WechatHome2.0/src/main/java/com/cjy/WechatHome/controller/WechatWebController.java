@@ -19,6 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cjy.WechatHome.async.EventModel;
+import com.cjy.WechatHome.async.EventProducer;
+import com.cjy.WechatHome.async.EventType;
 import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.Message;
 import com.cjy.WechatHome.model.User;
@@ -39,6 +42,8 @@ public class WechatWebController {
 	UserService userService;
 	@Autowired
 	MessageService messageService;
+	@Autowired
+	EventProducer eventProducer;
 	@RequestMapping("/expireWarning")
 	public String expireWarning(Model model,@RequestParam("userId")String userId){
 		WechatUser wechatUser = wechatUserService.selectWechatUser(userId);
@@ -107,35 +112,18 @@ public class WechatWebController {
 					cookie.setPath("/");
 					response.addCookie(cookie);
 					//给注册的用户发一份私信
-					Message regMessage = new Message();
-					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-					regMessage.setContent("欢迎您的注册，您的到期时间为"+dateFormat.format(newWechatUser.getExpireTime()));
-					regMessage.setFromId(newWechatUser.getBelongOwnerId());
-					regMessage.setToId(newWechatUser.getOpenId());
-					String conversationId;
-			        if (newWechatUser.getBelongOwnerId().compareTo(newWechatUser.getOpenId())>=0) {
-			        	conversationId = String.format("%s_%s", newWechatUser.getBelongOwnerId(), newWechatUser.getOpenId());
-			        } else {
-			        	conversationId = String.format("%s_%s", newWechatUser.getOpenId(), newWechatUser.getBelongOwnerId());
-			        }
-			        regMessage.setConversationId(conversationId);
-			        regMessage.setCreatedDate(new Date());
-			        regMessage.setHasRead(0);
-			        messageService.addMessage(regMessage);
+					EventModel eventModel = new EventModel(EventType.MESSAGE);
+					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss"); 
+					eventModel.setExt("content", "欢迎您的注册，您的到期时间为"+dateFormat.format(newWechatUser.getExpireTime()));
+					eventModel.setExt("fromId",newWechatUser.getBelongOwnerId());
+					eventModel.setExt("toId", newWechatUser.getOpenId());
+					eventProducer.fireEvent(eventModel);
 			        //给推荐用户发送信息
-			        Message introduceMessage = new Message();
-			        introduceMessage.setContent("您推荐用户成功，您的到期时间更新为"+dateFormat.format(introduceUser.getExpireTime()));
-			        introduceMessage.setFromId(introduceUser.getBelongOwnerId());
-			        introduceMessage.setToId(introduceUser.getOpenId());
-			        if (introduceUser.getBelongOwnerId().compareTo(introduceUser.getOpenId())>=0) {
-			        	conversationId = String.format("%s_%s", introduceUser.getBelongOwnerId(), introduceUser.getOpenId());
-			        } else {
-			        	conversationId = String.format("%s_%s", introduceUser.getOpenId(), introduceUser.getBelongOwnerId());
-			        }
-			        introduceMessage.setConversationId(conversationId);
-			        introduceMessage.setCreatedDate(new Date());
-			        introduceMessage.setHasRead(0);
-			        messageService.addMessage(introduceMessage);
+					EventModel eventModel2 = new EventModel(EventType.MESSAGE);
+					eventModel2.setExt("content", "您推荐用户成功，您的到期时间更新为"+dateFormat.format(introduceUser.getExpireTime()));
+					eventModel2.setExt("fromId",introduceUser.getBelongOwnerId());
+					eventModel2.setExt("toId", introduceUser.getOpenId());
+					eventProducer.fireEvent(eventModel2);
 					return "userOwnerInfo";
 				}
 			}

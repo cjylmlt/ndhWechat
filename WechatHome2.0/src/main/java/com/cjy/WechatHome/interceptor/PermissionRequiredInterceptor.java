@@ -3,7 +3,6 @@ package com.cjy.WechatHome.interceptor;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cjy.WechatHome.async.EventModel;
+import com.cjy.WechatHome.async.EventProducer;
+import com.cjy.WechatHome.async.EventType;
 import com.cjy.WechatHome.dao.LoginTicketDao;
 import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.LoginTicket;
@@ -37,6 +39,9 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 	UserService userService;
 	@Autowired
 	MessageService messageService;
+	@Autowired
+	EventProducer eventProducer;
+	
 	@Override
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
@@ -81,7 +86,7 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 			String openId = WechatUtil.getUserOpenId(code);
 			if (openId.equals("")){
 				response.sendRedirect("/error");
-				return true;
+				return false;
 			}
 			if (wechatUserService.isWchatUserExist(openId)) {
 				WechatUser wechatUser = wechatUserService.selectWechatUser(openId);
@@ -99,7 +104,7 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 					hostHolder.setWechatUser(wechatUser);
 					response.sendRedirect("/expireWarning?userId="+wechatUser.getOpenId());
 					//response.sendRedirect("/userInfo");
-					return true;
+					return false;
 				}
 			}
 			// 新用户
@@ -122,21 +127,12 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 				cookie.setPath("/");
 				response.addCookie(cookie);
 				//给注册的用户发一份私信
-				Message regMessage = new Message();
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-				regMessage.setContent("欢迎您的注册，您的到期时间为"+dateFormat.format(wechatUser.getExpireTime()));
-				regMessage.setFromId(wechatUser.getBelongOwnerId());
-				regMessage.setToId(wechatUser.getOpenId());
-				String conversationId;
-		        if (wechatUser.getBelongOwnerId().compareTo(wechatUser.getOpenId())>=0) {
-		        	conversationId = String.format("%s_%s", wechatUser.getBelongOwnerId(), wechatUser.getOpenId());
-		        } else {
-		        	conversationId = String.format("%s_%s", wechatUser.getOpenId(), wechatUser.getBelongOwnerId());
-		        }
-		        regMessage.setConversationId(conversationId);
-		        regMessage.setCreatedDate(new Date());
-		        regMessage.setHasRead(0);
-		        messageService.addMessage(regMessage);
+				EventModel eventModel = new EventModel(EventType.MESSAGE);
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss"); 
+				eventModel.setExt("content", "欢迎您的注册，您的到期时间为"+dateFormat.format(wechatUser.getExpireTime()));
+				eventModel.setExt("fromId",wechatUser.getBelongOwnerId());
+				eventModel.setExt("toId", wechatUser.getOpenId());
+				eventProducer.fireEvent(eventModel);
 				return true;
 			}
 
