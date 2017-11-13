@@ -88,9 +88,10 @@ public class ReplyService {
 					newsService.insertNews(newsPo);
 				}
 			}
-			for(News n: newsList){
-				n.setUrl(WechatUtil.packUserUrl(n.getUrl(),user.getUserId()));
-				
+			if(user.getStatus()==3){
+				for(News n: newsList){
+					n.setUrl(WechatUtil.packUserUrl(n.getUrl(),user.getUserId()));
+				}
 			}
 			spiderTimeEnd = System.currentTimeMillis();
 			if(newsList.size()>0){

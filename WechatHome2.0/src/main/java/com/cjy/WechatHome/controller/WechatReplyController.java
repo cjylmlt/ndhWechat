@@ -79,7 +79,7 @@ public class WechatReplyController {
 			String message = null;
 			String reply = null;
 			User user = userService.getUserByUserId(toUserName);
-			if(user == null||(user.getStatus()!=0&&user.getStatus()!=2)){	
+			if(user == null||(user.getStatus()!=0&&user.getStatus()!=2&&user.getStatus()!=3)){	
 				record.setUserId(toUserName);
 				if(user!=null){
 					record.setUsername(user.getUsername());
@@ -116,7 +116,7 @@ public class WechatReplyController {
 				
 			}
 			else if(MessageUtil.MESSAGE_VOICE.equals(msgType)){
-				if(user.getStatus()==2){//超级用户
+				if(user.getStatus()==2||user.getStatus()==3){//超级用户
 					message = replyService.voiceMessageReply(map, user, record);
 				}
 				if(user.getStatus()==0){//普通用户

@@ -33,7 +33,7 @@ import com.cjy.WechatHome.util.WechatUtil;
 
 @Controller
 public class WechatWebController {
-	private static final String HOST_URL = "http://fortestwechat.free.ngrok.cc";
+	private static final String HOST_URL = "http://mxd.burod.cn";
 	@Autowired
 	HostHolder hostHolder;
 	@Autowired
@@ -99,7 +99,14 @@ public class WechatWebController {
 				}
 				else{
 					WechatUser introduceUser = wechatUserService.selectWechatUser(introducerId);
-					introduceUser.setExpireTime(new Date(introduceUser.getExpireTime().getTime()+3600*1000*24*7));
+					//如果Introducer没过期 加7天
+					if(introduceUser.getExpireTime().getTime() - new Date().getTime() > 0){
+						introduceUser.setExpireTime(new Date(introduceUser.getExpireTime().getTime()+3600*1000*24*7));
+					}
+					//如果过期了 在当前时间基础上加7天
+					else{
+						introduceUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*7));
+					}
 					wechatUserService.updateExpireTime(introduceUser);
 					//找到owner
 					User owner = userService.getUserByUserId(introduceUser.getBelongOwnerId());
