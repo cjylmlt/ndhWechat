@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="http://www.njfzp.cn/Upload/mmshareindex/css/reset.css">
+<link rel="stylesheet" href="http://www.njfzp.cn/Upload/mmshareindex/css/style.css">
 <style>
 img {
     max-width: 100%;
@@ -24,22 +26,12 @@ div.container {
 <body background="http://chuantu.biz/t6/136/1510389951x2062257371.jpg">
 #if($wechatUser)
 	<font size="5">欢迎$!{wechatUser.userName}!<br>
-	<a href="/messageBox">您当前有$!{messageUnreadCount}未读信息，点击读取</a> <br>
 	您的到期时间为:$!date.format('yyyy-MM-dd HH:mm:ss ',$!wechatUser.expireTime)<br>
-	如果想免费续期，请将下面的二维码分享给你的朋友<br></font>
- <div class="polaroid">
-  <img src=$!{qrCode} alt="Norway" style="width:100%">
-  <div class="container">
-    <p><font size="5">推荐新用户扫描二维码并关注，您将可以续期一个星期</font></p>
-  </div>
-</div>
-
-
+	<a href="/poster">赚取vip</a> <br>
+	<a href="/messageBox">消息通知（$!{messageUnreadCount}条未读信息）</a> <br>
+	<a href="/myQrCode">我的二维码</a> <br>
+</font>
 <!--  <img src=$!{qrCode} alt="Norway" width="1000" height="300"/>-->
-
-
-
-	
 #else
 	您已过期!
 	怎么续期？

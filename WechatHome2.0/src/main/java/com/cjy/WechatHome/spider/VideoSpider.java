@@ -100,6 +100,7 @@ public class VideoSpider {
 		}
 		return newsList;
 	}
+	
 	public ArrayList<String> regex(String source,String target,String url){//从source文件中获取target格式的东西，然后和固定url拼起来
 		ArrayList<String> result = new ArrayList<>();
 		Pattern pattern = Pattern.compile(target);
@@ -122,6 +123,8 @@ public class VideoSpider {
 	public String getMovieSource(String url){
 		url = "http://www.byjsj.cn/"+url;
 		String urlResult = sendGet(url);//获得level-one page源代码
+		urlResult = urlResult.replaceFirst("<header[\\s\\S]+?</header>", "");
+		urlResult = urlResult.replaceFirst("<a href=\"/\" target=\"_self\">[\\s\\S]+?<a href=\"/topic/index.php\" target=\"_self\">片单</a>", "");
 		return urlResult;
 	}
 	public String getYoukuSource(String url){

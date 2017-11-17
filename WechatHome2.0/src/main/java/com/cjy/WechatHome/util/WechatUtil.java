@@ -26,8 +26,10 @@ import com.cjy.WechatHome.model.Media;
 import net.sf.json.JSONObject;
 
 public class WechatUtil {
-	private static final String APPID = "wx39a6afe0d6c218de";
-	private static final String APPSECRET="1087e9433396c0930c3b8d0b6960c948";
+	private static final String APPID = "wx164a6f55de3204c6";
+	private static final String APPSECRET="bbeb5bd1bdf55836603e0bf675d0281e";
+//	private static final String APPID = "wx39a6afe0d6c218de";
+//	private static final String APPSECRET="1087e9433396c0930c3b8d0b6960c948";
 	//private static final String APPID = "wxcc7030da657c484d";
 	//private static final String APPSECRET="4496ca6d9e4ffce5cdb8f6d0b5d69057";
 	private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
@@ -162,7 +164,7 @@ public class WechatUtil {
 	}
 	
 	public static String packUserUrl(String url,String userId){
-		String resultUrl = url.replaceAll("http://www.byjsj.cn", HOST_URL);
+		String resultUrl = url.replaceAll("http://www.goudaitv.com", HOST_URL);
 		resultUrl = resultUrl+"?ownerId="+userId;
 		return packWebUrl(resultUrl);
 	}

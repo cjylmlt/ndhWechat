@@ -114,7 +114,7 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 					// 无人推荐 则算在nhd上
 					ownerId = "gh_936af05e57ce";
 				} else {
-					User owner = userService.getUserByUserId(openId);
+					User owner = userService.getUserByUserId(ownerId);
 					if (owner == null) {
 						// 无人推荐 则算在nhd上
 						ownerId = "gh_936af05e57ce";
@@ -128,7 +128,7 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 				response.addCookie(cookie);
 				//给注册的用户发一份私信
 				EventModel eventModel = new EventModel(EventType.MESSAGE);
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss"); 
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
 				eventModel.setExt("content", "欢迎您的注册，您的到期时间为"+dateFormat.format(wechatUser.getExpireTime()));
 				eventModel.setExt("fromId",wechatUser.getBelongOwnerId());
 				eventModel.setExt("toId", wechatUser.getOpenId());

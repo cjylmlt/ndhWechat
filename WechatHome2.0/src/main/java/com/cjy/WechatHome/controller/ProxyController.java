@@ -47,6 +47,7 @@ public class ProxyController {
 	public String index(Model model,@RequestParam(value="code", required=false)String code,@RequestParam(value="state", required=false)String state) {
 		String content = videoSpider.getIndexSource();
 		content = content.replaceAll("<a target=\"_blank\" href=\" http://neihantutu.lofter.com/taobao\"><div class=\"code\"><span class=\"hd_waiting\">去拆红包</span></div></a>", "");
+		content = content.replaceAll("<header[\\s\\S]+?</header>", "");
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
 		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
 		model.addAttribute("content", content);
@@ -71,7 +72,8 @@ public class ProxyController {
 		WechatUser w = hostHolder.getWechatUser();
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address));
-		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
+		if(hostHolder.getWechatUser()!=null)
+			model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
 		return "proxy";
 	}
 	@RequestMapping(path={"/play/{index}"},method = {RequestMethod.GET})
@@ -79,6 +81,7 @@ public class ProxyController {
 		String address = "play/"+index+".html";
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address));
+		if(hostHolder.getWechatUser()!=null)
 		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
 		return "proxy";
 	}
@@ -94,8 +97,12 @@ public class ProxyController {
 		return "proxy";
 	}
 	@RequestMapping(path={"/js/player/{videoSource}"},method = {RequestMethod.GET})
-	public String getJs(@PathVariable("videoSource")String viedoSource){
-		return viedoSource;
+	public String getJs(@PathVariable("videoSource")String videoSource){
+		if("youku".equals(videoSource)||"mgtv".equals(videoSource))
+			return videoSource;
+		else{
+			return "iqiyi";
+		}
 	}
 	@RequestMapping(path={"api.yibuyy.com/tz/youku.php"},method = {RequestMethod.GET})
 	public String getYouku(Model model){

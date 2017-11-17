@@ -7,6 +7,8 @@ public class WechatUser {
 	private String userName;
 	private String belongOwnerId;
 	private Date expireTime;
+	private int recommendNum;
+	
 	public String getOpenId() {
 		return openId;
 	}
@@ -30,6 +32,12 @@ public class WechatUser {
 	}
 	public void setExpireTime(Date expireTime) {
 		this.expireTime = expireTime;
+	}
+	public int getRecommendNum() {
+		return recommendNum;
+	}
+	public void setRecommendNum(int recommendNum) {
+		this.recommendNum = recommendNum;
 	}
 	
 }

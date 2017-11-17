@@ -21,9 +21,9 @@ public class WechatConfiguration extends WebMvcConfigurerAdapter{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
-		//registry.addInterceptor(loginInterceptor);
+		registry.addInterceptor(loginInterceptor).addPathPatterns("/").addPathPatterns("/user/*").addPathPatterns("/userSetting").addPathPatterns("/definedReply/addTextReply").addPathPatterns("/definedReply/addPicReply").addPathPatterns("/definedReply/delete").addPathPatterns("/definedReply/update").addPathPatterns("/definedReply/updateAd");
 		registry.addInterceptor(LoginRequiredInterceptor).addPathPatterns("/user/*");
-		registry.addInterceptor(permissionRequiredInterceptor).addPathPatterns("/v").addPathPatterns("/play/*").addPathPatterns("/movie/*").addPathPatterns("/userInfo").addPathPatterns("/messageBox");
+		registry.addInterceptor(permissionRequiredInterceptor).addPathPatterns("/v").addPathPatterns("/play/*").addPathPatterns("/movie/*").addPathPatterns("/userInfo").addPathPatterns("/messageBox").addPathPatterns("/myQrCode");
 		super.addInterceptors(registry);
 	}
     @Override

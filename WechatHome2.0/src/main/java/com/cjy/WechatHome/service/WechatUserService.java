@@ -31,8 +31,8 @@ public class WechatUserService {
 			return user;
 		}
 	}
-	public void updateExpireTime(WechatUser wechatUser){
-		wechatUserDao.updateExpireTime(wechatUser);
+	public void updateWechatUser(WechatUser wechatUser){
+		wechatUserDao.updateWechatUser(wechatUser);
 	}
 	public WechatUser regWechatUser(String openId,String ownerId){
 		WechatUser wechatUser = new WechatUser();
@@ -40,7 +40,7 @@ public class WechatUserService {
 		wechatUser.setBelongOwnerId(ownerId);
 		String username = "vip-"+UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");
 		wechatUser.setUserName(username);
-		wechatUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*7));
+		wechatUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*10));
 		wechatUserDao.addWechatUser(wechatUser);
 		return wechatUser;
 	}

@@ -3,6 +3,7 @@ package com.cjy.WechatHome.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -80,6 +81,26 @@ public class WechatWebController {
 		model.addAttribute("qrCode", qrCode);
 		return "userInfo";
 	}
+	
+	@RequestMapping("/myQrCode")
+	public String getQrcode(Model model){
+		String targetUrl = HOST_URL+"/subscribe?introducerId="+hostHolder.getWechatUser().getOpenId();
+		String packUrl = WechatUtil.packWebUrl(targetUrl);
+		try {
+			packUrl = URLEncoder.encode(packUrl,"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String qrCode = "http://qr.topscan.com/api.php?text="+ packUrl;
+		model.addAttribute("qrCode", qrCode);
+		return "myQrCode";
+	}
+	@RequestMapping("/poster")
+	public String getPoster(Model model){
+		return "poster";
+	}
+	
 	@RequestMapping("/subscribe")
 	public String getSubInfo(Model model,@RequestParam("introducerId")String introducerId,HttpServletRequest request,HttpServletResponse response){
 		//判断是否为有效Id
@@ -99,15 +120,29 @@ public class WechatWebController {
 				}
 				else{
 					WechatUser introduceUser = wechatUserService.selectWechatUser(introducerId);
-					//如果Introducer没过期 加7天
-					if(introduceUser.getExpireTime().getTime() - new Date().getTime() > 0){
-						introduceUser.setExpireTime(new Date(introduceUser.getExpireTime().getTime()+3600*1000*24*7));
+					//如果Introducer没过期 加15天
+					introduceUser.setRecommendNum(introduceUser.getRecommendNum()+1);
+					if(introduceUser.getRecommendNum()<5){
+						if(introduceUser.getExpireTime().getTime() - new Date().getTime() > 0){
+							introduceUser.setExpireTime(new Date(introduceUser.getExpireTime().getTime()+3600*1000*24*15));
+						}
+						//如果过期了 在当前时间基础上加15天
+						else{
+							introduceUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*15));
+						}
 					}
-					//如果过期了 在当前时间基础上加7天
 					else{
-						introduceUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*7));
+						java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");   
+						java.util.Date date = null;
+						try {
+							date = format.parse("2099-12-25");
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} 
+						introduceUser.setExpireTime(date);
 					}
-					wechatUserService.updateExpireTime(introduceUser);
+					wechatUserService.updateWechatUser(introduceUser);
 					//找到owner
 					User owner = userService.getUserByUserId(introduceUser.getBelongOwnerId());
 					model.addAttribute("owner", owner);
@@ -120,7 +155,7 @@ public class WechatWebController {
 					response.addCookie(cookie);
 					//给注册的用户发一份私信
 					EventModel eventModel = new EventModel(EventType.MESSAGE);
-					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss"); 
+					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
 					eventModel.setExt("content", "欢迎您的注册，您的到期时间为"+dateFormat.format(newWechatUser.getExpireTime()));
 					eventModel.setExt("fromId",newWechatUser.getBelongOwnerId());
 					eventModel.setExt("toId", newWechatUser.getOpenId());
