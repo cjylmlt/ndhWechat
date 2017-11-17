@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<title>马小呆影视</title>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">欢迎$!{wechatUser.userName}!（到期时间:$!date.format('yyyy-MM-dd ',$!wechatUser.expireTime)）</a>
+    </div>
+    <div>
+        <ul class="nav navbar-nav">
+            <li><a href="/poster">赚取vip</a></li>
+            <li><a href="/messageBox">消息通知（$!{messageUnreadCount}条未读信息）</a></li>
+             <li><a href="/myQrCode">我的二维码</a></li>
+        </ul>
+    </div>
+    </div>
+</nav>
+${content}
+
+</body>
+</html>
