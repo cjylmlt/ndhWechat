@@ -4,32 +4,24 @@ package com.cjy.WechatHome.util;
 
 
 
-import java.io.IOException;
-
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.entity.StringEntity;
 
 import com.cjy.WechatHome.menu.Button;
 import com.cjy.WechatHome.menu.ClickButton;
 import com.cjy.WechatHome.menu.Menu;
 import com.cjy.WechatHome.menu.ViewButton;
 import com.cjy.WechatHome.model.AccessToken;
-import com.cjy.WechatHome.model.Media;
 
 import net.sf.json.JSONObject;
 
 public class WechatUtil {
 	private static final String APPID = "wx164a6f55de3204c6";
 	private static final String APPSECRET="bbeb5bd1bdf55836603e0bf675d0281e";
-//	private static final String APPID = "wx39a6afe0d6c218de";
-//	private static final String APPSECRET="1087e9433396c0930c3b8d0b6960c948";
+	//private static final String APPID = "wx39a6afe0d6c218de";
+	//private static final String APPSECRET="1087e9433396c0930c3b8d0b6960c948";
 	//private static final String APPID = "wxcc7030da657c484d";
 	//private static final String APPSECRET="4496ca6d9e4ffce5cdb8f6d0b5d69057";
 	private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
@@ -132,6 +124,13 @@ public class WechatUtil {
 			result = jsonObject.getInt("errcode");
 		}
 		return result;
+	}
+	
+	public static void sendMenuToWechat(){
+		String token = WechatUtil.getAccessToken().getToken();
+		String menu = JSONObject.fromObject(WechatUtil.packMenu()).toString();
+		int result =  WechatUtil.createMenu(token, menu);
+		System.out.println(result);
 	}
 	
 	public static int getOnlineMedia(String url,String message){

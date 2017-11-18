@@ -125,6 +125,7 @@ public class VideoSpider {
 		String urlResult = sendGet(url);//获得level-one page源代码
 		urlResult = urlResult.replaceFirst("<header[\\s\\S]+?</header>", "");
 		urlResult = urlResult.replaceFirst("<a href=\"/\" target=\"_self\">[\\s\\S]+?<a href=\"/topic/index.php\" target=\"_self\">片单</a>", "");
+		urlResult = urlResult.replaceFirst("<a href=\"/\" target=\"_self\">[\\s\\S]+?福利</span></a>", "");
 		return urlResult;
 	}
 	public String getYoukuSource(String url){

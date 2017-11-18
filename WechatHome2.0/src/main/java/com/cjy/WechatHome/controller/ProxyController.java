@@ -49,6 +49,7 @@ public class ProxyController {
 		content = content.replaceAll("<a target=\"_blank\" href=\" http://neihantutu.lofter.com/taobao\"><div class=\"code\"><span class=\"hd_waiting\">去拆红包</span></div></a>", "");
 		content = content.replaceAll("<header[\\s\\S]+?</header>", "");
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
+		model.addAttribute("wechatOwnerUser", hostHolder.getWechatOwnerUser());
 		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
 		model.addAttribute("content", content);
 		return "proxy";
@@ -71,6 +72,7 @@ public class ProxyController {
 		String address = "movie/"+index+".html";
 		WechatUser w = hostHolder.getWechatUser();
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
+		model.addAttribute("wechatOwnerUser", hostHolder.getWechatOwnerUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address));
 		if(hostHolder.getWechatUser()!=null)
 			model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));
@@ -80,6 +82,7 @@ public class ProxyController {
 	public String getPlay(Model model,@PathVariable("index")String index) {
 		String address = "play/"+index+".html";
 		model.addAttribute("wechatUser", hostHolder.getWechatUser());
+		model.addAttribute("wechatOwnerUser", hostHolder.getWechatOwnerUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address));
 		if(hostHolder.getWechatUser()!=null)
 		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getWechatUser().getOpenId()));

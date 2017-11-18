@@ -39,7 +39,7 @@ public class TopRecordService {
 					topRecordDao.insertTopRecord(r);
 				}
 			}
-			else if((new Date().getTime()-topRecordList.get(0).getUpdateTime().getTime())>1000){
+			else if((new Date().getTime()-topRecordList.get(0).getUpdateTime().getTime())>3600*1000*2400){
 				EventModel eventModel = new EventModel(EventType.TOPRECORD);
 				eventProducer.fireEvent(eventModel);
 			}
