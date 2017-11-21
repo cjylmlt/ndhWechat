@@ -58,6 +58,8 @@ public class VideoSpider {
 			content = new String(stringBuffer.toString().getBytes("ISO-8859-1"),"UTF8");
 			content = content.replaceAll("http://cdn.tvmob.cn/b.js", "");
 			content = content.replaceAll("http://cdn.tvmob.cn/piaofu.js", "");
+			content = content.replaceAll("http://cdn.tvmob.cn/tongji.js", "");
+			content = content.replaceAll(";\\(function\\(\\)[\\s\\S]+?</script>", "");
 			//content = get.getResponseBodyAsString();
 			//System.out.println("getUrl:"+status);
 			//System.out.println(content);

@@ -35,6 +35,7 @@ import com.cjy.WechatHome.util.WechatUtil;
 @Controller
 public class WechatWebController {
 	private static final String HOST_URL = "http://mxd.burod.cn";
+	//private static final String HOST_URL = "http://fortestwechat.free.ngrok.cc";
 	@Autowired
 	HostHolder hostHolder;
 	@Autowired
@@ -78,6 +79,7 @@ public class WechatWebController {
 			e.printStackTrace();
 		}
 		String qrCode = "http://qr.topscan.com/api.php?text="+ packUrl;
+		
 		model.addAttribute("qrCode", qrCode);
 		return "userInfo";
 	}

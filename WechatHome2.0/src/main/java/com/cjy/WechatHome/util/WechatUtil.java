@@ -33,6 +33,7 @@ public class WechatUtil {
 	private static final String WEB_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
 	private static final String WEB_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code ";
 	private static final String HOST_URL = "http://mxd.burod.cn";
+	//private static final String HOST_URL = "http://fortestwechat.free.ngrok.cc";
 	public static JSONObject doGetStr(String url){
 		HttpClient httpClient = new HttpClient();
 		GetMethod httpGet = new GetMethod(url);
