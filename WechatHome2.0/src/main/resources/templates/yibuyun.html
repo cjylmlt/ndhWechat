@@ -48,7 +48,54 @@ onload=initAd;
 <body style="margin:0px;padding:0px;">
 <div id="content"></div>
 <script language="javascript">
-document.getElementById("content").innerHTML = '<iframe src="http://bf.k3k.org.cn/share/'+parent.now+'" width="100%" scrolling="no" height="98%" align="middle" frameborder="no" hspace="0" vspace="0" marginheight="0" marginwidth="0" name="tv" allowfullscreen="true"></iframe>';
+var xmlHttp; 
+function GetXmlHttpObject(){ 
+　　if (window.XMLHttpRequest){ 
+　　　　// code for IE7+, Firefox, Chrome, Opera, Safari 
+　　　　xmlhttp=new XMLHttpRequest(); 
+　　}else{// code for IE6, IE5 
+　　　　xmlhttp=new ActiveXObject("Microsoft.XMLHTTP"); 
+　　} 
+　　return xmlhttp; 
+} 
+// -----------ajax方法-----------// 
+function getLabelsGet(){ 
+　　xmlHttp=GetXmlHttpObject(); 
+　　if (xmlHttp==null){ 
+　　　　alert('您的浏览器不支持AJAX！'); 
+　　　　return; 
+　　} 
+	var source = "key=http://bf.k3k.org.cn/share/"+parent.now;
+	var url="/yibuyunProxy?"+source; 
+　　xmlHttp.open("GET",url,true); 
+　　xmlHttp.onreadystatechange=getOkGet;//发送事件后，收到信息了调用函数 
+　　xmlHttp.send(); 
+}
+function getOkGet(){ 
+　　if(xmlHttp.readyState==1||xmlHttp.readyState==2||xmlHttp.readyState==3){ 
+　　　　// 本地提示：加载中 
+　　} 
+　　if (xmlHttp.readyState==4 && xmlHttp.status==200){ 
+　　　　var d= xmlHttp.responseText; 
+		console.log(xmlHttp.responseText);
+　　　　// 处理返回结果 
+		//document.getElementById("content").innerHTML = d;
+
+        var ifr = document.createElement('iframe');
+        document.body.appendChild(ifr);
+        var ifrdoc = ifr.contentWindow.document;
+        
+        //进入可编辑模式前存好
+        ifrdoc.designMode = 'on'; //文档进入可编辑模式
+        ifrdoc.open(); //打开流
+        ifrdoc.write(d); 
+        ifrdoc.close(); //关闭流
+        ifrdoc.designMode ='off'; //文档进入非可编辑模式
+　　} 
+} 
+getLabelsGet();
+
 </script>
+
 </body>
 </html>                                                                                                                                                                                                                            

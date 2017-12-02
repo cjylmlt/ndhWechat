@@ -71,6 +71,41 @@ public class VideoSpider {
 		}
 		return content;
 	}
+	public String sendGetForyYibuyun(String url){//获得给定url的源文件
+		String content="";
+		HttpClient client = new HttpClient();
+		GetMethod get = new GetMethod(url);
+
+		get.addRequestHeader("Accept-Language","zh-CN,zh;q=0.8");
+		get.addRequestHeader("Referer", "http://www.byjsj.cn/js/player/youku.html");
+		get.addRequestHeader("Host","www.byjsj.cn");
+		get.addRequestHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0");
+		try {
+			int status = client.executeMethod(get);
+			content = get.getResponseBodyAsString();
+			String main = regexForYibuyun(content, "var main = \"(.+?)\"");
+			String xml = regexForYibuyun(content, "var xml = \"(.+?)\"");
+			content = content.replaceAll("var main = \"(.+?)\"", "var main = \"http://bf.k3k.org.cn"+main+"\"");
+			content = content.replaceAll("var xml = \"(.+?)\"", "var xml = \"http://bf.k3k.org.cn"+xml+"\"");
+			content = content.replaceAll("/html/ckplayer/ckplayer.js", "http://bf.k3k.org.cn/html/ckplayer/ckplayer.js");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		} finally {
+			get.releaseConnection();
+		}
+		return content;
+	}
+	public String regexForYibuyun(String source,String target){//从source文件中获取target格式的东西，然后和固定url拼起来
+		String result = "";
+		Pattern pattern = Pattern.compile(target);
+		Matcher matcher = pattern.matcher(source);
+		if(matcher.find()){
+			return matcher.group(1);
+		}
+		return result;
+	}
 	public List<News> getVideoMessage(String content){//给定level-one page的url和id中获得level-two page url
 		List<News> newsList = new ArrayList<News>();
 		SpiderWeb spiderWeb = spiderWebDao.selectUserWeb(Integer.parseInt(adminSettingDao.selectAdminSetting("hostWeb")));
@@ -128,6 +163,7 @@ public class VideoSpider {
 		urlResult = urlResult.replaceFirst("<header[\\s\\S]+?</header>", "");
 		urlResult = urlResult.replaceFirst("<a href=\"/\" target=\"_self\">[\\s\\S]+?<a href=\"/topic/index.php\" target=\"_self\">片单</a>", "");
 		urlResult = urlResult.replaceFirst("<a href=\"/\" target=\"_self\">[\\s\\S]+?福利</span></a>", "");
+		urlResult = urlResult.replaceFirst("<a href=\"http://mp.weixin.qq.com/s.+?</a>", "");
 		return urlResult;
 	}
 	public String getYoukuSource(String url){

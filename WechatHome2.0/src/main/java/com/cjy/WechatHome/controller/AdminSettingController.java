@@ -27,4 +27,9 @@ public class AdminSettingController {
 		adminSettingDao.updateAdminSetting("hostWeb", hostWeb);
 		return "redirect:/";
 	}
+	@RequestMapping(path={"/changeStatics"},method = {RequestMethod.POST,RequestMethod.GET})
+	public String changeStatics(Model model){
+		return "wechat";
+	}
+	
 }

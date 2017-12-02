@@ -6,6 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -56,8 +57,11 @@ public class LoginInterceptor implements HandlerInterceptor{
 			if(loginTicket==null||loginTicket.getStatus()==1||loginTicket.getExpired().before(new Date())){
 				return true;				
 			}
-			User user = userDao.selectById(Integer.valueOf(loginTicket.getUserId()));
-			hostHolder.setUser(user);
+			String userId = loginTicket.getUserId();
+			if(StringUtils.isNumeric(userId)){
+				User user = userDao.selectById(Integer.valueOf(userId));
+				hostHolder.setUser(user);
+			}
 		}
 		return true;
 	}

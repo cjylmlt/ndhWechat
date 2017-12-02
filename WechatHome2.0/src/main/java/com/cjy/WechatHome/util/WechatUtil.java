@@ -152,7 +152,7 @@ public class WechatUtil {
 			String url = WEB_ACCESS_TOKEN_URL.replace("APPID", APPID).replace("SECRET", APPSECRET).replace("CODE", code);
 			JSONObject jsonObject = doGetStr(url);
 			String openId = "";
-			if(jsonObject!=null){
+			if(jsonObject!=null&&jsonObject.containsKey("openid")){
 				openId = jsonObject.getString("openid");
 			}
 			return openId;
@@ -164,7 +164,7 @@ public class WechatUtil {
 	}
 	
 	public static String packUserUrl(String url,String userId){
-		String resultUrl = url.replaceAll("http://www.goudaitv.com", HOST_URL);
+		String resultUrl = url.replaceAll("http://www.yitouxiong.cn", HOST_URL);
 		resultUrl = resultUrl+"?ownerId="+userId;
 		return packWebUrl(resultUrl);
 	}

@@ -101,7 +101,7 @@ public class ProxyController {
 	}
 	@RequestMapping(path={"/js/player/{videoSource}"},method = {RequestMethod.GET})
 	public String getJs(@PathVariable("videoSource")String videoSource){
-		if("youku".equals(videoSource)||"mgtv".equals(videoSource))
+		if("papapa".equals(videoSource)||"youku".equals(videoSource)||"mgtv".equals(videoSource)||"yibuyun".equals(videoSource))
 			return videoSource;
 		else{
 			return "iqiyi";
@@ -117,6 +117,7 @@ public class ProxyController {
 	@ResponseBody
 	public String getYoukuProxy(Model model,@RequestParam("key")String key){
 		String a = videoSpider.getYoukuSource(key);
+		a = a.replace("https://api.yibuyy.com/youkuyun/index.php?id=", "http://api.baiyug.cn/vip/index.php?url="); 
 		return a ;
 	}
 	@RequestMapping(path={"/Iqiyiproxy"},method = {RequestMethod.GET})
@@ -137,6 +138,11 @@ public class ProxyController {
 		String a = videoSpider.getQqSource(key);
 		String b = videoSpider.sendGet(a);
 		return b ;
+	}
+	@RequestMapping(path={"/yibuyunProxy"},method = {RequestMethod.GET})
+	@ResponseBody
+	public String getYibuyunProxy(Model model,@RequestParam("key")String key){
+		return videoSpider.sendGetForyYibuyun(key);
 	}
 	
 	@RequestMapping(path={"/ser/search"},method = {RequestMethod.GET})

@@ -8,6 +8,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cjy.WechatHome.async.EventModel;
 import com.cjy.WechatHome.async.EventProducer;
 import com.cjy.WechatHome.async.EventType;
+import com.cjy.WechatHome.controller.AdminSettingController;
 import com.cjy.WechatHome.dao.LoginTicketDao;
 import com.cjy.WechatHome.model.HostHolder;
 import com.cjy.WechatHome.model.LoginTicket;
@@ -41,14 +44,15 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 	MessageService messageService;
 	@Autowired
 	EventProducer eventProducer;
-	
+	private static final Logger logger = LoggerFactory.getLogger(PermissionRequiredInterceptor.class);
+
 	@Override
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
 		// TODO Auto-generated method stub
 		hostHolder.clearWechatOwnerUsers();
 		hostHolder.clearWechatUser();
-		
+
 	}
 
 	@Override
@@ -72,7 +76,7 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 				if (loginTicket != null && loginTicket.getStatus() != 1
 						&& !loginTicket.getExpired().before(new Date())) {
 					WechatUser wechatUser = wechatUserService.selectWechatUser(loginTicket.getUserId());
-					if (wechatUser != null) {
+					if (wechatUser != null&&(wechatUser.getExpireTime().getTime() - new Date().getTime() > 0)) {
 						hostHolder.setWechatUser(wechatUser);
 						hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
 						return true;
@@ -81,63 +85,62 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 
 			}
 			// 沒有cookie或者cookie过期
-
-			String code = request.getParameter("code");
-			String openId = WechatUtil.getUserOpenId(code);
-			if (openId.equals("")){
-				response.sendRedirect("/error");
-				return false;
-			}
-			if (wechatUserService.isWchatUserExist(openId)) {
-				WechatUser wechatUser = wechatUserService.selectWechatUser(openId);
-				// 没有过期
-				if (wechatUser.getExpireTime().getTime() - new Date().getTime() > 0) {
-					hostHolder.setWechatUser(wechatUser);
-					hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
-					Cookie cookie = new Cookie("ticket", userService.addLoginTicket(wechatUser.getOpenId()));
-					cookie.setPath("/");
-					response.addCookie(cookie);
-					return true;
-				}
-				// 过期了
-				else {
-					hostHolder.setWechatUser(wechatUser);
-					response.sendRedirect("/expireWarning?userId="+wechatUser.getOpenId());
-					//response.sendRedirect("/userInfo");
-					return false;
-				}
-			}
-			// 新用户
-			else {
-				String ownerId = request.getParameter("ownerId");
-				if (ownerId == null || ownerId.equals("")) {
-					// 无人推荐 则算在nhd上
-					ownerId = "gh_936af05e57ce";
-				} else {
-					User owner = userService.getUserByUserId(ownerId);
-					if (owner == null) {
-						// 无人推荐 则算在nhd上
-						ownerId = "gh_936af05e57ce";
-					}
-				}
-				WechatUser wechatUser = wechatUserService.regWechatUser(openId, ownerId);
+		}
+		String code = request.getParameter("code");
+		String openId = WechatUtil.getUserOpenId(code);
+		if (openId.equals("")) {
+			response.sendRedirect("/error");
+			return false;
+		}
+		if (wechatUserService.isWchatUserExist(openId)) {
+			WechatUser wechatUser = wechatUserService.selectWechatUser(openId);
+			// 没有过期
+			if (wechatUser.getExpireTime().getTime() - new Date().getTime() > 0) {
 				hostHolder.setWechatUser(wechatUser);
 				hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
 				Cookie cookie = new Cookie("ticket", userService.addLoginTicket(wechatUser.getOpenId()));
 				cookie.setPath("/");
 				response.addCookie(cookie);
-				//给注册的用户发一份私信
-				EventModel eventModel = new EventModel(EventType.MESSAGE);
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
-				eventModel.setExt("content", "欢迎您的注册，您的到期时间为"+dateFormat.format(wechatUser.getExpireTime()));
-				eventModel.setExt("fromId",wechatUser.getBelongOwnerId());
-				eventModel.setExt("toId", wechatUser.getOpenId());
-				eventProducer.fireEvent(eventModel);
 				return true;
 			}
-
+			// 过期了
+			else {
+				hostHolder.setWechatUser(wechatUser);
+				response.sendRedirect("/expireWarning?userId=" + wechatUser.getOpenId());
+				// response.sendRedirect("/userInfo");
+				return false;
+			}
 		}
-		return true;
+		// 新用户
+		else {
+			String ownerId = request.getParameter("ownerId");
+			if (ownerId == null || ownerId.equals("")) {
+				// 无人推荐 则算在nhd上
+				ownerId = "gh_936af05e57ce";
+			} else {
+				User owner = userService.getUserByUserId(ownerId);
+				if (owner == null) {
+					// 无人推荐 则算在nhd上
+					ownerId = "gh_936af05e57ce";
+				}
+			}
+			WechatUser wechatUser = wechatUserService.regWechatUser(openId, ownerId);
+			hostHolder.setWechatUser(wechatUser);
+			hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
+			Cookie cookie = new Cookie("ticket", userService.addLoginTicket(wechatUser.getOpenId()));
+			cookie.setPath("/");
+			response.addCookie(cookie);
+			// 给注册的用户发一份私信
+			EventModel eventModel = new EventModel(EventType.MESSAGE);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			eventModel.setExt("content", "欢迎您的注册，您的到期时间为" + dateFormat.format(wechatUser.getExpireTime()));
+			eventModel.setExt("fromId", wechatUser.getBelongOwnerId());
+			eventModel.setExt("toId", wechatUser.getOpenId());
+			eventProducer.fireEvent(eventModel);
+			return true;
+		}
+
+		//return true;
 	}
 
 }

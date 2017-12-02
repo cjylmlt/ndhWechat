@@ -172,10 +172,10 @@ public class WechatWebController {
 				}
 			}
 			else {
-				return "error/error";
+				return "/error";
 			}
 		}
-		return "/v";
+		return "redirect:/v";
 	}
 	@RequestMapping("/messageBox")
 	public String getMessageBox(Model model){
