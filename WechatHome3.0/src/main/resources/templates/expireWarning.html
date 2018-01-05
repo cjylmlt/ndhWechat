@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+img {
+    max-width: 100%;
+    height: auto;
+}
+div.polaroid {
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+}
+
+div.container {
+  padding: 10px;
+}
+</style>
+</head>
+
+<title>马小呆影视</title>
+</head>
+<body background="http://chuantu.biz/t6/136/1510389951x2062257371.jpg">
+					<!-- 上传图片地址 -->
+
+#if($wechatUser)
+	<font size="5">欢迎$!{wechatUser.userName}!<br>
+	您已过期！<br>
+	您的到期时间为:$!date.format('yyyy-MM-dd HH:mm:ss ',$!wechatUser.expireTime)<br>
+	如果想免费续期，请将下面的二维码分享给你的朋友<br></font>
+ <div class="polaroid">
+  <img src=$!{qrCode} alt="Norway" style="width:50%">
+  <div class="container">
+    <p><font size="5">推荐新用户扫描二维码并关注，您将可以续期十五天</font></p>
+  </div>
+</div>
+#end
+
+
+
+
+</body>
+</html>

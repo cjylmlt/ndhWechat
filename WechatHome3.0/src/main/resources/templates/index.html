@@ -1,0 +1,125 @@
+#parse("header.html")
+#parse("carousel.html")
+<link rel="stylesheet" href="../styles/index.css">
+<link rel="stylesheet" href="../styles/detail.css">
+
+
+
+    <div class="zg-wrap zu-main clearfix " role="main">
+        <div class="zu-main-content">
+            <div class="zu-main-content-inner">
+                <div class="zu-main-feed-con navigable" data-feedtype="topstory" id="zh-question-list" data-widget="navigable" data-navigable-options="{&quot;items&quot;:&quot;&gt; .zh-general-list .feed-content&quot;,&quot;offsetTop&quot;:-82}">
+                    <a href="javascript:;" class="zu-main-feed-fresh-button" id="zh-main-feed-fresh-button" style="display:none"></a>
+                    <div id="js-home-feed-list" class="zh-general-list topstory clearfix" data-init="{&quot;params&quot;: {}, &quot;nodename&quot;: &quot;TopStory2FeedList&quot;}" data-delayed="true" data-za-module="TopStoryFeedList">
+
+                       <!--  <table class="table">
+                          <caption>24小时热搜top10</caption>
+                          <thead>
+                            <tr>
+                              <th>排名</th>
+                              <th>关键词</th>
+                              <th>搜索次数</th></tr>
+                          </thead>
+                          <tbody>
+                          
+                          #foreach($topRecord in $topRecordList)
+                            #if($velocityCount==1)
+                            <tr class="success">
+                              <td>$!{velocityCount}</td>
+                              <td>$!{topRecord.content}</td>
+                              <td>$!{topRecord.count}</td></tr>
+                              
+                              #elseif($velocityCount==2)
+                               <tr class="warning">
+                               <td>$!{velocityCount}</td>
+                              <td>$!{topRecord.content}</td>
+                              <td>$!{topRecord.count}</td></tr>
+                              
+                               #elseif($velocityCount==3)
+                               <tr class="danger">
+                               <td>$!{velocityCount}</td>
+                              <td>$!{topRecord.content}</td>
+                              <td>$!{topRecord.count}</td></tr>
+                              
+                               #else
+                               <tr class="active">
+                               <td>$!{velocityCount}</td>
+                              <td>$!{topRecord.content}</td>
+                              <td>$!{topRecord.count}</td></tr>
+                              
+                             #end
+                          #end
+               
+                          </tbody>
+                        </table>
+                        -->
+                        <table class="table">
+                          <caption>昨日后台总关注量</caption>
+                          <thead>
+                            <tr>
+                              <th>关注量</th>
+                              <th>取关量</th>
+                              </tr>
+                          </thead>
+                          <tbody>                   
+                            <tr class="success">
+                              <td>$!{subRecord.count}</td>
+                              <td>$!{unSubRecord.count}</td>
+                             </tr>
+                          </tbody>
+                        </table>
+                        
+                        #if($userList)
+                        <form action ="/adminSetting" method="post">
+                        <div>当前使用站点为：$!{choosenWeb}</div>
+                        <div class="dropdown">
+                        	<select name="hostWeb"> 
+                        	#foreach($hostWeb in $hostWebList)
+							<option value=$hostWeb.id>$hostWeb.webName</option> 
+							#end
+							</select> 
+						</div>
+							<input type="submit" value="修改"/>
+						</form>
+						 <form action ="/adminSetting/changeWebUrl" method="post">
+                  		 <input class="form-control" type="text" name="webUrl" value="${oldWebUrl}">
+						<input type="submit" value="修改"/>
+						</form>
+                        <table class="table">
+					  <caption>用户基本信息</caption>
+					  <thead>
+					    <tr>
+					      <th>用户名</th>
+					      <th>中文名</th>
+					      <th>备注一</th>
+					      <!-- <th>基本信息</th> -->
+					    </tr>
+					  </thead>
+					  <tbody>
+					  #foreach($user in $userList)
+						<tr>
+					      <!-- <td><a href="/user/$!{user.id}" target="_blank"><img src=$!{user.headUrl}  alt="用户头像" height="50" width="60" /></a></td> -->
+					      <td><a href="/user/$!{user.id}">$!{user.username}</a> </td>
+					      	<!--  公众号id：$!{user.userId} </br> -->
+					      	<!--  账户信息：#if($!{user.status}==0)
+					      		用户正常 </br> 
+					      	   #elseif($!{user.status}==1)
+					      	        用户已被停用 </br> 
+					      	    #elseif($!{user.status}==2)
+					      	        超级用户 </br> 
+					      	   #end-->
+					      	   <td>$!{user.chineseName}</td>
+					      	  <td>$!{user.noteOne}</td> 
+					      	 </tr>
+					     #end
+					  </tbody>
+					</table> 	
+                        #end
+                    </div>
+                    
+            </div>
+        </div>
+    </div>
+#parse("js.html")
+<script type="text/javascript" src="/scripts/main/site/detail.js"></script>
+#parse("footer.html")
