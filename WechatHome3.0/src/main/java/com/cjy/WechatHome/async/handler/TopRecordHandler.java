@@ -13,8 +13,8 @@ import com.cjy.WechatHome.async.EventHandler;
 import com.cjy.WechatHome.async.EventModel;
 import com.cjy.WechatHome.async.EventType;
 import com.cjy.WechatHome.dao.TopRecordDao;
-import com.cjy.WechatHome.model.TopRecord;
-import com.cjy.WechatHome.service.RecordService;
+import com.cjy.WechatHome.web.model.TopRecord;
+import com.cjy.WechatHome.web.service.RecordService;
 @Component
 public class TopRecordHandler implements EventHandler{
 @Autowired

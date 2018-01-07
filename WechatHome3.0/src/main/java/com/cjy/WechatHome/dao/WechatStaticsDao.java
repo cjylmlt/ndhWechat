@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.cjy.WechatHome.model.User;
-import com.cjy.WechatHome.model.WechatStatics;
+import com.cjy.WechatHome.web.model.User;
+import com.cjy.WechatHome.web.model.WechatStatics;
 
 @Mapper
 public interface WechatStaticsDao {

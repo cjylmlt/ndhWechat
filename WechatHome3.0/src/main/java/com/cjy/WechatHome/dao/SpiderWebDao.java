@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import  com.cjy.WechatHome.model.Record;
-import com.cjy.WechatHome.model.SpiderWeb;
-import com.cjy.WechatHome.model.TopRecord;
+import com.cjy.WechatHome.theater.model.SpiderWeb;
+import com.cjy.WechatHome.web.model.Record;
+import com.cjy.WechatHome.web.model.TopRecord;
 @Mapper
 public interface SpiderWebDao{
 	String TABLE_NAME = " spider_web ";

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cjy.WechatHome.model.HostHolder;
+import com.cjy.WechatHome.web.model.HostHolder;
 @Component
 public class LoginRequiredInterceptor implements HandlerInterceptor{
 @Autowired

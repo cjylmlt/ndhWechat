@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.cjy.WechatHome.model.LoginTicket;
-import com.cjy.WechatHome.model.User;
+import com.cjy.WechatHome.web.model.LoginTicket;
+import com.cjy.WechatHome.web.model.User;
 
 @Mapper
 public interface LoginTicketDao {

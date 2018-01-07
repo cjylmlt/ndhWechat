@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import com.cjy.WechatHome.async.EventHandler;
 import com.cjy.WechatHome.async.EventModel;
 import com.cjy.WechatHome.async.EventType;
-import com.cjy.WechatHome.model.News;
-import com.cjy.WechatHome.model.NewsPo;
-import com.cjy.WechatHome.service.NewsService;
 import com.cjy.WechatHome.spider.VideoSpider;
+import com.cjy.WechatHome.wechat.model.News;
+import com.cjy.WechatHome.wechat.model.NewsPo;
+import com.cjy.WechatHome.wechat.service.NewsService;
 @Component
 public class VideoSpiderHandler implements EventHandler{
 	@Autowired

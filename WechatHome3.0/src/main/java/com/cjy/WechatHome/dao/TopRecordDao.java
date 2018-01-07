@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import  com.cjy.WechatHome.model.Record;
-import com.cjy.WechatHome.model.TopRecord;
+import com.cjy.WechatHome.web.model.Record;
+import com.cjy.WechatHome.web.model.TopRecord;
 @Mapper
 public interface TopRecordDao{
 	String TABLE_NAME = " top_record ";

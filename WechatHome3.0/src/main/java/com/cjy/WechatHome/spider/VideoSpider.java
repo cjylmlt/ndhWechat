@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 
 import com.cjy.WechatHome.dao.AdminSettingDao;
 import com.cjy.WechatHome.dao.SpiderWebDao;
-import com.cjy.WechatHome.model.HostHolder;
-import com.cjy.WechatHome.model.News;
-import com.cjy.WechatHome.model.SpiderWeb;
-import com.cjy.WechatHome.model.User;
+import com.cjy.WechatHome.theater.model.SpiderWeb;
+import com.cjy.WechatHome.web.model.HostHolder;
+import com.cjy.WechatHome.web.model.User;
+import com.cjy.WechatHome.wechat.model.News;
 
 
 

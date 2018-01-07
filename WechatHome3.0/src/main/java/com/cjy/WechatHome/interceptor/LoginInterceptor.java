@@ -14,9 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cjy.WechatHome.dao.LoginTicketDao;
 import com.cjy.WechatHome.dao.UserDao;
-import com.cjy.WechatHome.model.HostHolder;
-import com.cjy.WechatHome.model.LoginTicket;
-import com.cjy.WechatHome.model.User;
+import com.cjy.WechatHome.web.model.HostHolder;
+import com.cjy.WechatHome.web.model.LoginTicket;
+import com.cjy.WechatHome.web.model.User;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor{

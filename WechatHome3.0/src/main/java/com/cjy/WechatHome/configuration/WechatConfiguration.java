@@ -20,8 +20,8 @@ public class WechatConfiguration extends WebMvcConfigurerAdapter{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
-		registry.addInterceptor(loginInterceptor).addPathPatterns("/","/user/*","/userSetting","/definedReply/addTextReply","/definedReply/addPicReply","/definedReply/delete","/definedReply/update","/definedReply/updateAd","/wechatStatics","/search");
-		registry.addInterceptor(LoginRequiredInterceptor).addPathPatterns("/user/*","/wechatStatics","/search");
+		registry.addInterceptor(loginInterceptor).addPathPatterns("/","/user/**","/userSetting","/definedReply/addTextReply","/definedReply/addPicReply","/definedReply/delete","/definedReply/update","/definedReply/updateAd","/wechatStatics","/search");
+		registry.addInterceptor(LoginRequiredInterceptor).addPathPatterns("/user/**","/wechatStatics","/search");
 	    registry.addInterceptor(permissionRequiredInterceptor).addPathPatterns("/v","/play/**","/movie/**","/userInfo","/messageBox","/myQrCode","/play.php","/mplay.php");
 		super.addInterceptors(registry);
 	}

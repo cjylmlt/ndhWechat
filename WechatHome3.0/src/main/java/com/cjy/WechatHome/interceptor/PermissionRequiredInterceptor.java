@@ -3,7 +3,6 @@ package com.cjy.WechatHome.interceptor;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,24 +18,22 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cjy.WechatHome.async.EventModel;
 import com.cjy.WechatHome.async.EventProducer;
 import com.cjy.WechatHome.async.EventType;
-import com.cjy.WechatHome.controller.AdminSettingController;
 import com.cjy.WechatHome.dao.LoginTicketDao;
-import com.cjy.WechatHome.model.HostHolder;
-import com.cjy.WechatHome.model.LoginTicket;
-import com.cjy.WechatHome.model.Message;
-import com.cjy.WechatHome.model.User;
-import com.cjy.WechatHome.model.WechatUser;
-import com.cjy.WechatHome.service.MessageService;
-import com.cjy.WechatHome.service.UserService;
-import com.cjy.WechatHome.service.WechatUserService;
+import com.cjy.WechatHome.theater.model.Fan;
+import com.cjy.WechatHome.theater.service.FanService;
+import com.cjy.WechatHome.theater.service.MessageService;
 import com.cjy.WechatHome.util.WechatUtil;
+import com.cjy.WechatHome.web.model.HostHolder;
+import com.cjy.WechatHome.web.model.LoginTicket;
+import com.cjy.WechatHome.web.model.User;
+import com.cjy.WechatHome.web.service.UserService;
 
 @Component
 public class PermissionRequiredInterceptor implements HandlerInterceptor {
 	@Autowired
 	HostHolder hostHolder;
 	@Autowired
-	WechatUserService wechatUserService;
+	FanService fanService;
 	@Autowired
 	LoginTicketDao loginTicketDao;
 	@Autowired
@@ -51,8 +48,8 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
 		// TODO Auto-generated method stub
-		hostHolder.clearWechatOwnerUsers();
-		hostHolder.clearWechatUser();
+		hostHolder.clearFanOwnerUsers();
+		hostHolder.clearFans();
 
 	}
 
@@ -76,10 +73,10 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 				LoginTicket loginTicket = loginTicketDao.selectByTicket(ticket);
 				if (loginTicket != null && loginTicket.getStatus() != 1
 						&& !loginTicket.getExpired().before(new Date())) {
-					WechatUser wechatUser = wechatUserService.selectWechatUser(loginTicket.getUserId());
-					if (wechatUser != null&&(wechatUser.getExpireTime().getTime() - new Date().getTime() > 0)) {
-						hostHolder.setWechatUser(wechatUser);
-						hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
+					Fan fan = fanService.selectFan(loginTicket.getUserId());
+					if (fan != null&&(fan.getExpireTime().getTime() - new Date().getTime() > 0)) {
+						hostHolder.setFan(fan);
+						hostHolder.setFanOwnerUser(userService.getUserByUserId(fan.getBelongOwnerId()));
 						return true;
 					}
 				}
@@ -93,21 +90,21 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 			response.sendRedirect("/error");
 			return false;
 		}
-		if (wechatUserService.isWchatUserExist(openId)) {
-			WechatUser wechatUser = wechatUserService.selectWechatUser(openId);
+		if (fanService.isFanExist(openId)) {
+			Fan fan = fanService.selectFan(openId);
 			// 用户没有过期
-			if (wechatUser.getExpireTime().getTime() - new Date().getTime() > 0) {
-				hostHolder.setWechatUser(wechatUser);
-				hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
-				Cookie cookie = new Cookie("ticket", userService.addLoginTicket(wechatUser.getOpenId()));
+			if (fan.getExpireTime().getTime() - new Date().getTime() > 0) {
+				hostHolder.setFan(fan);
+				hostHolder.setFanOwnerUser(userService.getUserByUserId(fan.getBelongOwnerId()));
+				Cookie cookie = new Cookie("ticket", userService.addLoginTicket(fan.getOpenId()));
 				cookie.setPath("/");
 				response.addCookie(cookie);
 				return true;
 			}
 			// 用户过期了
 			else {
-				hostHolder.setWechatUser(wechatUser);
-				response.sendRedirect("/expireWarning?userId=" + wechatUser.getOpenId());
+				hostHolder.setFan(fan);
+				response.sendRedirect("/expireWarning?userId=" + fan.getOpenId());
 				// response.sendRedirect("/userInfo");
 				return false;
 			}
@@ -125,18 +122,18 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 					ownerId = "gh_936af05e57ce";
 				}
 			}
-			WechatUser wechatUser = wechatUserService.regWechatUser(openId, ownerId);
-			hostHolder.setWechatUser(wechatUser);
-			hostHolder.setWechatOwnerUser(userService.getUserByUserId(wechatUser.getBelongOwnerId()));
-			Cookie cookie = new Cookie("ticket", userService.addLoginTicket(wechatUser.getOpenId()));
+			Fan fan = fanService.regFan(openId, ownerId);
+			hostHolder.setFan(fan);
+			hostHolder.setFanOwnerUser(userService.getUserByUserId(fan.getBelongOwnerId()));
+			Cookie cookie = new Cookie("ticket", userService.addLoginTicket(fan.getOpenId()));
 			cookie.setPath("/");
 			response.addCookie(cookie);
 			// 给注册的用户发一份私信
 			EventModel eventModel = new EventModel(EventType.MESSAGE);
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			eventModel.setExt("content", "欢迎您的注册，您的到期时间为" + dateFormat.format(wechatUser.getExpireTime()));
-			eventModel.setExt("fromId", wechatUser.getBelongOwnerId());
-			eventModel.setExt("toId", wechatUser.getOpenId());
+			eventModel.setExt("content", "欢迎您的注册，您的到期时间为" + dateFormat.format(fan.getExpireTime()));
+			eventModel.setExt("fromId", fan.getBelongOwnerId());
+			eventModel.setExt("toId", fan.getOpenId());
 			eventProducer.fireEvent(eventModel);
 			//跳转vip通知
 			

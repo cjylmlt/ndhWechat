@@ -1,7 +1,8 @@
 package com.cjy.WechatHome.dao;
 
-import com.cjy.WechatHome.model.Message;
 import org.apache.ibatis.annotations.*;
+
+import com.cjy.WechatHome.theater.model.Message;
 
 import java.util.List;
 

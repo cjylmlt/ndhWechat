@@ -17,9 +17,9 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Service;
 
-import com.cjy.WechatHome.model.News;
-import com.cjy.WechatHome.model.NewsMessage;
-import com.cjy.WechatHome.model.TextMessage;
+import com.cjy.WechatHome.wechat.model.News;
+import com.cjy.WechatHome.wechat.model.NewsMessage;
+import com.cjy.WechatHome.wechat.model.TextMessage;
 import com.thoughtworks.xstream.XStream;
 
 

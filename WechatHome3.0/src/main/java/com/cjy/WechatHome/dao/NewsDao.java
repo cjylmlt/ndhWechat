@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import com.cjy.WechatHome.model.News;
-import com.cjy.WechatHome.model.NewsPo;
+import com.cjy.WechatHome.wechat.model.News;
+import com.cjy.WechatHome.wechat.model.NewsPo;
 
 
 @Mapper

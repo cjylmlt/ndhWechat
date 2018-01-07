@@ -1,7 +1,7 @@
 package com.cjy.WechatHome.util;
 
-import com.cjy.WechatHome.model.OnlineMediaMessage;
 import com.cjy.WechatHome.type.MediaType;
+import com.cjy.WechatHome.wechat.model.OnlineMediaMessage;
 
 public class OnlineMediaUtil {
 	

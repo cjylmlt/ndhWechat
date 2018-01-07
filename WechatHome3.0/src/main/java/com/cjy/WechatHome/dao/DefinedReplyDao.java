@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.cjy.WechatHome.model.DefinedReply;
+import com.cjy.WechatHome.wechat.model.DefinedReply;
 @Mapper
 public interface DefinedReplyDao {
 	String TABLE_NAME = " defined_reply ";

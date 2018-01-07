@@ -1,25 +1,26 @@
 package com.cjy.WechatHome.util;
 
-
-
-
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
-import com.cjy.WechatHome.menu.Button;
-import com.cjy.WechatHome.menu.ClickButton;
-import com.cjy.WechatHome.menu.Menu;
-import com.cjy.WechatHome.menu.ViewButton;
-import com.cjy.WechatHome.model.AccessToken;
+import com.cjy.WechatHome.wechat.model.AccessToken;
+import com.cjy.WechatHome.wechat.model.Button;
+import com.cjy.WechatHome.wechat.model.ClickButton;
+import com.cjy.WechatHome.wechat.model.Menu;
+import com.cjy.WechatHome.wechat.model.ViewButton;
 
 import net.sf.json.JSONObject;
-
+@Configuration
 public class WechatUtil {
-	private static final String APPID = "wx164a6f55de3204c6";
-	private static final String APPSECRET="bbeb5bd1bdf55836603e0bf675d0281e";
+	private static  String APPID ;
+	private static  String APPSECRET;
 	//private static final String APPID = "wx39a6afe0d6c218de";
 	//private static final String APPSECRET="1087e9433396c0930c3b8d0b6960c948";
 	//private static final String APPID = "wxcc7030da657c484d";
@@ -32,8 +33,16 @@ public class WechatUtil {
 	
 	private static final String WEB_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
 	private static final String WEB_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code ";
-	private static final String HOST_URL = "http://mxd.burod.cn";
+	private static  String HOST_URL ;
 	//private static final String HOST_URL = "http://fortestwechat.free.ngrok.cc";
+	
+	public WechatUtil(@Value("${host.url}") String host,
+			@Value("${wechat.appid}") String appid,
+			@Value("${wechat.appsecret}") String appsecret){
+		WechatUtil.HOST_URL = host;
+		WechatUtil.APPID = appid;
+		WechatUtil.APPSECRET = appsecret;
+	}
 	public static JSONObject doGetStr(String url){
 		HttpClient httpClient = new HttpClient();
 		GetMethod httpGet = new GetMethod(url);
