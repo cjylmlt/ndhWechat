@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-
+import java.util.List;
 import com.cjy.WechatHome.web.model.LoginTicket;
 import com.cjy.WechatHome.web.model.User;
 
@@ -19,6 +19,8 @@ public interface LoginTicketDao {
 	int addTicket(LoginTicket ticket);
 	@Select({"select ", SELECT_FIELDS,"from",TABLE_NAME,"where ticket = #{ticket}"})
 	LoginTicket selectByTicket(String ticket);
+	@Select({"select ", SELECT_FIELDS,"from",TABLE_NAME,"where user_id = #{id} limit 2"})
+	List<LoginTicket> selectById(String id);
 	@Update({"update",TABLE_NAME,"set status=#{0} where ticket=#{1}"})
 	void updateStatus(int status,String ticket);
 

@@ -162,10 +162,6 @@ public class VideoSpider {
 		urlResult = urlResult.replaceAll("<a target=\"blank\" class=\"gobtn\" href=\"http://xiaogui1.5awo.com\">爱客资源网</a>", "");
 		urlResult = urlResult.replaceAll("<a target=\"blank\" class=\"gobtn\" href=\"https://jq.qq.com.+?\">加入Q群</a>", "");
 		urlResult = urlResult.replaceAll("<div class=\"widget widget-textasst\">.+?</div>", "");
-		//微信支付宝图片 打赏
-		
-		
-		
 		//无效过滤
 		urlResult = urlResult.replaceAll("<div class=\"asst asst-post_header\">.+?</div>", "");
 		urlResult = urlResult.replaceAll("<div class=\"widget widget-textasst\">[\\s\\S]+?</div>", "");
@@ -173,7 +169,8 @@ public class VideoSpider {
 		urlResult = urlResult.replaceAll("<div id=\"SOHUCS\">[\\s\\S]+?\"重新注册\"</div>", "");
 		urlResult = urlResult.replaceAll("<a href.+?站长统计</a>", "");
 		urlResult = urlResult.replaceAll("<font color=\"red\">【影视】</font>", "");
-		
+		//过滤搜索栏
+		urlResult = urlResult.replaceAll("<form method=\"get\" id=\"soform\"[\\s\\S]+?</form>", "");
 		
 		
 		if(user!=null){
@@ -182,14 +179,23 @@ public class VideoSpider {
 			urlResult = urlResult.replaceAll("images/qrcode.png", "/uploadImages/"+user.getUserId()+"/qrcode");
 			urlResult = urlResult.replaceAll("images/zfb.png", "/uploadImages/"+user.getUserId()+"/zfb");
 			urlResult = urlResult.replaceAll("images/wx.png", "/uploadImages/"+user.getUserId()+"/wx");
+			urlResult = urlResult.replaceAll("images/sologo.png", "/uploadImages/"+user.getUserId()+"/qrcode");
+			
 		}
 		else{
 			urlResult = urlResult.replaceAll("爱客", "");
 			urlResult = urlResult.replaceAll("images/qrcode.png", "");
 			urlResult = urlResult.replaceAll("images/zfb.png", "");
 			urlResult = urlResult.replaceAll("images/wx.png", "");
+			urlResult = urlResult.replaceAll("images/sologo.png", "");
 		}
-		
+		//把"/css/*","/js/*","/images/*"转到爱客去
+
+		urlResult=urlResult.replaceAll("css/","http://v.woaik.com/css/");
+		urlResult=urlResult.replaceAll("js/","http://v.woaik.com/js/");
+		urlResult=urlResult.replaceAll("images/","http://v.woaik.com/images/");
+		urlResult=urlResult.replaceAll("jiazai.png","");
+
 		return urlResult;
 	}
 }

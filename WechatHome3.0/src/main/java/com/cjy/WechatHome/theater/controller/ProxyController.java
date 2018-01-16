@@ -2,10 +2,10 @@ package com.cjy.WechatHome.theater.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,14 +47,13 @@ public class ProxyController {
 		return "theater/proxy";
 	}
 	@RequestMapping(path={"/dsj/**"},method = {RequestMethod.GET})
-	public String getMovie(Model model,HttpServletRequest request) {
+	public String getDsj(Model model,HttpServletRequest request) {
 		String address = request.getRequestURI();
-		Fan w = hostHolder.getFan();
 		User user;
-		if(w==null)
+		if(hostHolder.getFan()==null)
 			user = null;
 		else
-			user = userService.getUserByUserId(w.getBelongOwnerId());
+			user = userService.getUserByUserId(hostHolder.getFan().getBelongOwnerId());
 		model.addAttribute("wechatUser", hostHolder.getFan());
 		model.addAttribute("wechatOwnerUser", hostHolder.getFanOwnerUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address,user));
@@ -62,6 +61,46 @@ public class ProxyController {
 			model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getFan().getOpenId()));
 		return "theater/proxy";
 	}
+	
+	@RequestMapping(path={"/movie.php","/tv.php","zongyi.php","dongman.php"},method = {RequestMethod.GET})
+	public String getMovie(Model model,HttpServletRequest request) {
+		Map<String, String[]> parameterMap = request.getParameterMap();
+		
+		String address = request.getRequestURI()+"?";
+		for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
+			address+=map.getKey();
+			address+="=";
+			address+=map.getValue()[0];
+			address+="&";
+		}
+		User user;
+		if(hostHolder.getFan()==null)
+			user = null;
+		else
+			user = userService.getUserByUserId(hostHolder.getFan().getBelongOwnerId());
+		model.addAttribute("wechatUser", hostHolder.getFan());
+		model.addAttribute("wechatOwnerUser", hostHolder.getFanOwnerUser());
+		model.addAttribute("content", videoSpider.getMovieSource(address,user));
+		if(hostHolder.getFan()!=null)
+			model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getFan().getOpenId()));
+		return "theater/proxy";
+	}
+	
+	@RequestMapping(path={"/v"},method = {RequestMethod.GET})
+	public String getTheaterIndex(Model model,HttpServletRequest request) {
+		User user;
+		if(hostHolder.getFan()==null)
+			user = null;
+		else
+			user = userService.getUserByUserId(hostHolder.getFan().getBelongOwnerId());
+		model.addAttribute("wechatUser", hostHolder.getFan());
+		model.addAttribute("wechatOwnerUser", hostHolder.getFanOwnerUser());
+		model.addAttribute("content", videoSpider.getMovieSource("",user));
+		if(hostHolder.getFan()!=null)
+			model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getFan().getOpenId()));
+		return "theater/proxy";
+	}
+	
 	@RequestMapping(path={"/play.php","/mplay.php"},method = {RequestMethod.GET})
 	public String getPlay(Model model,HttpServletRequest request) {
 		StringBuilder address = new StringBuilder();
@@ -81,7 +120,10 @@ public class ProxyController {
 		model.addAttribute("wechatOwnerUser", hostHolder.getFanOwnerUser());
 		model.addAttribute("content", videoSpider.getMovieSource(address.toString(),user));
 		if(hostHolder.getFan()!=null)
-		model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getFan().getOpenId()));
+			model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getFan().getOpenId()));
+		if(hostHolder.getFan().getExpireTime().getTime()<new Date().getTime()+3600*1000*24*10){
+			model.addAttribute("warnning","warnning");
+		}
 		return "theater/proxy";
 	}
 	@RequestMapping(path={"/jiazai.php"},method = {RequestMethod.GET})

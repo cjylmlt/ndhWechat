@@ -12,6 +12,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cjy.WechatHome.web.model.UserSetting;
+import com.cjy.WechatHome.web.service.UserSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -46,6 +48,12 @@ public class WechatWebController {
 	MessageService messageService;
 	@Autowired
 	EventProducer eventProducer;
+	@Autowired
+	UserSettingService userSettingService;
+	@Value("${wechat.interceptor}")
+	String interceptor;
+
+
 	public WechatWebController(@Value("${host.url}")String host){
 		HOST_URL = host;
 	}
@@ -70,8 +78,16 @@ public class WechatWebController {
 	}
 	@RequestMapping("/userInfo")
 	public String getUserInfo(Model model){
-		model.addAttribute("fan", hostHolder.getFan());
-		model.addAttribute("messageList", messageService.getMessageList(hostHolder.getFan().getOpenId(), 0, 100));
+		if(interceptor.equals("false")){
+			model.addAttribute("fan",fanService.selectFan("oKtSQ07yrpPNKn2giRihih8XA6dg"));
+			model.addAttribute("messageList", messageService.getMessageList(fanService.selectFan("oKtSQ07yrpPNKn2giRihih8XA6dg").getOpenId(), 0, 3));
+			messageService.updateReadStatus(hostHolder.getFan().getOpenId());
+		}
+		else if(interceptor.equals("true")){
+			model.addAttribute("fan", hostHolder.getFan());
+			model.addAttribute("messageList", messageService.getMessageList(hostHolder.getFan().getOpenId(), 0, 3));
+			messageService.updateReadStatus(hostHolder.getFan().getOpenId());
+		}
 		return "theater/fanpage";
 	}
 	
@@ -90,7 +106,8 @@ public class WechatWebController {
 		return "theater/myQrCode";
 	}
 	@RequestMapping("/poster")
-	public String getPoster(Model model){
+	public String getPoster(Model model,@RequestParam(value = "next",required = false)String next){
+		model.addAttribute("next",next);
 		return "theater/poster";
 	}
 	
@@ -101,6 +118,8 @@ public class WechatWebController {
 			Fan introduceFan = fanService.selectFan(introducerId);
 			User owner = userService.getUserByUserId(introduceFan.getBelongOwnerId());
 			model.addAttribute("owner", owner);
+			//获取该owner的设置
+			UserSetting userSetting = userSettingService.selectUserSetting(owner.getId());
 			//判断当前账号是否注册过
 			String code = request.getParameter("code");
 			String openId = WechatUtil.getUserOpenId(code);
@@ -115,15 +134,15 @@ public class WechatWebController {
 					}
 				}
 				else{
-					//如果Introducer没过期 加15天
+					//如果Introducer没过期 加RecommendTime天
 					introduceFan.setRecommendNum(introduceFan.getRecommendNum()+1);
-					if(introduceFan.getRecommendNum()<5){
+					if(introduceFan.getRecommendNum()<userSetting.getRecommendNum()){
 						if(introduceFan.getExpireTime().getTime() - new Date().getTime() > 0){
-							introduceFan.setExpireTime(new Date(introduceFan.getExpireTime().getTime()+3600*1000*24*15));
+							introduceFan.setExpireTime(new Date(introduceFan.getExpireTime().getTime()+3600*1000*24*userSetting.getRecommendTime()));
 						}
-						//如果过期了 在当前时间基础上加15天
+						//如果过期了 在当前时间基础上加RecommendTime天
 						else{
-							introduceFan.setExpireTime(new Date(new Date().getTime()+3600*1000*24*15));
+							introduceFan.setExpireTime(new Date(new Date().getTime()+3600*1000*24*userSetting.getRecommendTime()));
 						}
 					}
 					else{
@@ -139,7 +158,7 @@ public class WechatWebController {
 					}
 					fanService.updateFan(introduceFan);
 					//注册当前用户
-					Fan newFan =fanService.regFan(openId,owner.getUserId());
+					Fan newFan =fanService.regFan(openId,owner.getUserId(),userSetting.getRegisterTime());
 					hostHolder.setFan(newFan);
 					hostHolder.setFanOwnerUser(userService.getUserByUserId(newFan.getBelongOwnerId()));
 					Cookie cookie = new Cookie("ticket", userService.addLoginTicket(newFan.getOpenId()));
@@ -154,11 +173,11 @@ public class WechatWebController {
 					eventProducer.fireEvent(eventModel);
 			        //给推荐用户发送信息
 					EventModel eventModel2 = new EventModel(EventType.MESSAGE);
-					eventModel2.setExt("content", "您推荐用户成功，您的到期时间更新为"+dateFormat.format(introduceFan.getExpireTime()));
+					eventModel2.setExt("content", "您推荐用户成功，累计有效推荐"+introduceFan.getRecommendNum()+"人,您的到期时间更新为"+dateFormat.format(introduceFan.getExpireTime()));
 					eventModel2.setExt("fromId",introduceFan.getBelongOwnerId());
 					eventModel2.setExt("toId", introduceFan.getOpenId());
 					eventProducer.fireEvent(eventModel2);
-					return "userOwnerInfo";
+					return "theater/userOwnerInfo";
 				}
 				return "theater/userOwnerInfo";
 			}
@@ -170,11 +189,12 @@ public class WechatWebController {
 	}
 	@RequestMapping("/messageBox")
 	public String getMessageBox(Model model){
-		model.addAttribute("wechatUser", hostHolder.getFan());
-		model.addAttribute("wechatOwnerUser", hostHolder.getFanOwnerUser());
-		List<Message> messageList = messageService.getMessageList(hostHolder.getFan().getOpenId(), 0, 100);
-		model.addAttribute("messageList", messageList);
-		messageService.updateReadStatus(hostHolder.getFan().getOpenId());
-		return "theater/messageBox";
+//		model.addAttribute("wechatUser", hostHolder.getFan());
+//		model.addAttribute("wechatOwnerUser", hostHolder.getFanOwnerUser());
+//		List<Message> messageList = messageService.getMessageList(hostHolder.getFan().getOpenId(), 0, 100);
+//		model.addAttribute("messageList", messageList);
+//		messageService.updateReadStatus(hostHolder.getFan().getOpenId());
+//		return "theater/messageBox";
+		return "redirect:/userInfo";
 	}
 }

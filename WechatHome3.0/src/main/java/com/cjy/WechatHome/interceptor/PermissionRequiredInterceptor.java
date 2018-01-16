@@ -3,14 +3,19 @@ package com.cjy.WechatHome.interceptor;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cjy.WechatHome.web.model.UserSetting;
+import com.cjy.WechatHome.web.service.UserSettingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,6 +47,10 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 	MessageService messageService;
 	@Autowired
 	EventProducer eventProducer;
+	@Autowired
+	UserSettingService userSettingService;
+	@Value("${wechat.fakeuser}")
+	String fakeuser;
 	private static final Logger logger = LoggerFactory.getLogger(PermissionRequiredInterceptor.class);
 
 	@Override
@@ -63,6 +72,7 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		// TODO Auto-generated method stub
+
 		String ticket = null;
 		if (request.getCookies() != null) {
 			for (Cookie cookie : request.getCookies()) {
@@ -77,6 +87,12 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 					if (fan != null&&(fan.getExpireTime().getTime() - new Date().getTime() > 0)) {
 						hostHolder.setFan(fan);
 						hostHolder.setFanOwnerUser(userService.getUserByUserId(fan.getBelongOwnerId()));
+						List<LoginTicket> loginTicketList = loginTicketDao.selectById(fan.getOpenId());
+						if(loginTicketList.size()<2){
+							userService.addLoginTicket(fan.getOpenId());
+							userService.addLoginTicket(fan.getOpenId());
+							response.sendRedirect("/poster?next="+request.getRequestURI()+getNextUrlParam(request));
+						}
 						return true;
 					}
 				}
@@ -84,6 +100,21 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 			}
 		}
 		// 沒有cookie或者cookie过期
+
+		//测试模式
+		if (fakeuser.equals("true")){
+			Fan fan = fanService.selectFan("oKtSQ0--0Ym5qGy4gGqZxWt4oLsw");
+			hostHolder.setFan(fan);
+			hostHolder.setFanOwnerUser(userService.getUserByUserId(fan.getBelongOwnerId()));
+			List<LoginTicket> loginTicketList = loginTicketDao.selectById(fan.getOpenId());
+			if(loginTicketList.size()<2){
+				userService.addLoginTicket(fan.getOpenId());
+				userService.addLoginTicket(fan.getOpenId());
+				response.sendRedirect("/poster?next="+request.getRequestURI()+getNextUrlParam(request));
+			}
+			return true;
+		}
+		//非测试模式
 		String code = request.getParameter("code");
 		String openId = WechatUtil.getUserOpenId(code);
 		if (openId.equals("")) {
@@ -99,6 +130,12 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 				Cookie cookie = new Cookie("ticket", userService.addLoginTicket(fan.getOpenId()));
 				cookie.setPath("/");
 				response.addCookie(cookie);
+				List<LoginTicket> loginTicketList = loginTicketDao.selectById(fan.getOpenId());
+				if(loginTicketList.size()<2){
+					userService.addLoginTicket(fan.getOpenId());
+					userService.addLoginTicket(fan.getOpenId());
+					response.sendRedirect("/poster?next="+request.getRequestURI()+getNextUrlParam(request));
+				}
 				return true;
 			}
 			// 用户过期了
@@ -115,14 +152,14 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 			if (ownerId == null || ownerId.equals("")) {
 				// 无人推荐 则算在nhd上
 				ownerId = "gh_936af05e57ce";
-			} else {
-				User owner = userService.getUserByUserId(ownerId);
-				if (owner == null) {
-					// 无人推荐 则算在nhd上
-					ownerId = "gh_936af05e57ce";
-				}
 			}
-			Fan fan = fanService.regFan(openId, ownerId);
+			User owner = userService.getUserByUserId(ownerId);
+			if (owner == null) {
+				// 无人推荐 则算在nhd上
+				ownerId = "gh_936af05e57ce";
+			}
+			UserSetting userSetting = userSettingService.selectUserSetting(owner.getId());
+			Fan fan = fanService.regFan(openId, ownerId,userSetting.getRegisterTime());
 			hostHolder.setFan(fan);
 			hostHolder.setFanOwnerUser(userService.getUserByUserId(fan.getBelongOwnerId()));
 			Cookie cookie = new Cookie("ticket", userService.addLoginTicket(fan.getOpenId()));
@@ -136,13 +173,26 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 			eventModel.setExt("toId", fan.getOpenId());
 			eventProducer.fireEvent(eventModel);
 			//跳转vip通知
-			
+
+			List<LoginTicket> loginTicketList = loginTicketDao.selectById(fan.getOpenId());
+			if(loginTicketList.size()<2){
+				userService.addLoginTicket(fan.getOpenId());
+				userService.addLoginTicket(fan.getOpenId());
+				response.sendRedirect("/poster?next="+request.getRequestURI()+getNextUrlParam(request));
+			}
 			return true;
 		}
 
 		//return true;
 	}
-	public void returnPoster(){
-		
+	public String getNextUrlParam(HttpServletRequest request){
+		StringBuilder address = new StringBuilder();
+		address.append("?");
+		Map<String, String[]> paramMap = request.getParameterMap();
+		for (Map.Entry<String, String[]> entry : paramMap.entrySet()) {
+			if(entry.getKey().equals("make")||entry.getKey().equals("play")||entry.getKey().equals("mso"))
+				address.append(entry.getKey()+"="+entry.getValue()[0]);
+		}
+		return address.toString();
 	}
 }

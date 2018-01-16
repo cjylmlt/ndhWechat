@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cjy.WechatHome.async.EventModel;
 import com.cjy.WechatHome.async.EventProducer;
@@ -35,6 +36,15 @@ public class FansController {
 	FanService fanService;
 	@Autowired
 	EventProducer eventProducer;
+	@RequestMapping(path = { "/user/{id}/fans/statics" }, method = { RequestMethod.GET })
+	@ResponseBody
+	public String getFansStatics(@PathVariable("id") int id,Model model) {
+		User visitUser = hostHolder.getUser();
+		if(visitUser.getId()==id||visitUser.getUsername().equals("admin")){
+			return fanService.getFanPoJsonString(id);
+		}
+		return "";
+	}
 	@RequestMapping(path = { "/user/{id}/fans" }, method = { RequestMethod.GET })
 	public String getFans(@PathVariable("id") int id,Model model) {
 		User visitUser = hostHolder.getUser();
@@ -53,10 +63,10 @@ public class FansController {
 			for (Fan fan : fansList) {
 				FanPo fanPo = new FanPo(fan);
 				if(new Date().before(fan.getExpireTime())){
-					fanPo.setIsExpired(false);
+					fanPo.setIsExpired("正常");
 				}
 				else{
-					fanPo.setIsExpired(true);
+					fanPo.setIsExpired("过期");
 				}
 				fanPoList.add(fanPo);
 			}
@@ -73,10 +83,10 @@ public class FansController {
 			for (Fan fan : fansList) {
 				FanPo fanPo = new FanPo(fan);
 				if(new Date().before(fan.getExpireTime())){
-					fanPo.setIsExpired(false);
+					fanPo.setIsExpired("正常");
 				}
 				else{
-					fanPo.setIsExpired(true);
+					fanPo.setIsExpired("过期");
 				}
 				fanPoList.add(fanPo);
 			}

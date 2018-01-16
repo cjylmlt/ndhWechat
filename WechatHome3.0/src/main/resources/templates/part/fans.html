@@ -59,32 +59,22 @@
 	</div><!-- /.modal -->
 </div>
 
-
-
-
-
-						
 							<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
-										<h3 class="header smaller lighter blue">粉丝列表(总数$fansNum，粉丝多加载慢请见谅)</h3>
+										<h3 class="header smaller lighter blue">粉丝列表(总数$fansNum，粉丝多批量延长操作可能有延迟)</h3>
 										<!-- div.table-responsive -->
 										<!-- div.dataTables_borderWrap -->
 										<div>
 											<table id="dynamic-table" class="table table-striped table-bordered table-hover">
 												<thead>
 													<tr>
-														<th class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</th>
+
 														<th>粉丝名</th>
 														<th>推荐人数</th>
-														<th class="hidden-480">open_id</th>
+
 														<th>
 															<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
 															到期时间
@@ -94,67 +84,18 @@
 													</tr>
 												</thead>
 
-												<tbody>
-													#foreach($fan in $fans)
+												<tbody id="tbdata">
 													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
 
-														<td>
-															<a>${fan.userName}</a>
-														</td>
-														<td>${fan.recommendNum}</td>
-														<td>${fan.openId}</td>
-														<td>$!date.format('yyyy-MM-dd HH:mm:ss ',$!{fan.expireTime})</td>
 
-														<td class="hidden-480">
-															#if($fan.isExpired)
-															<span class="label label-sm label-warning">到期</span>
-															#else
-															<span class="label label-sm label-success">正常</span>
-															#end
-														</td>
+														<td></td>
+														<td></td>
+														
+														<td></td>
+														<td></td>
+														<td></td>
 
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#" data-toggle="modal" data-target="#vipSettingForm">
-																	<a href="javascript:void(0);" class="jq_link" rel=$fan.openId>增加</a>
-																</a>
-																	
-																<a class="red" onclick="submit">
-																
- 																	<form action="/user/$settingUser.id/fans/delete" method="post">
-																<input type="hidden" name="openId" value="$fan.openId">
-																
-																	<input type="submit" value="删除"/>
-																
-																</form>
-																</a>
-																
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<a class="blue" href="#" data-toggle="modal" data-target="#vipSettingForm">
-																	<a href="javascript:void(0);" class="jq_link" rel=$fan.openId>增加</a>
-																</a>
-																	
-																<a class="red" onclick="submit">
-																
- 																	<form action="/user/$settingUser.id/fans/delete" method="post">
-																<input type="hidden" name="openId" value="$fan.openId">
-																
-																	<input type="submit" value="删除"/>
-																
-																</form>
-																</a>
-															</div>
-														</td>
 													</tr>
-													#end
 												</tbody>
 											</table>
 										</div>

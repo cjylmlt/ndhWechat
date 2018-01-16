@@ -1,23 +1,68 @@
 
-<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="../styles/index.css">
-<link rel="stylesheet" href="../styles/detail.css">
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="textReplyForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabe2">
+					添加文字关键词
+				</h4>
+			</div>
+			<form id="textReplyForm"  method="post">
+			<div class="modal-body">
+				<input type="hidden"  name="id" value=$settingUser.id>
+				<input type="text"  name="key" style="width:100%;" placeholder="请输入关键词"> <br>
+				<input type="text"  name="content" style="width:100%;" placeholder="请输入文字回复"> <br>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+				<button type="submit" class="btn btn-primary" onclick="form=document.getElementById('textReplyForm');form.action='/definedReply/addTextReply'">确认</button>
+			</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
 
-    <div class="zg-wrap zu-main clearfix " role="main">
-        <div class="zu-main-content">
-            <div class="zu-main-content-inner">
-                <div class="zu-main-feed-con navigable" data-feedtype="topstory" id="zh-question-list" data-widget="navigable" data-navigable-options="{&quot;items&quot;:&quot;&gt; .zh-general-list .feed-content&quot;,&quot;offsetTop&quot;:-82}">
-                    <a href="javascript:;" class="zu-main-feed-fresh-button" id="zh-main-feed-fresh-button" style="display:none"></a>
-                    <div id="js-home-feed-list" class="zh-general-list topstory clearfix" data-init="{&quot;params&quot;: {}, &quot;nodename&quot;: &quot;TopStory2FeedList&quot;}" data-delayed="true" data-za-module="TopStoryFeedList">
+<div class="modal fade" id="picReplyForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabe3">
+					添加图文关键词
+				</h4>
+			</div>
+			<form id="picReplyForm"  method="post">
+			<div class="modal-body">
+				<input type="hidden"  name="id" value=$settingUser.id>
+				<input type="text"  name="key" style="width:100%;" placeholder="请输入关键词"> <br>
+				<input type="hidden"  name="value" style="width:100%;" placeholder=""> 
+				<input type="text"  name="picUrl" style="width:100%;" placeholder="请输入图文标题"> <br>
+				<input type="text"  name="url" style="width:100%;" placeholder="请输入网址链接"> <br>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+				<button type="submit" class="btn btn-primary" onclick="form=document.getElementById('picReplyForm');form.action='/definedReply/addPicReply'">确认</button>
+			</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+#set($path="/uploadImages/")  #set($qrcode="qrcode") #set($zfb="zfb") #set($split="/")
+#set($wx="wx")
+#set($qrcodepath="$path$settingUser.userId$split$qrcode")
+#set($zfbpath="$path$settingUser.userId$split$zfb")
+#set($wxpath="$path$settingUser.userId$split$wx")
 					#if($adminUser && ${adminUser.username}=="admin")
 					<!-- 上传图片地址 -->
-					#set($path="/uploadImages/")  #set($qrcode="qrcode") #set($zfb="zfb") #set($split="/")
-					#set($wx="wx")
-					#set($qrcodepath="$path$settingUser.userId$split$qrcode")
-					#set($zfbpath="$path$settingUser.userId$split$zfb")
-					#set($wxpath="$path$settingUser.userId$split$wx")
-					
-					
 					<form action="/userSetting" method="post">
 					<input name="id" value=$settingUser.id type="hidden">
 						<table class="table" style="word-break:break-all; word-wrap:break-all;">
@@ -66,7 +111,7 @@
 					 
 					<input class="btn btn-primary" type="submit" value="提交"/>                        
 					</form>
-					
+				#end
 					
 					<table class="table" style="word-break:break-all; word-wrap:break-all;">
 					<span class="glyphicon glyphicon-asterisk"><span class="label label-danger">用户基本信息</span>
@@ -86,7 +131,7 @@
 						<input type="hidden" name="userId" value=$settingUser.userId>
 						<input type="hidden" name="fileName" value="qrcode">
 						<input type="hidden" name="id" value=$settingUser.id>
-						<input type="file" name="file" /> <input type="submit" value="Submit" />
+						<input type="file" name="file" /> <input type="submit" value="提交" />
 						</form>  
 						</td>
 						</tr>
@@ -105,7 +150,7 @@
 						<input type="hidden" name="userId" value=$settingUser.userId>
 						<input type="hidden" name="fileName" value="wx">
 						<input type="hidden" name="id" value=$settingUser.id>
-						<input type="file" name="file" /> <input type="submit" value="Submit" />
+						<input type="file" name="file" /> <input type="submit" value="提交" />
 						</form>  
 						</td>
 						</tr>
@@ -117,13 +162,13 @@
 						<input type="hidden" name="userId" value=$settingUser.userId>
 						<input type="hidden" name="fileName" value="zfb">
 						<input type="hidden" name="id" value=$settingUser.id>
-						<input type="file" name="file" /> <input type="submit" value="Submit" />
+						<input type="file" name="file" /> <input type="submit" value="提交" />
 						</form>  
 						</td>
 						</tr>
 					</tbody>
 					</table> 
-					#end
+
 					
                        <table class="table">
                           <span class="glyphicon glyphicon-asterisk"><span class="label label-danger">文字关键词</span>
@@ -132,7 +177,7 @@
                               <th>序号</th>
                               <th>关键词</th>
                               <th>回复</th>
-                              <th><button class="zu-top-add-question" id="zu-top-add-question">添加</button></th>
+                              <th><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#textReplyForm">添加</button></th>
                               </tr>
                           </thead>
                           <tbody>
@@ -200,7 +245,7 @@
                               <th>封面标题</th>
                               <th>封面图片地址</th>
                               <th>跳转链接</th>
-                              <th><button class="zu-top-add-question" id="zu-top-add-picReply">添加</button></th>
+                              <th><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#picReplyForm">添加</button></th>
                               </tr>
                           </thead>
                           <tbody>
@@ -224,9 +269,6 @@
                         </table>
                     </div>
                     
-            </div>
-        </div>
-    </div>
-#parse("js.html")
-<script type="text/javascript" src="/scripts/main/site/detail.js"></script>
+
+
 

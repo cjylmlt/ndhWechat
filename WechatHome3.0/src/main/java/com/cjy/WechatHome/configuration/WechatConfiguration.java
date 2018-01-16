@@ -1,6 +1,7 @@
 package com.cjy.WechatHome.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
@@ -17,12 +18,16 @@ public class WechatConfiguration extends WebMvcConfigurerAdapter{
 	LoginRequiredInterceptor LoginRequiredInterceptor;
 	@Autowired
 	PermissionRequiredInterceptor permissionRequiredInterceptor;
+	@Value("${wechat.interceptor}")
+	String interceptor;
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addInterceptor(loginInterceptor).addPathPatterns("/","/user/**","/userSetting","/definedReply/addTextReply","/definedReply/addPicReply","/definedReply/delete","/definedReply/update","/definedReply/updateAd","/wechatStatics","/search");
 		registry.addInterceptor(LoginRequiredInterceptor).addPathPatterns("/user/**","/wechatStatics","/search");
-	    registry.addInterceptor(permissionRequiredInterceptor).addPathPatterns("/v","/play/**","/movie/**","/userInfo","/messageBox","/myQrCode","/play.php","/mplay.php");
+		if(interceptor.equals("true"))
+	    registry.addInterceptor(permissionRequiredInterceptor).addPathPatterns("/v","/play/**","/movie/**","/userInfo","/messageBox","/myQrCode","/play.php","/mplay.php","/v","/movie.php","/tv.php","/zongyi.php","/dongman.php");
 		super.addInterceptors(registry);
 	}
     @Override

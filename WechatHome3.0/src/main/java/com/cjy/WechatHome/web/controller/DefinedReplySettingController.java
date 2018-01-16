@@ -28,8 +28,7 @@ public class DefinedReplySettingController {
 	@Autowired
 	DefinedReplyService definedReplyService;
 	@RequestMapping(path = {"/definedReply/addTextReply"}, method = {RequestMethod.POST})
-	@ResponseBody
-	public String addTextReply(@RequestParam("id") int id,@RequestParam("title") String title, @RequestParam("content") String content,Model model,HttpServletRequest request){
+	public String addTextReply(@RequestParam("id") int id,@RequestParam("key") String key, @RequestParam("content") String content,Model model,HttpServletRequest request){
 		User visitUser = hostHolder.getUser();
 		User user = userService.getUser(id);
 	    DefinedReply ad = null;
@@ -40,11 +39,10 @@ public class DefinedReplySettingController {
 	    //如果是超级用户或者是用户本人
 	    if("admin".equals(visitUser.getUsername())||visitUser.getId()==user.getId()){
 	       DefinedReply definedReply = new DefinedReply();
-	       definedReply.setReplyKey(title);
+	       definedReply.setReplyKey(key);
 	       definedReply.setUserName(user.getUsername());
 	       definedReply.setValue(content);
 	       if(!definedReplyService.insertDefinedReply(definedReply,user.getUsername())){
-	    	   return WendaUtil.getJSONString(1,"失败");
 	       }
 	       definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
 		   model.addAttribute("settingUser", user);
@@ -62,16 +60,13 @@ public class DefinedReplySettingController {
 		  }
 		  model.addAttribute("ad",ad);
 		  model.addAttribute("definedReplyList", definedReplyList);
-		  return WendaUtil.getJSONString(0);
 	    }catch (Exception e) {
 		  e.printStackTrace();
-		  return WendaUtil.getJSONString(1,"失败");
 	    }
-	    
+	    return "redirect:/user/"+user.getId();
     }
 	
 	@RequestMapping(path = {"/definedReply/addPicReply"}, method = {RequestMethod.POST})
-	@ResponseBody
 	public String addPicReply(@RequestParam("id") int id,
 			@RequestParam("key") String key, 
 			@RequestParam("value") String value,
@@ -94,7 +89,7 @@ public class DefinedReplySettingController {
 	       definedReply.setPicUrl(picUrl);
 	       definedReply.setUrl(url);
 	       if(!definedReplyService.insertDefinedReply(definedReply,user.getUsername())){
-	    	   return WendaUtil.getJSONString(1,"失败");
+	    	   System.out.println("aa");
 	       }
 	       definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
 		   model.addAttribute("settingUser", user);
@@ -112,12 +107,10 @@ public class DefinedReplySettingController {
 		  }
 		  model.addAttribute("ad",ad);
 		  model.addAttribute("definedReplyList", definedReplyList);
-		  return WendaUtil.getJSONString(0);
 	    }catch (Exception e) {
 		  e.printStackTrace();
-		  return WendaUtil.getJSONString(1,"失败");
 	    }
-	    
+	    return "redirect:/user/"+user.getId();
     }
 	
 	@RequestMapping(path = {"/definedReply/delete"}, method = {RequestMethod.POST})

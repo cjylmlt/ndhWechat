@@ -35,7 +35,6 @@ public class UploadController {
 			HttpServletRequest request,
 			Model model) throws IOException {  
 		fileName = fileName+".jpg";
-        System.out.println("开始");  
         String path="C:\\uploadImages\\"+userId+"\\";
         File targetDir = new File(path); 
         if(!targetDir.exists()){

@@ -3,22 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://css.0826.cc/w/clipboard.min.js"></script>
+
 <title>$!{wechatOwnerUser.noteOne}</title>
 </head>
 <body>
+<div class="alert alert-warning">
+    <a href="#" class="close" data-dismiss="alert">
+        &times;
+    </a>
+    #if($warnning)
+        <strong>提示:</strong>您会员时间不足，点击个人中心，免费续期！
+    #else
+        <strong>提示:</strong>欢迎$!{wechatUser.userName}!到期时间:$!date.format('yyyy-MM-dd ',$!wechatUser.expireTime)！
+    #end
+</div>
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
-    <div class="navbar-header">
-        <a class="navbar-brand" href="#">欢迎$!{wechatUser.userName}!（到期时间:$!date.format('yyyy-MM-dd ',$!wechatUser.expireTime)）</a>
-    </div>
+    <!--<div class="navbar-header">-->
+        <!--<a class="navbar-brand" href="#">欢迎$!{wechatUser.userName}!（到期时间:$!date.format('yyyy-MM-dd ',$!wechatUser.expireTime)）</a>-->
+    <!--</div>-->
     <div>
         <ul class="nav navbar-nav">
             <li><a href="/poster"><font color="#FF0000">免费领取vip</font></a></li>
             <li><a href="/myQrCode">我的二维码</a></li>
-            <li><a href="/messageBox">消息通知（$!{messageUnreadCount}条未读信息）</a></li>
-             
+            <li><a href="/messageBox">个人中心（$!{messageUnreadCount}条未读信息）</a></li>
+
         </ul>
     </div>
     </div>
 </nav>
-<div>

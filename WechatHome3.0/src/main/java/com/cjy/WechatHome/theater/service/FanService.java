@@ -3,17 +3,23 @@ package com.cjy.WechatHome.theater.service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cjy.WechatHome.async.EventModel;
 import com.cjy.WechatHome.async.EventProducer;
 import com.cjy.WechatHome.async.EventType;
 import com.cjy.WechatHome.dao.FanDao;
 import com.cjy.WechatHome.theater.model.Fan;
+import com.cjy.WechatHome.theater.model.FanPo;
+import com.cjy.WechatHome.theater.model.FanPoList;
+import com.cjy.WechatHome.web.model.User;
+import com.cjy.WechatHome.web.service.UserService;
 
 @Service
 public class FanService {
@@ -23,6 +29,8 @@ public class FanService {
 	MessageService messageService;
 	@Autowired
 	EventProducer eventProducer;
+	@Autowired
+	UserService userService;
 	public boolean isFanExist(String openId){
 		Fan user = fanDao.selectFanById(openId);
 		if(user==null){
@@ -120,13 +128,13 @@ public class FanService {
 			}
 		}
 	}
-	public Fan regFan(String openId,String ownerId){
+	public Fan regFan(String openId,String ownerId,int registerTime){
 		Fan wechatUser = new Fan();
 		wechatUser.setOpenId(openId);
 		wechatUser.setBelongOwnerId(ownerId);
 		String username = "vip-"+UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");
 		wechatUser.setUserName(username);
-		wechatUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*10));
+		wechatUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*registerTime));
 		fanDao.addFan(wechatUser);
 		return wechatUser;
 	}
@@ -159,5 +167,19 @@ public class FanService {
 			messageService.deleteMessageByUserId(user.getOpenId());
 			fanDao.deleteFan(user.getUserName());
 		}
+	}
+	public String getFanPoJsonString(int id){
+		User user = userService.getUser(id);
+		List<Fan> fansList = selectFansByOwner(user.getUserId(), 0, 100000);
+		List<FanPo> fanPoList = new LinkedList<>();
+		
+		for (Fan fan : fansList) {
+			FanPo fanPo = new FanPo(fan);
+			fanPoList.add(fanPo);
+		}
+		FanPoList jsonList = new FanPoList();
+		jsonList.setData(fanPoList);
+		String a = JSONObject.toJSONString(jsonList);
+		return a;
 	}
 }
