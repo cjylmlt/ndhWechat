@@ -4,6 +4,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import com.cjy.WechatHome.wechat.model.Button;
 import com.cjy.WechatHome.wechat.model.ClickButton;
 import com.cjy.WechatHome.wechat.model.Menu;
 import com.cjy.WechatHome.wechat.model.ViewButton;
+import com.cjy.WechatHome.wechat.model.WechatUser;
 
 import net.sf.json.JSONObject;
 @Configuration
@@ -26,16 +28,15 @@ public class WechatUtil {
 	//private static final String APPID = "wxcc7030da657c484d";
 	//private static final String APPSECRET="4496ca6d9e4ffce5cdb8f6d0b5d69057";
 	private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
-	
+	private static final String WECHAT_USER_URL = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID";
 	private static final String CREATE_MENU_URL = " https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
-	
+	private static final String WEB_WECHAT_USER_URL = " https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 	private static final String GET_MEDIA_URL = "https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=ACCESS_TOKEN";
 	
 	private static final String WEB_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
 	private static final String WEB_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code ";
 	private static  String HOST_URL ;
-	//private static final String HOST_URL = "http://fortestwechat.free.ngrok.cc";
-	
+
 	public WechatUtil(@Value("${host.url}") String host,
 			@Value("${wechat.appid}") String appid,
 			@Value("${wechat.appsecret}") String appsecret){
@@ -46,10 +47,15 @@ public class WechatUtil {
 	public static JSONObject doGetStr(String url){
 		HttpClient httpClient = new HttpClient();
 		GetMethod httpGet = new GetMethod(url);
+		httpGet.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+        //设置期望服务端返回的编码
+		httpGet.setRequestHeader("Accept", "text/plain;charset=utf-8");
+		String charSet = httpGet.getResponseCharSet();
 		JSONObject jsonObject = null;
 		try {
 			int status = httpClient.executeMethod(httpGet);
 			String content = httpGet.getResponseBodyAsString();
+			content = new String(content.getBytes("ISO-8859-1"), "UTF-8");
 			if(content!=null){
 				jsonObject = JSONObject.fromObject(content);
 			}
@@ -92,8 +98,45 @@ public class WechatUtil {
 		}
 		return accessToken;
 	}
-	
-	
+	public static WechatUser getWechatUser(AccessToken accessToken,String openId){
+		String url = WECHAT_USER_URL.replace("ACCESS_TOKEN", accessToken.getToken()).replace("OPENID", openId);
+		JSONObject jsonObject = doGetStr(url);
+		WechatUser user = new WechatUser();
+		if(jsonObject!=null){
+			user.setCity(jsonObject.getString("city"));
+			user.setCountry(jsonObject.getString("country"));
+			user.setHeadimgurl(jsonObject.getString("headimgurl"));
+			user.setLanguage(jsonObject.getString("language"));
+			user.setNickName(jsonObject.getString("nickname"));
+			user.setOpenId(jsonObject.getString("p"));
+			user.setProvice(jsonObject.getString("province"));
+			user.setLanguage(jsonObject.getString("language"));
+			user.setSex(jsonObject.getInt("sex"));
+			user.setSubscribe(jsonObject.getInt("subscribe"));
+			user.setSubscribeTime(jsonObject.getLong("subscribe_time"));
+			return user;
+		}
+		return null;
+	}
+
+//    public static WechatUser getWebWechatUser(String accessToken,String openId){
+//        String url = WECHAT_USER_URL.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
+//        JSONObject jsonObject = doGetStr(url);
+//        WechatUser user = new WechatUser();
+//        if(jsonObject!=null){
+//            user.setCity(jsonObject.getString("city"));
+//            user.setCountry(jsonObject.getString("country"));
+//            user.setHeadimgurl(jsonObject.getString("headimgurl"));
+//            user.setLanguage(jsonObject.getString("language"));
+//            user.setNickName(jsonObject.getString("nickname"));
+//            user.setOpenId(jsonObject.getString("openid"));
+//            user.setProvice(jsonObject.getString("province"));
+//            user.setSex(jsonObject.getInt("sex"));
+//            return user;
+//        }
+//        return null;
+//    }
+
 	//组装菜单
 	public static Menu packMenu(){
 		Menu menu = new Menu();
@@ -154,6 +197,7 @@ public class WechatUtil {
 	
 	public static String packWebUrl(String redirectUrl,String userId){
 		String url = WEB_URL.replace("REDIRECT_URI", redirectUrl).replace("APPID", APPID).replace("SCOPE", "snsapi_base").replace("STATE", userId);
+        //String url = WEB_URL.replace("REDIRECT_URI", redirectUrl).replace("APPID", APPID).replace("SCOPE", "snsapi_userinfo").replace("STATE", userId);
 		return url;
 	}
 	public static String getUserOpenId(String code){
@@ -171,7 +215,23 @@ public class WechatUtil {
 		}
 		
 	}
-	
+
+//    public static String getWebAccessToken(String code){
+//        if(code!=null){
+//            String url = WEB_ACCESS_TOKEN_URL.replace("APPID", APPID).replace("SECRET", APPSECRET).replace("CODE", code);
+//            JSONObject jsonObject = doGetStr(url);
+//            String access_token = "";
+//            if(jsonObject!=null&&jsonObject.containsKey("access_token")){
+//                access_token = jsonObject.getString("access_token");
+//            }
+//            return access_token;
+//        }
+//        else{
+//            return "";
+//        }
+//
+//    }
+
 	public static String packUserUrl(String url,String userId){
 		String resultUrl = url.replaceAll("http://v.burod.cn/v", HOST_URL);
 		return packWebUrl(resultUrl,userId);

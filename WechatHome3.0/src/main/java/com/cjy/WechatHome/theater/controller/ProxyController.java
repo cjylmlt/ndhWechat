@@ -6,6 +6,11 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.cjy.WechatHome.util.WechatUtil;
+import com.cjy.WechatHome.web.service.UserSettingService;
+import com.cjy.WechatHome.wechat.model.WechatUser;
+import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +39,8 @@ public class ProxyController {
 	MessageService messageService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	UserSettingService userSettingService;
 	@RequestMapping(path={"search.php"})
 	public String getSearch(Model model,@RequestParam("sousuo")String searchWord) {
 		try {
@@ -88,6 +95,7 @@ public class ProxyController {
 	
 	@RequestMapping(path={"/v"},method = {RequestMethod.GET})
 	public String getTheaterIndex(Model model,HttpServletRequest request) {
+		long startTime = System.currentTimeMillis();
 		User user;
 		if(hostHolder.getFan()==null)
 			user = null;
@@ -98,11 +106,15 @@ public class ProxyController {
 		model.addAttribute("content", videoSpider.getMovieSource("",user));
 		if(hostHolder.getFan()!=null)
 			model.addAttribute("messageUnreadCount", messageService.getUnreadCount(hostHolder.getFan().getOpenId()));
+		logger.info("controller="+(System.currentTimeMillis()-startTime)+"ms");
 		return "theater/proxy";
 	}
 	
 	@RequestMapping(path={"/play.php","/mplay.php"},method = {RequestMethod.GET})
 	public String getPlay(Model model,HttpServletRequest request) {
+//		String openId = WechatUtil.getUserOpenId(code);
+//		String access_token = WechatUtil.getWebAccessToken(code);
+//		WechatUser tempuser = WechatUtil.getWebWechatUser(access_token,openId);
 		StringBuilder address = new StringBuilder();
 		address.append(request.getRequestURI()).append("?");
 		Map<String, String[]> paramMap = request.getParameterMap();
@@ -138,5 +150,4 @@ public class ProxyController {
 		String address = request.getRequestURI();
 		return videoSpider.getMovieSource(address,null);
 	}
-	
 }

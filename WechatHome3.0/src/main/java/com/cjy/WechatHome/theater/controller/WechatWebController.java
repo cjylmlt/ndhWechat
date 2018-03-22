@@ -37,7 +37,6 @@ import com.cjy.WechatHome.web.service.UserService;
 @Controller
 public class WechatWebController {
 	private static String HOST_URL;
-	//private static final String HOST_URL = "http://fortestwechat.free.ngrok.cc";
 	@Autowired
 	HostHolder hostHolder;
 	@Autowired

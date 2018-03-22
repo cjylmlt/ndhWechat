@@ -3,6 +3,8 @@ package com.cjy.WechatHome.async.handler;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,7 @@ public class VideoSpiderHandler implements EventHandler{
 	VideoSpider videoSpider;
 	@Autowired
 	NewsService newsService;
+	private final ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
 	@Override
 	public void doHandle(EventModel model) {
 //		ExecutorService cachedThreadPool = Executors.newCachedThreadPool(); 
@@ -46,40 +49,53 @@ public class VideoSpiderHandler implements EventHandler{
 //				System.out.println("done");
 //			}
 //		});
-		List<News> newsList;
-		String content = model.getExt("content");
-		String type = model.getExt("type");
-		if("old".equals(type)){
-			newsList = videoSpider.getVideoMessage(model.getExt("urlContent"));	
-			newsService.deleteNewsByKey(content);
-		}
-		else{
-			newsList = videoSpider.newGetVideoMessage(model.getExt("urlContent"));	
-			newsService.newDeleteNewsByKey(content);
-		}
-		newsService.deleteNewsByKey(content);
-		for(News n:newsList){
-			NewsPo newsPo = new NewsPo();
-			newsPo.setDescription(n.getDescription());
-			newsPo.setKey(content);
-			newsPo.setPicUrl(n.getPicUrl());
-			newsPo.setTitle(n.getTitle());
-			newsPo.setUpdateTime(new Date());
-			newsPo.setUrl(n.getUrl());
+		cachedThreadPool.submit(()->{
+			List<News> newsList;
+			String content = model.getExt("content");
+			String type = model.getExt("type");
 			if("old".equals(type)){
-				
-				newsService.insertNews(newsPo);
+				newsList = videoSpider.getVideoMessage(model.getExt("urlContent"));
+				newsService.deleteNewsByKey(content);
 			}
-			else if("new".equals(type)){
-				
-				newsService.newInsertNews(newsPo);
+			else{
+				newsList = videoSpider.newGetVideoMessage(model.getExt("urlContent"));
+				newsService.newDeleteNewsByKey(content);
 			}
-		}
+			if(newsList.size()>0) {
+				for (News n : newsList) {
+					NewsPo newsPo = new NewsPo();
+					newsPo.setDescription(n.getDescription());
+					newsPo.setKey(content);
+					newsPo.setPicUrl(n.getPicUrl());
+					newsPo.setTitle(n.getTitle());
+					newsPo.setUpdateTime(new Date());
+					newsPo.setUrl(n.getUrl());
+					if ("old".equals(type)) {
+						newsService.insertNews(newsPo);
+					} else if ("new".equals(type)) {
+						newsService.newInsertNews(newsPo);
+					}
+				}
+			}
+			else{
+				NewsPo newsPo = new NewsPo();
+				newsPo.setDescription("");
+				newsPo.setKey(content);
+				newsPo.setPicUrl("");
+				newsPo.setTitle("empty");
+				newsPo.setUpdateTime(new Date());
+				newsPo.setUrl("");
+				if ("old".equals(type)) {
+					newsService.insertNews(newsPo);
+				} else if ("new".equals(type)) {
+					newsService.newInsertNews(newsPo);
+				}
+			}
+		});
 	}
 
 	@Override
 	public List<EventType> getSupportEventTypes() {
 		  return Arrays.asList(EventType.VIDEOSPIDER);
 	}
-
 }

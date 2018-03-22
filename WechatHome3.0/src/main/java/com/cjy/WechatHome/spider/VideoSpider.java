@@ -103,16 +103,16 @@ public class VideoSpider {
 		SpiderWeb spiderWeb = spiderWebDao.selectUserWeb(7);//选择爱客
 		String url = spiderWeb.getSearchUrl()+content;
 		String urlResult = sendGet(url);//获得level-one page源代码
-		ArrayList<String> videoTitleList = regex(urlResult,spiderWeb.getTitleRegex1(),"");
-		ArrayList<String> videoPicUrlList = regex(urlResult,spiderWeb.getPicRegex1(),"");
-		ArrayList<String> videoUrlList = regex(urlResult,spiderWeb.getVideoRegex1(),spiderWeb.getWebUrl());
-		if(spiderWeb.getPicRegex2()!=null){
-			ArrayList<String> videoTitleList2 = regex(urlResult,spiderWeb.getTitleRegex2(),"");
-			ArrayList<String> videoPicUrlList2 = regex(urlResult,spiderWeb.getPicRegex2(),"");
-			ArrayList<String> videoUrlList2 = regex(urlResult,spiderWeb.getVideoRegex2(),spiderWeb.getWebUrl());
-			videoTitleList.addAll(videoTitleList2);
-			videoPicUrlList.addAll(videoPicUrlList2);
-			videoUrlList.addAll(videoUrlList2);
+		ArrayList<String> videoTitleList = regex(urlResult,spiderWeb.getTitleRegex2(),"");
+		ArrayList<String> videoPicUrlList = regex(urlResult,spiderWeb.getPicRegex2(),"");
+		ArrayList<String> videoUrlList = regex(urlResult,spiderWeb.getVideoRegex2(),spiderWeb.getWebUrl());
+		if(spiderWeb.getPicRegex1()!=null){
+			ArrayList<String> videoTitleList1 = regex(urlResult,spiderWeb.getTitleRegex1(),"");
+			ArrayList<String> videoPicUrlList1 = regex(urlResult,spiderWeb.getPicRegex1(),"");
+			ArrayList<String> videoUrlList1 = regex(urlResult,spiderWeb.getVideoRegex1(),spiderWeb.getWebUrl());
+			videoTitleList.addAll(videoTitleList1);
+			videoPicUrlList.addAll(videoPicUrlList1);
+			videoUrlList.addAll(videoUrlList1);
 		}
 		int num = 0;
 		if(videoTitleList.size()<=7)
@@ -172,29 +172,13 @@ public class VideoSpider {
 		//过滤搜索栏
 		urlResult = urlResult.replaceAll("<form method=\"get\" id=\"soform\"[\\s\\S]+?</form>", "");
 		
-		
-		if(user!=null){
-			urlResult = urlResult.replaceAll("爱客", user.getNoteOne());
-//			urlResult = urlResult.replaceAll("images/qrcode.png", "/uploadImages/"+user.getUserId()+"/qrcode");
-			urlResult = urlResult.replaceAll("images/qrcode.png", "/uploadImages/"+user.getUserId()+"/qrcode");
-			urlResult = urlResult.replaceAll("images/zfb.png", "/uploadImages/"+user.getUserId()+"/zfb");
-			urlResult = urlResult.replaceAll("images/wx.png", "/uploadImages/"+user.getUserId()+"/wx");
-			urlResult = urlResult.replaceAll("images/sologo.png", "/uploadImages/"+user.getUserId()+"/qrcode");
-			
-		}
-		else{
-			urlResult = urlResult.replaceAll("爱客", "");
-			urlResult = urlResult.replaceAll("images/qrcode.png", "");
-			urlResult = urlResult.replaceAll("images/zfb.png", "");
-			urlResult = urlResult.replaceAll("images/wx.png", "");
-			urlResult = urlResult.replaceAll("images/sologo.png", "");
-		}
+
 		//把"/css/*","/js/*","/images/*"转到爱客去
 
-		urlResult=urlResult.replaceAll("css/","http://v.woaik.com/css/");
-		urlResult=urlResult.replaceAll("js/","http://v.woaik.com/js/");
-		urlResult=urlResult.replaceAll("images/","http://v.woaik.com/images/");
-		urlResult=urlResult.replaceAll("jiazai.png","");
+		urlResult=urlResult.replaceAll("css/","http://v.burod.cn/v/css/");
+		urlResult=urlResult.replaceAll("js/","http://v.burod.cn/v/js/");
+
+		//urlResult=urlResult.replaceAll("1280jiazai","video");
 
 		return urlResult;
 	}

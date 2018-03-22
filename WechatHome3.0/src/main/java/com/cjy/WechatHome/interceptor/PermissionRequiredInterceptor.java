@@ -59,7 +59,6 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 		// TODO Auto-generated method stub
 		hostHolder.clearFanOwnerUsers();
 		hostHolder.clearFans();
-
 	}
 
 	@Override
@@ -72,7 +71,6 @@ public class PermissionRequiredInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		// TODO Auto-generated method stub
-
 		String ticket = null;
 		if (request.getCookies() != null) {
 			for (Cookie cookie : request.getCookies()) {

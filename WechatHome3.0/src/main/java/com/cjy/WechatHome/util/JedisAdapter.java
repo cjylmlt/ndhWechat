@@ -7,6 +7,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.Jedis;
@@ -17,10 +18,12 @@ import redis.clients.jedis.Transaction;
 public class JedisAdapter implements InitializingBean{
 	private static final Logger logger = LoggerFactory.getLogger(JedisAdapter.class);
 	private JedisPool pool;
+    @Value("${spring.redis.url}")
+    String redisUrl;
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		// TODO Auto-generated method stub
-		pool = new JedisPool("redis://localhost:6379/10");
+		pool = new JedisPool(redisUrl);
 		Jedis jedis = pool.getResource();
 		System.out.println("服务正在运行: "+jedis.ping());
 		jedis.close();
@@ -244,6 +247,34 @@ public class JedisAdapter implements InitializingBean{
         try {
             jedis = pool.getResource();
             return jedis.zscore(key, member);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+    public String setex(String key, int seconds,String value) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.setex(key,seconds ,value);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+    public String get(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.get(key);
         } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
         } finally {

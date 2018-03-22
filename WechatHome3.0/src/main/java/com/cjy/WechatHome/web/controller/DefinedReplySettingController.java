@@ -1,6 +1,7 @@
 package com.cjy.WechatHome.web.controller;
 
 import java.util.List;
+import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -209,17 +210,19 @@ public class DefinedReplySettingController {
 		   definedReplyList = definedReplyService.getReplyByUser(user.getUsername());
 		   model.addAttribute("settingUser", null);
 	    }
-	    try {
-		  List<DefinedReply> adList = definedReplyService.getADList(user.getUsername());
-		  if(adList.size()>0){
-			ad = adList.get(0);
-		  }
-		  model.addAttribute("ad",ad);
-		  model.addAttribute("definedReplyList", definedReplyList);
-	    }catch (Exception e) {
-		  e.printStackTrace();
-		  
-	    }
+	    ad = getFirstAd(user,(x)->{
+			List<DefinedReply> adList = definedReplyService.getADList(x.getUsername());
+			if(adList.size()>0){
+				return adList.get(0);
+			}
+			else
+				return null;
+		});
+	    model.addAttribute("ad",ad);
+	    model.addAttribute("definedReplyList", definedReplyList);
 	    return "redirect:/user/"+String.valueOf(user.getId());
+	}
+	public static DefinedReply getFirstAd(User user, Function<User,DefinedReply> func){
+		return func.apply(user);
 	}
 }

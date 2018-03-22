@@ -5,8 +5,8 @@
 
 	<groupId>com.cjy</groupId>
 	<artifactId>WechatHome</artifactId>
-	<version>4.0.9-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<version>4.2.6-SNAPSHOT</version>
+	<packaging>war</packaging>
 
 	<name>WechatHome</name>
 	<description>Demo project for Spring Boot</description>

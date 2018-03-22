@@ -135,7 +135,8 @@ public class FanService {
 		String username = "vip-"+UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");
 		wechatUser.setUserName(username);
 		wechatUser.setExpireTime(new Date(new Date().getTime()+3600*1000*24*registerTime));
-		fanDao.addFan(wechatUser);
+		if(!isFanExist(openId))
+			fanDao.addFan(wechatUser);
 		return wechatUser;
 	}
 	public Fan selectFanByName(String username){

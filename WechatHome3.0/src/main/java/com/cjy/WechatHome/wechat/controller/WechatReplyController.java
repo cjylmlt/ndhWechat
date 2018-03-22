@@ -79,30 +79,30 @@ public class WechatReplyController {
 			String message = null;
 			String reply = null;
 			User user = userService.getUserByUserId(toUserName);
-			if(user == null||(user.getStatus()!=0&&user.getStatus()!=2&&user.getStatus()!=3)){	
-				record.setUserId(toUserName);
-				if(user!=null){
-					record.setUsername(user.getUsername());
-				}
-				else{
-					record.setUsername("外部用户");
-				}
-				List<News> mindList = newsService.selectNewsByKey("外部用户的提示");
-				if(mindList.size()>0){
-					message = MessageUtil.packNewsMessage(toUserName, fromUserName,mindList);
-					return message;
-				}
-				record.setUserUrl(userUrl);
-				record.setDate(new Date());
-				record.setContent(content);
-				record.setReply(message);
-				record.setStatus(1);
-				endTime = System.currentTimeMillis();
-				record.setDurationTime(endTime-startTime);
-				recordService.insertRecord(record);
-				return null;
+			if(user == null||(user.getStatus()!=0&&user.getStatus()!=2&&user.getStatus()!=3)){
+				user = userService.getUser(1);
+//				record.setUserId(toUserName);
+//				if(user!=null){
+//					record.setUsername(user.getUsername());
+//				}
+//				else{
+//					record.setUsername("外部用户");
+//				}
+//				List<News> mindList = newsService.selectNewsByKey("外部用户的提示");
+//				if(mindList.size()>0){
+//					message = MessageUtil.packNewsMessage(toUserName, fromUserName,mindList);
+//					return message;
+//				}
+//				record.setUserUrl(userUrl);
+//				record.setDate(new Date());
+//				record.setContent(content);
+//				record.setReply(message);
+//				record.setStatus(1);
+//				endTime = System.currentTimeMillis();
+//				record.setDurationTime(endTime-startTime);
+//				recordService.insertRecord(record);
+//				return null;
 			}
-			DefinedReply definedReply;
 			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
 				message = replyService.textMessageReply(map, user, record);
 			}
