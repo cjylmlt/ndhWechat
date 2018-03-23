@@ -13,6 +13,8 @@ public class DefinedReplyService {
 	DefinedReplyDao definedReplyDao;
 	public DefinedReply getReply(String replyKey,String username) {
 		DefinedReply definedReply = definedReplyDao.getDefinedReplyByKeyAndUser(replyKey,username);
+		if(definedReply!=null)
+			definedReply.setValue(definedReply.getValue().replaceAll("\\\\n","\n"));
 //		if (definedReply!=null) {
 //			System.out.println(definedReply.getValue());
 //		}

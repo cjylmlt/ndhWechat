@@ -70,7 +70,18 @@ public class ReplyService {
 		if(MessageUtil.MESSAGE_SUBSCRIBE.equals(eventType)){
 			if((definedReply = definedReplyService.getReply("新关注的回复", user.getUsername()))!=null){
 				if(definedReply.getValue()!=null){
-					message = MessageUtil.packText(toUserName, fromUserName, definedReply.getValue());
+					if(definedReply.getPicUrl()!=null){
+						List<News> newsList = new ArrayList<>();
+						News news = new News();
+						news.setDescription("");
+						news.setTitle(definedReply.getValue());
+						news.setPicUrl(definedReply.getPicUrl());
+						news.setUrl(definedReply.getUrl());
+						newsList.add(news);
+						message = MessageUtil.packNewsMessage(toUserName, fromUserName,newsList);
+					}
+					else
+						message = MessageUtil.packText(toUserName, fromUserName, definedReply.getValue());
 				}
 				else{
 					message = MessageUtil.packText(toUserName, fromUserName, reply);
