@@ -30,6 +30,7 @@ public class VideoSpider {
 	HostHolder hostHolder;
 	@Autowired
 	AdminSettingDao adminSettingDao;
+	private final static String AIKE_URL = "http://v.c768.cn/v/";
 	public String sendGet(String url){//获得给定url的源文件
 		String content="";
 		HttpClient client = new HttpClient();
@@ -141,18 +142,17 @@ public class VideoSpider {
 		return result;
 	}
 	public String getIndexSource(){
-		String url = "http://v.burod.cn/v/";
-		String urlResult = sendGet(url);//获得level-one page源代码
+		String urlResult = sendGet(AIKE_URL);//获得level-one page源代码
 		return urlResult;
 	}
 	public String getSearchSource(String content){
-		String url = "http://v.burod.cn/v/seacher.php?sousuo="+content;
+		String url = AIKE_URL+"seacher.php?sousuo="+content;
 		String urlResult = sendGet(url);//获得level-one page源代码
 		return urlResult;
 	}
 	public String getMovieSource(String url,User user){
 
-		url = "http://v.burod.cn/v/"+url;
+		url = AIKE_URL+url;
 		String urlResult = sendGet(url);//获得level-one page源代码
 		urlResult = urlResult.replaceFirst("<header[\\s\\S]+?</header>", "");
 		urlResult = urlResult.replaceFirst("<a href=\"/\" target=\"_self\">[\\s\\S]+?<a href=\"/topic/index.php\" target=\"_self\">片单</a>", "");
@@ -175,8 +175,8 @@ public class VideoSpider {
 
 		//把"/css/*","/js/*","/images/*"转到爱客去
 
-		urlResult=urlResult.replaceAll("css/","http://v.burod.cn/v/css/");
-		urlResult=urlResult.replaceAll("js/","http://v.burod.cn/v/js/");
+		urlResult=urlResult.replaceAll("css/",AIKE_URL+"css/");
+		urlResult=urlResult.replaceAll("js/",AIKE_URL+"js/");
 
 		//urlResult=urlResult.replaceAll("1280jiazai","video");
 

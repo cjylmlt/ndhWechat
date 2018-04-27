@@ -35,14 +35,17 @@ public class WechatUtil {
 	
 	private static final String WEB_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
 	private static final String WEB_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code ";
-	private static  String HOST_URL ;
+	private static String HOST_URL ;
+	private static String MOVIE_URL;
 
 	public WechatUtil(@Value("${host.url}") String host,
 			@Value("${wechat.appid}") String appid,
-			@Value("${wechat.appsecret}") String appsecret){
+			@Value("${wechat.appsecret}") String appsecret,
+            @Value("${movie.url}")String movieUrl){
 		WechatUtil.HOST_URL = host;
 		WechatUtil.APPID = appid;
 		WechatUtil.APPSECRET = appsecret;
+		WechatUtil.MOVIE_URL = movieUrl;
 	}
 	public static JSONObject doGetStr(String url){
 		HttpClient httpClient = new HttpClient();
@@ -233,7 +236,7 @@ public class WechatUtil {
 //    }
 
 	public static String packUserUrl(String url,String userId){
-		String resultUrl = url.replaceAll("http://v.burod.cn/v", HOST_URL);
+		String resultUrl = url.replaceAll(MOVIE_URL, HOST_URL);
 		return packWebUrl(resultUrl,userId);
 	}
 

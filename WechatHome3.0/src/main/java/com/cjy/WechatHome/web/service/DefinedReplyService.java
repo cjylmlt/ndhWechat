@@ -2,6 +2,7 @@ package com.cjy.WechatHome.web.service;
 
 import java.util.List;
 
+import com.cjy.WechatHome.web.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,11 @@ import com.cjy.WechatHome.wechat.model.DefinedReply;
 public class DefinedReplyService {
 	@Autowired
 	DefinedReplyDao definedReplyDao;
+	@Autowired
+    UserService userService;
 	public DefinedReply getReply(String replyKey,String username) {
 		DefinedReply definedReply = definedReplyDao.getDefinedReplyByKeyAndUser(replyKey,username);
-		if(definedReply!=null)
+		if(definedReply!=null&&definedReply.getValue()!=null)
 			definedReply.setValue(definedReply.getValue().replaceAll("\\\\n","\n"));
 //		if (definedReply!=null) {
 //			System.out.println(definedReply.getValue());
@@ -50,4 +53,18 @@ public class DefinedReplyService {
 	public void updateAd(int id,String replyKey,String picUrl,String url){
 		definedReplyDao.updateAd(id,replyKey,picUrl,url);
 	}
+
+	public void recorverDefinedReply(){
+	    List<User> userList = userService.selectAll();
+	    for (User user:userList){
+	        DefinedReply ad = new DefinedReply();
+	        ad.setUserName(user.getUsername());
+	        ad.setReplyKey("广告");
+	        insertDefinedReply(ad,user.getUsername());
+	        ad.setReplyKey("新关注的回复");
+            insertDefinedReply(ad,user.getUsername());
+            ad.setReplyKey("搜索不到的回复");
+            insertDefinedReply(ad,user.getUsername());
+        }
+    }
 }
