@@ -20,13 +20,13 @@ public class TestWeb {
 	@Test
 	public void contextLoads() throws IOException {
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
-        String url = "http://127.0.0.1/WechatHome/maxiaodai.do";
+        String url = "http://127.0.0.1:8080/WechatHome/maxiaodai.do";
 		//String url = "http://fortestwechat.free.ngrok.cc/WechatHome/maxiaodai.do";
 		String toUserName = "gh_8f67b02309a8";
 		String fromUserName = "gh_8f67b02309a8";
-		for(int i=0;i<100;i++) {
+		for(int i=0;i<1;i++) {
             String b = String.valueOf(i);
-            String a = MessageUtil.packText(toUserName, fromUserName,"baby");
+            String a = MessageUtil.packText(toUserName, fromUserName,"4");
             PostMethod post = new PostMethod(url);
             post.setRequestBody(a);
             HttpClient client = new HttpClient();
