@@ -1,11 +1,13 @@
 package com.cjy.WechatHome.wechat.model;
 
+import java.util.Date;
+
 public class ElasticSearchRecord {
     private String fromUserId;
     private String ownerId;
     private String receivedMessage;
     private String sentMessage;
-    private String messageTime;
+    private Date messageTime;
 
     public String getFromUserId() {
         return fromUserId;
@@ -39,11 +41,12 @@ public class ElasticSearchRecord {
         this.sentMessage = sentMessage;
     }
 
-    public String getMessageTime() {
+
+    public Date getMessageTime() {
         return messageTime;
     }
 
-    public void setMessageTime(String messageTime) {
+    public void setMessageTime(Date messageTime) {
         this.messageTime = messageTime;
     }
 }

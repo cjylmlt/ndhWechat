@@ -23,13 +23,13 @@ public class TestElasticSearch {
         movieQueryMessage.setQueryContent("adfasdfadfaasdfasdfa");
         movieQueryMessage.setOwnerId("123");
         movieQueryMessage.setQueryUserId("1234");
-        movieQueryMessage.setQueryTime(simpleDateFormat.format(new Date()));
+        movieQueryMessage.setQueryTime(new Date());
         List<NewsPo> news = new LinkedList<>();
         NewsPo newsPo = new NewsPo();
         newsPo.setKey("ddd");
         news.add(newsPo);
         movieQueryMessage.setQueryResult(JSON.toJSONString(news));
-        ElasticSearchUtil.add("wechat","movie",movieQueryMessage);
+        ElasticSearchUtil.add("test","movie",movieQueryMessage);
         System.out.println();
 	}
     @Test

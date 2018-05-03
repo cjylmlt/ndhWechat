@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.cjy.WechatHome.async.EventProducer;
 import com.cjy.WechatHome.spider.VideoSpider;
 import com.cjy.WechatHome.util.MessageUtil;
-import com.cjy.WechatHome.util.UserUtil;
 import com.cjy.WechatHome.util.WechatUtil;
 import com.cjy.WechatHome.web.model.Record;
 import com.cjy.WechatHome.web.model.User;
@@ -214,7 +213,7 @@ public class ReplyService {
                     else
                         newsService.insertNews(newsPo);
                 }
-                MovieQueryMessage movieQueryMessage = new MovieQueryMessage(fromUserName, user.getUserId(), content, JSON.toJSONString(newsPos), simpleDateFormat.format(new Date()));
+                MovieQueryMessage movieQueryMessage = new MovieQueryMessage(fromUserName, user.getUserId(), content, JSON.toJSONString(newsPos), new Date());
                 ElasticSearchUtil.add(wechatIndex, movieType, movieQueryMessage);
             }
         }
@@ -248,9 +247,10 @@ public class ReplyService {
         record.setSpiderTime(spiderTimeEnd - spiderTimeStart);
         ElasticSearchRecord elasticSearchRecord = new ElasticSearchRecord();
         elasticSearchRecord.setFromUserId(fromUserName);
-        elasticSearchRecord.setMessageTime(simpleDateFormat.format(new Date()));
+        elasticSearchRecord.setMessageTime(new Date());
         elasticSearchRecord.setOwnerId(user.getUsername());
         elasticSearchRecord.setSentMessage(message);
+        elasticSearchRecord.setReceivedMessage(content);
         ElasticSearchUtil.add(userIndex,recordType,elasticSearchRecord);
         return message;
     }
