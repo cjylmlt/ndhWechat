@@ -32,10 +32,10 @@ public class ReplyService {
     NewsService newsService;
     @Autowired
     EventProducer eventProducer;
-    private static final String wechatIndex = "wechat";
+    private static final String theaterIndex = "theater";
     private static final String movieType = "movie";
-    private static final String userIndex = "user";
-    private static final String recordType = "movie";
+    private static final String recordsIndex = "userrecords";
+    private static final String recordType = "record";
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private final ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
 
@@ -154,7 +154,9 @@ public class ReplyService {
                 eventProducer.fireEvent(eventModel);
             }
             if (newsPoList.get(0).getTitle().equals("empty")) {
-                return emptyResultMessage(newsList, content, user, toUserName, fromUserName);
+                message =  emptyResultMessage(newsList, content, user, toUserName, fromUserName);
+                addElasticSearchRecord(fromUserName,toUserName,user,content,message);
+                return message;
             }
         } else {
             if (user.getStatus() == 3) {
@@ -211,8 +213,10 @@ public class ReplyService {
                     else
                         newsService.insertNews(newsPo);
                 }
-                MovieQueryMessage movieQueryMessage = new MovieQueryMessage(fromUserName, user.getUserId(), content, JSON.toJSONString(newsPos), new Date());
-                ElasticSearchUtil.add(wechatIndex, movieType, movieQueryMessage);
+                for (NewsPo n : newsPos) {
+                    MovieQueryMessage movieQueryMessage = new MovieQueryMessage(fromUserName, user.getUserId(), n.getTitle(), JSON.toJSONString(n), new Date());
+                    ElasticSearchUtil.add(theaterIndex, movieType, movieQueryMessage);
+                }
             }
         }
         elasticSearchContent(newsList, content, false);
@@ -228,14 +232,18 @@ public class ReplyService {
         long spiderTimeEnd = System.currentTimeMillis();
         record.setContent(content);
         record.setSpiderTime(spiderTimeEnd - spiderTimeStart);
+        addElasticSearchRecord(fromUserName,toUserName,user,content,message);
+        return message;
+    }
+
+    private void addElasticSearchRecord(String fromUserName, String toUserName, User user, String content, String message) {
         ElasticSearchRecord elasticSearchRecord = new ElasticSearchRecord();
         elasticSearchRecord.setFromUserId(fromUserName);
         elasticSearchRecord.setMessageTime(new Date());
         elasticSearchRecord.setOwnerId(user.getUsername());
         elasticSearchRecord.setSentMessage(message);
         elasticSearchRecord.setReceivedMessage(content);
-        ElasticSearchUtil.add(userIndex, recordType, elasticSearchRecord);
-        return message;
+        ElasticSearchUtil.add(recordsIndex, recordType, elasticSearchRecord);
     }
 
     private void packBusinessUserUrl(User user, List<News> newsList) {
@@ -262,28 +270,26 @@ public class ReplyService {
     }
 
     private void elasticSearchContent(List<News> newsList, String content, boolean containContent) {
-        List<MovieQueryMessage> movieQueryMessages = ElasticSearchUtil.fuzzySearch(wechatIndex, movieType, "queryContent", content, containContent);
+        List<MovieQueryMessage> movieQueryMessages = ElasticSearchUtil.fuzzySearch(theaterIndex, movieType, "queryContent", content, containContent);
         Set<String> urlSet = new HashSet<>();
         for (News n : newsList)
             urlSet.add(n.getUrl());
         for (MovieQueryMessage movieQueryMessage : movieQueryMessages) {
-            List<NewsPo> newsPos = JSON.parseArray(movieQueryMessage.getQueryResult(), NewsPo.class);
+            NewsPo newsPo = JSON.parseObject(movieQueryMessage.getQueryResult(), NewsPo.class);
             if (newsList.size() < 8) {
-                for (int i = 0; i < newsPos.size() && newsList.size() < 8; i++) {
-                    News news = new News();
-                    news.setTitle("相似匹配-" + newsPos.get(i).getTitle());
-                    news.setDescription("相似匹配-" + newsPos.get(i).getDescription());
-                    news.setUrl(newsPos.get(i).getUrl());
-                    news.setPicUrl(newsPos.get(i).getPicUrl());
-                    if (urlSet.add(news.getUrl()))
-                        newsList.add(news);
-                }
-            } else
-                break;
+                News news = new News();
+                news.setTitle("相似匹配-" + newsPo.getTitle());
+                news.setDescription("相似匹配-" + newsPo.getDescription());
+                news.setUrl(newsPo.getUrl());
+                news.setPicUrl(newsPo.getPicUrl());
+                if (urlSet.add(news.getUrl()))
+                    newsList.add(news);
+            }
         }
     }
 
-    public String emptyResultMessage(List<News> newsList, String content, User user, String toUserName, String fromUserName) {
+    public String emptyResultMessage(List<News> newsList, String content, User user, String toUserName, String
+            fromUserName) {
         String message, reply;
         newsList.clear();
         elasticSearchContent(newsList, content, true);
