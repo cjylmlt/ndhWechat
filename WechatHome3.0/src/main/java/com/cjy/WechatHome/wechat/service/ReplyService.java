@@ -131,7 +131,6 @@ public class ReplyService {
 
     public String searchMovie(User user, String content, String urlContent, String toUserName, String fromUserName, Record record) throws UnsupportedEncodingException {
         long spiderTimeStart = System.currentTimeMillis();
-        List<DefinedReply> adList;
         String reply, message;
         List<News> newsList = new ArrayList<>();
         List<NewsPo> newsPoList;
@@ -155,10 +154,9 @@ public class ReplyService {
                 eventProducer.fireEvent(eventModel);
             }
             if (newsPoList.get(0).getTitle().equals("empty")) {
-                return emptyResultMessage(newsList,content,user,toUserName,fromUserName);
+                return emptyResultMessage(newsList, content, user, toUserName, fromUserName);
             }
-        }
-        else {
+        } else {
             if (user.getStatus() == 3) {
                 Future<List<News>> futureTask = cachedThreadPool.submit(new Callable<List<News>>() {
                     @Override
@@ -217,32 +215,17 @@ public class ReplyService {
                 ElasticSearchUtil.add(wechatIndex, movieType, movieQueryMessage);
             }
         }
-        elasticSearchContent(newsList, content,false);
+        elasticSearchContent(newsList, content, false);
         //组装url
-        if (user.getStatus() == 3 && !user.getUsername().equals("anonymous")) {
-            for (News n : newsList) {
-                n.setUrl(WechatUtil.packUserUrl(n.getUrl(), user.getUserId()));
-            }
-        }
-        long spiderTimeEnd = System.currentTimeMillis();
+        packBusinessUserUrl(user, newsList);
         //组装广告
         if (newsList.size() > 0) {
-            if ((adList = definedReplyService.getADList(user.getUsername())) != null) {
-                if (adList.size() > 0 && adList.get(0).getValue() != null && !adList.get(0).getValue().equals("")) {
-                    DefinedReply d = adList.get(0);
-                    News news = new News();
-                    news.setDescription("");
-                    news.setTitle(d.getValue());
-                    news.setPicUrl(d.getPicUrl());
-                    news.setUrl(d.getUrl());
-                    newsList.add(1, news);
-                }
-            }
+            addAd(user, newsList);
             message = MessageUtil.packNewsMessage(toUserName, fromUserName, newsList);
+        } else {
+            message = emptyResultMessage(newsList, content, user, toUserName, fromUserName);
         }
-        else {
-            message = emptyResultMessage(newsList,content,user,toUserName,fromUserName);
-        }
+        long spiderTimeEnd = System.currentTimeMillis();
         record.setContent(content);
         record.setSpiderTime(spiderTimeEnd - spiderTimeStart);
         ElasticSearchRecord elasticSearchRecord = new ElasticSearchRecord();
@@ -251,40 +234,66 @@ public class ReplyService {
         elasticSearchRecord.setOwnerId(user.getUsername());
         elasticSearchRecord.setSentMessage(message);
         elasticSearchRecord.setReceivedMessage(content);
-        ElasticSearchUtil.add(userIndex,recordType,elasticSearchRecord);
+        ElasticSearchUtil.add(userIndex, recordType, elasticSearchRecord);
         return message;
     }
 
-    private void elasticSearchContent(List<News> newsList, String content,boolean containContent) {
-        List<MovieQueryMessage> movieQueryMessages = ElasticSearchUtil.fuzzySearch(wechatIndex, movieType, "queryContent", content,containContent);
+    private void packBusinessUserUrl(User user, List<News> newsList) {
+        if (user.getStatus() == 3 && !user.getUsername().equals("anonymous")) {
+            for (News n : newsList) {
+                n.setUrl(WechatUtil.packUserUrl(n.getUrl(), user.getUserId()));
+            }
+        }
+    }
+
+    private void addAd(User user, List<News> newsList) {
+        List<DefinedReply> adList;
+        if ((adList = definedReplyService.getADList(user.getUsername())) != null) {
+            if (adList.size() > 0 && adList.get(0).getValue() != null && !adList.get(0).getValue().equals("")) {
+                DefinedReply d = adList.get(0);
+                News news = new News();
+                news.setDescription("");
+                news.setTitle(d.getValue());
+                news.setPicUrl(d.getPicUrl());
+                news.setUrl(d.getUrl());
+                newsList.add(1, news);
+            }
+        }
+    }
+
+    private void elasticSearchContent(List<News> newsList, String content, boolean containContent) {
+        List<MovieQueryMessage> movieQueryMessages = ElasticSearchUtil.fuzzySearch(wechatIndex, movieType, "queryContent", content, containContent);
         Set<String> urlSet = new HashSet<>();
-        for(News n: newsList)
+        for (News n : newsList)
             urlSet.add(n.getUrl());
         for (MovieQueryMessage movieQueryMessage : movieQueryMessages) {
             List<NewsPo> newsPos = JSON.parseArray(movieQueryMessage.getQueryResult(), NewsPo.class);
             if (newsList.size() < 8) {
-                for (int i=0; i<newsPos.size()&&newsList.size()<8;i++) {
+                for (int i = 0; i < newsPos.size() && newsList.size() < 8; i++) {
                     News news = new News();
                     news.setTitle("相似匹配-" + newsPos.get(i).getTitle());
                     news.setDescription("相似匹配-" + newsPos.get(i).getDescription());
                     news.setUrl(newsPos.get(i).getUrl());
                     news.setPicUrl(newsPos.get(i).getPicUrl());
-                    if(urlSet.add(news.getUrl()))
+                    if (urlSet.add(news.getUrl()))
                         newsList.add(news);
                 }
             } else
                 break;
         }
     }
-    public String emptyResultMessage(List<News> newsList,String content,User user,String toUserName,String fromUserName){
-        String message,reply;
+
+    public String emptyResultMessage(List<News> newsList, String content, User user, String toUserName, String fromUserName) {
+        String message, reply;
         newsList.clear();
-        elasticSearchContent(newsList, content,true);
+        elasticSearchContent(newsList, content, true);
         if (newsList.size() > 0) {
-            News n = newsList.get(0);
+            News n = new News();
             n.setTitle("搜索不到您当前输入的信息，为您推荐以下相似内容");
-            if (definedReplyService.getReply("搜索不到的回复", user.getUsername()) != null)
-                n.setDescription(definedReplyService.getReply("搜索不到的回复", user.getUsername()).getValue());
+            n.setUrl("http://www.baidu.com");
+            newsList.add(0, n);
+            packBusinessUserUrl(user, newsList);
+            addAd(user, newsList);
             message = MessageUtil.packNewsMessage(toUserName, fromUserName, newsList);
         } else {
             if (definedReplyService.getReply("搜索不到的回复", user.getUsername()) != null)

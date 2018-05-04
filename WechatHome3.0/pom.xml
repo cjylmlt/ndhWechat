@@ -5,7 +5,7 @@
 
     <groupId>com.cjy</groupId>
     <artifactId>WechatHome</artifactId>
-    <version>4.3.7-SNAPSHOT</version>
+    <version>4.3.8-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>WechatHome</name>
