@@ -58,7 +58,7 @@ public class UserService {
 			//user.setSalt(UUID.randomUUID().toString().substring(0, 5));
 			//user.setHeadUrl(String.format("http://images.cjy.com/head/%dt.png", new Random().nextInt(1000)));
 			user.setPassword(password);
-			user.setHeadUrl("https://images.nowcoder.com/head/613m.png");
+			user.setHeadUrl("https://images.cjy.com/head/613m.png");
 			user.setUserId(wechatId);
 			userDao.addUser(user); 
 			user = userDao.selectByName(username);
