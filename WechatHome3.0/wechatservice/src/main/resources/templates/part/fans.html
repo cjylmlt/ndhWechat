@@ -1,0 +1,108 @@
+
+
+<!-- 按钮触发模态框 -->
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#batchVipSettingForm">
+	批量延长所有用户vip时间
+</button>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="batchVipSettingForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					会员延长设置
+				</h4>
+			</div>
+			<form id="batchVipSettingForm"  method="post">
+			<div class="modal-body">
+				<input type="text"  name="days" placeholder="请输入要延长的期限（天）">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+				<button type="submit" class="btn btn-primary" onclick="form=document.getElementById('batchVipSettingForm');form.action='/user/$settingUser.id/fans/renewall'">延长所有会员</button>
+				<button type="submit" class="btn btn-primary" onclick="form=document.getElementById('batchVipSettingForm');form.action='/user/$settingUser.id/fans/renewexpired'">延长过期会员</button>
+
+			</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+<div class="modal fade" id="vipSettingForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel1">
+					会员延长设置
+				</h4>
+			</div>
+			
+			<form id="vipSettingForm"  method="post">
+			<div class="modal-body">
+				<input type="hidden" name="openId" value="">
+				<input type="text" name="days" placeholder="请输入要延长的期限（天）">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				</button>
+				<button type="submit" class="btn btn-primary" onclick="form=document.getElementById('vipSettingForm');form.action='/user/$settingUser.id/fans/renew'">确认延长该会员</button>
+			</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+							<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+										<h3 class="header smaller lighter blue">粉丝列表(总数$fansNum，粉丝多批量延长操作可能有延迟)</h3>
+										<!-- div.table-responsive -->
+										<!-- div.dataTables_borderWrap -->
+										<div>
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+												<thead>
+													<tr>
+
+														<th>粉丝名</th>
+														<th>推荐人数</th>
+
+														<th>
+															<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+															到期时间
+														</th>
+														<th class="hidden-480">状态</th>
+														<th></th>
+													</tr>
+												</thead>
+
+												<tbody id="tbdata">
+													<tr>
+
+
+														<td></td>
+														<td></td>
+														
+														<td></td>
+														<td></td>
+														<td></td>
+
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+
+	
+						</div><!-- /.row -->
+	
+					

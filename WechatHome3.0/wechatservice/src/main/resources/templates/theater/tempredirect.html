@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        div.polaroid {
+            width: 100%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            text-align: center;
+        }
+
+        div.container {
+            padding: 10px;
+        }
+
+        html {
+            background: url("/images/img/poster.jpg") no-repeat center center fixed;
+            background-position-y: top;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+    function load(next){
+        var i = 1;
+        var timer = setInterval(function(){
+            if(i== -1){
+                //clearInterval(timer);
+                window.location.href=next;
+            }else{
+                document.body.innerHTML = " <h1 style=\'text-align:center\'><font size='14'>首次登录，请阅读下方规则<br>10秒后将自动进入观影界面！"+i+"</font></h1>";
+                --i;
+            }
+        },1000);
+
+    }
+</script>
+<title>海报</title>
+</head>
+#if($realurl)
+<body onload="load('$realurl')">
+<h1 style="text-align:center"><font size="14">首次登录，请阅读下方规则<br>10秒后将自动进入观影界面！</font></h1>
+</body>
+#end
+</html>

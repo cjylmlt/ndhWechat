@@ -1,0 +1,54 @@
+<div class="step-content pos-rel">
+	<div class="step-pane active" data-step="1">
+		<h3 class="lighter block green">观影页面设置</h3>
+
+		<form class="form-horizontal" id="sample-form" action="/user/$settingUser.id/vipSetting/update" method="get">
+			<div class="form-group has-warning">
+				<label for="registerTime" class="col-xs-12 col-sm-3 control-label no-padding-right">注册赠送时长</label>
+				<div class="col-xs-12 col-sm-5">
+						<span class="block input-icon input-icon-right">
+							<input type="text" id="registerTime" name = "registerTime" value=$!userVipSetting.registerTime class="width-100" />
+							<i class="ace-icon fa fa-leaf"></i>
+						</span>
+				</div>
+				<div class="help-block col-xs-12 col-sm-reset inline"> 天 </div>
+			</div>
+			<div class="form-group has-warning">
+				<label for="recommendTime" class="col-xs-12 col-sm-3 control-label no-padding-right">分享赠送时长</label>
+
+				<div class="col-xs-12 col-sm-5">
+						<span class="block input-icon input-icon-right">
+							<input type="text" id="recommendTime" name="recommendTime" value=$!userVipSetting.recommendTime class="width-100" />
+							<i class="ace-icon fa fa-leaf"></i>
+						</span>
+				</div>
+				<div class="help-block col-xs-12 col-sm-reset inline"> 天 </div>
+			</div>
+			<div class="form-group has-warning">
+				<label for="recommendNum" class="col-xs-12 col-sm-3 control-label no-padding-right">推荐多少人无限看</label>
+
+				<div class="col-xs-12 col-sm-5">
+						<span class="block input-icon input-icon-right">
+							<input type="text" id="recommendNum" name = "recommendNum"value=$!userVipSetting.recommendNum class="width-100" />
+							<i class="ace-icon fa fa-leaf"></i>
+						</span>
+				</div>
+				<div class="help-block col-xs-12 col-sm-reset inline"> 人 </div>
+			</div>
+			<br>
+			<div class="form-group has-warning">
+				<label for="alipayKey" class="col-xs-12 col-sm-3 control-label no-padding-right">支付宝红包口令</label>
+
+				<div class="col-xs-12 col-sm-5">
+						<span class="block input-icon input-icon-right">
+							<input type="text" id="alipayKey" name= "alipayKey" value='$!userVipSetting.alipayKey' class="width-100" />
+							<i class="ace-icon fa fa-leaf"></i>
+						</span>
+				</div>
+				<div class="help-block col-xs-12 col-sm-reset inline"></div>
+			</div>
+			<div style="text-align:center;"><input style="margin: auto"  type="submit" value="修改"></div>
+		</form>
+
+	</div>
+</div>
